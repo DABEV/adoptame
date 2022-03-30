@@ -1,0 +1,14 @@
+.menu > a {
+    border-color: #74422b; 
+    color: #74422b
+}
+
+.menu > a.disabled { 
+    color: #74422b
+}
+
+.menu > a.active, .menu > a:hover {
+    background-color: #d5b095; 
+    border-color: #74422b;
+    color: white;
+}
