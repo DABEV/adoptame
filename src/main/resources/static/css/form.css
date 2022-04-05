@@ -1,0 +1,39 @@
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+form > .card {
+    border: solid;
+    color: #253E5C;
+    border-width: thin;
+}
+
+/* Icono derecho */
+.card-body > .row > div > i {
+    font-size: 5rem;
+}
+
+/* Etiqueta de un campo del formulario */
+.card-body > .row > div > .row > div > label {
+    color: #698FAE;
+}
+
+.card-body > .row > div > .row > div > div > span {
+    background-color: #253E5C;
+    color: white;
+}
+
+.card-body > .row > div > .row > div > div > span {
+    background-color: #253E5C;
+    color: white;
+}
+
+.card-body > div > button {
+    color: #253E5C; 
+    border-color: #253E5C;
+    font-size: 1rem;
+}

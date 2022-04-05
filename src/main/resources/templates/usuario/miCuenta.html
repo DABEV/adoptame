@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/imports :: head('Mi cuenta')">
+    </head>
+    <head>
+        <link th:href="@{/css/form.css}" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container-fluid">
+            <!-- Navbar -->
+            <div class="row mb-3">
+                <navbar th:replace="fragments/navbar :: navbar"></navbar>
+            </div>
+            <!-- Contenido -->
+            <div class="row">
+                <!-- Menú -->
+                <div class="col-md-3 mb-2">
+                    <div th:replace="fragments/menus :: adoptador(1)">
+                    </div>
+                </div>
+                <div class="col-md-9 mb-2">
+                    <div class="d-grid gap-4">
+                        <div>
+                            <h2 style="color: #253e5c">Mi cuenta</h2>
+                        </div>
+                        <form>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Información básica</h5>
+                                    <div class="row justify-content-between">
+                                        <div class="col-md-1 col-sm-1">
+                                            <i class="vertical-center fa-solid fa-circle-user"></i>
+                                        </div>
+                                        <div class="col-md-11 col-sm-11">
+                                            <div class="row">
+                                                <!-- Nombre -->
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label>Nombre(s): </label>
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text" id="addon-wrapping-nombre">
+                                                            <i class="fas fa-tag"></i>
+                                                        </span>
+                                                        <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ej. Rosa María" aria-label="nombre" aria-describedby="addon-wrapping-nombre" />
+                                                    </div>
+                                                </div>
+                                                <!-- Apellido -->
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label>Apellido(s): </label>
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text" id="addon-wrapping-apellido">
+                                                            <i class="fas fa-tag"></i>
+                                                        </span>
+                                                        <input type="text" name="apellido" id="apellido" class="form-control" placeholder="Ej. Millán Villareal" aria-label="apellido" aria-describedby="addon-wrapping-apellido" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <!-- Dirección -->
+                                                <div class="col-md-12 col-sm-12 mb-3">
+                                                    <label>Dirección(s): </label>
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text" id="addon-wrapping-direccion">
+                                                            <i class="fas fa-building"></i>
+                                                        </span>
+                                                        <input type="text" name="direccion" id="direccion" class="form-control" placeholder="Ej. Ave. México #30, Emiliano Zapata, Morelos." aria-label="direccion" aria-describedby="addon-wrapping-direccion" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <!-- Correo electrónico -->
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label>Correo electrónico: </label>
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text" id="addon-wrapping-correoElectronico">
+                                                            <i class="fas fa-tag"></i>
+                                                        </span>
+                                                        <input type="text" name="correoElectronico" id="correoElectronico" class="form-control" placeholder="Ej. usuario@dominio.com" aria-label="correoElectronico" aria-describedby="addon-wrapping-correoElectronico" />
+                                                    </div>
+                                                </div>
+                                                <!-- Teléfono -->
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label>Teléfono: </label>
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text" id="addon-wrapping-telefono">
+                                                            <i class="fas fa-phone"></i>
+                                                        </span>
+                                                        <input type="text" name="telefono" id="telefono" class="form-control" placeholder="Ej. Millán Villareal" aria-label="telefono" aria-describedby="addon-wrapping-telefono" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mt-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Cambiar contraseña</h5>
+                                    <div class="row justify-content-between">
+                                        <div class="col-md-12 col-sm-12">
+                                            <div class="row">
+                                                <!-- Contraseña -->
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label>Contraseña: </label>
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text" id="addon-wrapping-contrasenia">
+                                                            <i class="fas fa-lock"></i>
+                                                        </span>
+                                                        <input type="text" name="contrasenia" id="contrasenia" class="form-control" aria-label="contrasenia" aria-describedby="addon-wrapping-contrasenia" />
+                                                    </div>
+                                                </div>
+                                                <!-- Nueva contraseña -->
+                                                <div class="col-md-6 col-sm-12 mb-3">
+                                                    <label>Nueva contraseña: </label>
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text" id="addon-wrapping-nueva_contrasenia">
+                                                            <i class="fas fa-lock"></i>
+                                                        </span>
+                                                        <input type="text" name="nueva_contrasenia" id="nueva_contrasenia" class="form-control" aria-label="nueva_contrasenia" aria-describedby="addon-wrapping-nueva_contrasenia" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <!-- Repetir Contraseña -->
+                                                <div class="col-md-12 col-sm-12 mb-3">
+                                                    <label>Repetir Contraseña(s): </label>
+                                                    <div class="input-group flex-nowrap">
+                                                        <span class="input-group-text" id="addon-wrapping-repetir_contrasenia">
+                                                            <i class="fas fa-lock"></i>
+                                                        </span>
+                                                        <input type="text" name="repetir_contrasenia" id="repetir_contrasenia" class="form-control" aria-label="repetir_contrasenia" aria-describedby="addon-wrapping-repetir_contrasenia" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 mt-3 text-center">
+                                        <button type="button" class="btn btn-outline-primary btn-rounded" data-mdb-ripple-color="dark"> 
+                                            <i class="fas fa-circle-plus me-2"></i>
+                                            Guardar información
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="row mt-3">
+                <footer th:replace="fragments/footer :: footer"></footer>
+            </div>            
+        </div>
+        <scripts th:replace="fragments/imports :: scripts"></scripts>
+    </body>
+</html>
