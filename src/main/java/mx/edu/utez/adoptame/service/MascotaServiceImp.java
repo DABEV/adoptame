@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import mx.edu.utez.adoptame.model.Mascota;
+
 @Service
 public class MascotaServiceImp implements MascotaService {
 
@@ -26,13 +28,13 @@ public class MascotaServiceImp implements MascotaService {
     }
 
     @Override
-    public Mascota obtenerMascota(long id) {
+    public Mascota obtenerMascota(Long id) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean eliminarMascota(long id) {
+    public boolean eliminarMascota(Long id) {
         // TODO Auto-generated method stub
         return false;
     }

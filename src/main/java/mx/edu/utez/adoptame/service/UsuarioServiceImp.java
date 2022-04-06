@@ -1,6 +1,10 @@
 package mx.edu.utez.adoptame.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import mx.edu.utez.adoptame.model.Usuario;
 
 @Service
 public class UsuarioServiceImp implements UsuarioService {
@@ -24,13 +28,13 @@ public class UsuarioServiceImp implements UsuarioService {
     }
 
     @Override
-    public Usuario obtenerUsuario(long id) {
+    public Usuario obtenerUsuario(Long id) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean eliminarUsuario(long id) {
+    public boolean eliminarUsuario(Long id) {
         // TODO Auto-generated method stub
         return false;
     }

@@ -1,6 +1,10 @@
 package mx.edu.utez.adoptame.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import mx.edu.utez.adoptame.model.Donacion;
 
 @Service
 public class DonacionServiceImp implements DonacionService {
@@ -24,13 +28,13 @@ public class DonacionServiceImp implements DonacionService {
     }
 
     @Override
-    public Donacion obtenerDonacion(long id) {
+    public Donacion obtenerDonacion(Long id) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean eliminarDonacion(long id) {
+    public boolean eliminarDonacion(Long id) {
         // TODO Auto-generated method stub
         return false;
     }

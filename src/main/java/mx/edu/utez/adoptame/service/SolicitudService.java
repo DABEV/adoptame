@@ -1,12 +1,16 @@
 package mx.edu.utez.adoptame.service;
 
+import java.util.List;
+
+import mx.edu.utez.adoptame.model.Solicitud;
+
 public interface SolicitudService {
     List<Solicitud> listarSolicitudes ();
     Solicitud guardarSolicitud (Solicitud solicitud);
     Solicitud actualizarSolicitud (Solicitud solicitud);
-    Solicitud obtenerSolicitud (long id);
-    boolean eliminarSolicitud (long id);
+    Solicitud obtenerSolicitud (Long id);
+    boolean eliminarSolicitud (Long id);
 
-    boolean rechazarSolicitud(long id);
-    boolean aprobarSolicitud(long id);
+    boolean rechazarSolicitud(Long id);
+    boolean aprobarSolicitud(Long id);
 }

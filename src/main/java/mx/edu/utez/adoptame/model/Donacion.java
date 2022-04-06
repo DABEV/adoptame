@@ -14,8 +14,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "donativos")
-public class Donativo {
+@Table(name = "donaciones")
+public class Donacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,7 +37,7 @@ public class Donativo {
     @JoinColumn(name = "donador_id", nullable = false)
     private Usuario donador;
 
-    public Donativo() {
+    public Donacion() {
     }
 
     public Long getId() {

@@ -55,7 +55,7 @@ public class Usuario {
     private Set<Rol> roles;
 
     @OneToMany(mappedBy = "donador")
-    private List<Donativo> donativos;
+    private List<Donacion> donativos;
 
     @OneToMany(mappedBy = "usuario")
     private List<Favorito> favoritos;
@@ -146,11 +146,11 @@ public class Usuario {
         this.roles = roles;
     }
 
-    public List<Donativo> getDonativos() {
+    public List<Donacion> getDonativos() {
         return donativos;
     }
 
-    public void setDonativos(List<Donativo> donativos) {
+    public void setDonativos(List<Donacion> donativos) {
         this.donativos = donativos;
     }
 

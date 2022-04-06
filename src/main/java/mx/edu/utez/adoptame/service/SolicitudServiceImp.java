@@ -1,6 +1,10 @@
 package mx.edu.utez.adoptame.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import mx.edu.utez.adoptame.model.Solicitud;
 
 @Service
 public class SolicitudServiceImp implements SolicitudService {
@@ -24,25 +28,25 @@ public class SolicitudServiceImp implements SolicitudService {
     }
 
     @Override
-    public Solicitud obtenerSolicitud(long id) {
+    public Solicitud obtenerSolicitud(Long id) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean eliminarSolicitud(long id) {
+    public boolean eliminarSolicitud(Long id) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean rechazarSolicitud(long id) {
+    public boolean rechazarSolicitud(Long id) {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public boolean aprobarSolicitud(long id) {
+    public boolean aprobarSolicitud(Long id) {
         // TODO Auto-generated method stub
         return false;
     }

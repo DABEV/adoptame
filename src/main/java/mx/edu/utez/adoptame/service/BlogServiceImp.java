@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import mx.edu.utez.adoptame.model.Blog;
+
 @Service
 public class BlogServiceImp implements BlogService {
 
@@ -26,13 +28,13 @@ public class BlogServiceImp implements BlogService {
     }
 
     @Override
-    public Blog obtenerBlog(long id) {
+    public Blog obtenerBlog(Long id) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean eliminarBlog(long id) {
+    public boolean eliminarBlog(Long id) {
         // TODO Auto-generated method stub
         return false;
     }
