@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+    <div th:fragment="adoptador(activo)" class="menu list-group shadow-3">
+        <a href="#" class="list-group-item list-group-item-action disabled">
+            <strong>Menú adoptador</strong>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 1 ? 'active' : ''" aria-current="true">
+            <i class="fas fa-plus-circle"></i>
+            Mi cuenta
+        </a>
+        <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 2 ? 'active' : ''" aria-current="true">
+            <i class="fas fa-wallet"></i>
+            Mis donaciones
+        </a>
+        <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 3 ? 'active' : ''" aria-current="true">
+            <i class="fas fa-envelope"></i>
+            Mis solicitudes de adopción
+        </a>
+        <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 4 ? 'active' : ''" aria-current="true">
+            <i class="fas fa-heart"></i>
+            Mi lista de favoritos
+        </a>
+    </div>
+    
+    <div th:fragment="administrador(activo)" class="menu list-group shadow-3">
+        <a href="#" class="list-group-item list-group-item-action disabled">
+            <strong>Menú administrador</strong>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 1 ? 'active' : ''" aria-current="true">
+            <i class="fas fa-plus-circle"></i>
+            Añadir mascota
+        </a>
+        <a href="#" class="list-group-item list-group-item-action active" th:classappend="${activo} == 2 ? 'active' : ''" aria-current="true">
+            <i class="fas fa-envelope"></i>
+            Ver solicitudes de adopción
+        </a>
+    </div>
+    </body>
+</html>

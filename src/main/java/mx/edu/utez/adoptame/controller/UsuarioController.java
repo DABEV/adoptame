@@ -10,23 +10,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UsuarioController {
 
     @GetMapping("/consultarTodos")
-    public String consultarTodos(){
+    public String consultarTodos() {
         return "";
     }
 
     @GetMapping("/consultaUnica/{id}")
-    public String consultaUnica(){
+    public String consultaUnica() {
         return "";
     }
 
     @PostMapping("/guardarUsuario")
-    public String guardarUsuario(){
+    public String guardarUsuario() {
         return "";
     }
 
     @PostMapping("/borrarUsuario")
-    public String borrarUsuario(){
+    public String borrarUsuario() {
         return "";
+    }
+
+    @GetMapping("/mi-cuenta")
+    public String miCuenta() {
+        return "usuario/miCuenta";
     }
     
 }

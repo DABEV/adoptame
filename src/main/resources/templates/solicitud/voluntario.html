@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/imports :: head('Solicitud de adoptador')">
+    </head>
+    <head>
+        <link th:href="@{/css/card.css}" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="container-fluid">
+            <!-- Navbar -->
+            <div class="row mb-3">
+                <navbar th:replace="fragments/navbar :: navbar"></navbar>
+            </div>
+            <!-- Contenido -->
+            <div class="row">
+                <!-- Menú -->
+                <div class="col-md-3 mb-2">
+                    <div th:replace="fragments/menus :: administrador(2)">
+                    </div>
+                </div>
+                <div class="col-md-9 mb-2">
+                    <div class="d-grid gap-4">
+                        <div>
+                            <h2 style="color: #253e5c">Solicitudes de adopción</h2>
+                            <p class="h4 fw-light" style="color: #698fae">
+                                Listado de solicitudes para adoptar una mascota
+                            </p>
+                        </div>
+
+                        <!--Cards contenedores de la info de las mascotas-->
+                        <div class="row">
+                            <div th:replace="fragments/card :: mascota(
+                                'Soriana',
+                                true,
+                                '17-05-2022',
+                                'https://i.pinimg.com/736x/93/2d/3b/932d3b9e902812a4d298ae6f5e23ddad.jpg',
+                                true
+                            )">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="row mt-3">
+                <footer th:replace="fragments/footer :: footer"></footer>
+            </div>            
+        </div>
+        <scripts th:replace="fragments/imports :: scripts"></scripts>
+    </body>
+</html>

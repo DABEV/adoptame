@@ -1,0 +1,20 @@
+.card {
+    max-width: 520px;
+}
+
+.card > .row {
+    height: 100%;
+}
+
+.card-body > div > a {
+    color: #b07d5d;
+}
+
+/* Necesario para que la imagen del amp no sobrepase el contenedor donde se encuentra. */
+.fixed-container {
+    position: relative;
+}
+ 
+amp-img.contain img {
+    object-fit: contain;
+}
