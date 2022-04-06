@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambio de Contraseña</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet" />
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+    <style>
+        i {
+            color: white;
+        }
+
+        h2 {
+            color: #253e5c;
+        }
+
+        .boton {
+            width: 30%;
+            background-color: #253e5c;
+        }
+
+        .bg-span {
+            background-color: #253e5c;
+        }
+
+        .radius {
+            border-radius: 30px;
+        }
+
+        .subtitle {
+            color: #698FAE;
+            size: 24px;
+        }
+
+        .btn-outlined {
+            color: #698FAE;
+            border: 1px solid #253E5C;
+            box-shadow: none;
+        }
+    </style>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#modal1">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal Cambio de contraseña -->
+    <div class="modal fade" id="modal1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Cambia tu contraseña</h2>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="subtitle">¿Cómo quieres que te enviemos el código para cambiar la contraseña?</div>
+                    <!-- Correo electrónico  -->
+                    <div class="input-group mb-3 mt-4">
+                        <span class="input-group-text bg-span" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+                        <input type="email" th:field="*{mail}"  class="form-control" placeholder="Correo Electrónico"/>
+                    </div>
+                    <!-- telefono  -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-span" id="basic-addon1"><i class="fas fa-phone"></i></span>
+                        <input type="tel" th:field="*{telefono}" class="form-control" placeholder="Teléfono"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <!-- Buttons -->
+                    <button type="button" class="btn btn-outlined radius" data-mdb-dismiss="modal">Close</button>
+                    <button type="submit" class="btn boton radius btn-primary btn-block" data-mdb-toggle="modal"
+                        data-mdb-target="#modal2">
+                        <i class="fas fa-sign-in-alt"></i>&nbsp&nbspSiguiente
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal introducción de código-->
+    <div class="modal fade" id="modal2">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Introduce el código de seguridad</h2>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="subtitle">Comprueba si has recibido un mensaje con tu código, que debe tener X digitos,
+                        en el mensaje/correo electrónico</div>
+                    <!-- codigo -->
+                    <div class="input-group mb-3 mt-4">
+                        <span class="input-group-text bg-span" id="basic-addon1"><i class="fas fa-lock"></i></span>
+                        <input type="text" th:field="*{codigo}" class="form-control"
+                            placeholder="Código" />
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <!-- Buttons -->
+                    <button type="button" class="btn btn-outlined radius" data-mdb-dismiss="modal">Close</button>
+                    <button type="submit" class="btn boton radius btn-primary btn-block" data-mdb-toggle="modal"
+                        data-mdb-target="#modal3">
+                        <i class="fas fa-sign-in-alt"></i>&nbsp&nbspSiguiente
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal introducción de nueva contraseña-->
+    <div class="modal fade" id="modal3">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Elige una nueva contraseña</h2>
+                    <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="subtitle">Una contraseña segura combina letras y signos. Recuerda que la contraseña debe
+                        contener X caracteres como mínimo.</div>
+                    <!-- Contraseña  -->
+                    <div class="input-group mb-3 mt-4">
+                        <span class="input-group-text bg-span" id="basic-addon1"><i class="fas fa-eye"></i></span>
+                        <input type="password" th:field="password" class="form-control" placeholder="Contraseña"/>
+                    </div>
+                    <!-- Confirmar Contraseña  -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text bg-span" id="basic-addon1"><i class="fas fa-eye-slash"></i></span>
+                        <input type="password"  th:field="password" class="form-control" placeholder="Confirmar Contraseña"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- Buttons -->
+                    <button type="button" class="btn btn-outlined radius" data-mdb-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript" src="js/script.js"></script>
+</body>
+
+</html>
