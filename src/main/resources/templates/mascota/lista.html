@@ -1,70 +1,69 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
-    <!-- MDB -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet" />
-
-    <title>Registro mascota</title>
+<head th:replace="fragments/imports :: head('Lista de Mascotas')">
+    <title>Lista mascotas</title>
 </head>
 
 <body>
-    <div class="mx-4 mt-4">
-        <div class="row">
-            <div class="col-md-12 col-sm-12 col-12 col-lg-3 mb-5">
-                <div th:replace="fragments/cards-mascota :: card-filtro"></div>>
-            </div>
-            <div class="row d-flex justify-content-center mt-5">
-                <div class="col-12 col-sm-12 col-md-12 col-lg-10">
-                    <div class="d-grid gap-2">
-                        <button type="submit" style="background-color: #253E5C;"
-                            class="btn btn-primary mb-4 btn-rounded">
-                            <i class="fas fa-plus-circle me-2"></i>
-                            Añadir nueva mascota
-                        </button>
-                    </div>
-                </div>
-            </div>
+    <div class="container-fluid">
+        <!-- Navbar -->
+        <div class="row mb-3">
+            <navbar th:replace="fragments/navbar :: navbar"></navbar>
         </div>
-        <div class="col-md-12 col-sm-12 col-12 col-lg-9">
-            <div class="d-grid gap-4">
-                <div class="row">
-                    <div class="col-lg-7">
-                        <h2 style="color: #253E5C;">Lista de Mascotas</h2>
-                        <p class="h4 fw-light" style="color: #698FAE">Consulta la información de las mascotas
-                            registradas
-                        </p>
+        <!-- Contenido -->
+        <div class="mx-4 mt-4">
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-12 col-lg-3 mb-5">
+                    <div class="card" style="border: solid; color: #74422B; border-width: thin;"
+                        th:replace="fragments/cardsMascota :: card-filtro">
                     </div>
-                    <div class="col-lg-5">
-                        <form>
-                            <div class="row mb-4 d-flex justify-content-center">
-                                <div class="col-12 col-sm-12 col-md-10 mb-3">
-                                    <div class="form-outline">
-                                        <input type="text" id="busqueda" placeholder="Palabra clave ..."
-                                            class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-1">
-                                    <button type="button" class="btn btn-primary btn-floating"
-                                        style="background-color: #253E5C;">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                        </form>
+                    <div class="row d-flex justify-content-center mt-5">
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-10">
+                            <div class="d-grid gap-2">
+                                <button type="submit" style="background-color: #253E5C;"
+                                    class="btn btn-primary mb-4 btn-rounded">
+                                    <me class="fas fa-plus-circle me-2"></me>
+                                    Añadir nueva mascota
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="mb-4 mt-3">
-                    <div class="row  justify-content-center">
-                        <!--For each-->
-                        <div class="col-12 col-md-4 col-sm-12 mb-4" th:each="mascota : ${listaMascota}">
-                            <div th:replace="fragments/cards-mascota :: card-mascota"></div>
+                <div class="col-md-12 col-sm-12 col-12 col-lg-9">
+                    <div class="d-grid gap-4">
+                        <div class="row">
+                            <div class="col-lg-7">
+                                <h2 style="color: #253E5C;">Lista de Mascotas</h2>
+                                <p class="h4 fw-light" style="color: #698FAE">Consulta la información de las mascotas
+                                    registradas
+                                </p>
+                            </div>
+                            <div class="col-lg-5">
+                                <form>
+                                    <div class="row mb-4 d-flex justify-content-center">
+                                        <div class="col-12 col-sm-12 col-md-10 mb-3">
+                                            <div class="form-outline">
+                                                <input type="text" id="busqueda" placeholder="Palabra clave ..."
+                                                    class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-1">
+                                            <button type="button" class="btn btn-primary btn-floating"
+                                                style="background-color: #253E5C;">
+                                                <em class="fas fa-search"></em>
+                                            </button>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="mb-4 mt-3">
+                            <div class="row  justify-content-center">
+                                <!--For each-->
+                                <div class="col-12 col-md-4 col-sm-12 mb-4" th:each="mascota: ${listaMascotas}">
+                                    <div th:replace="fragments/cardsMascota :: card-mascota"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -72,12 +71,13 @@
         </div>
     </div>
     </div>
+    <!-- Footer -->
+    <div class="row mt-3">
+        <footer th:replace="fragments/footer :: footer"></footer>
     </div>
-
-
-
+    </div>
     <!-- MDB -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
+    <script th:src="@{/js/md-bootstrap.min.js}"></script>
 </body>
 
 </html>

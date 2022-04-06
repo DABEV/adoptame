@@ -66,6 +66,7 @@ public class Mascota {
     private List<Solicitud> solicitudes;
 
     public Mascota() {
+        //Constructor vacío de mascota
     }
     
     public Long getId() {
