@@ -1,6 +1,7 @@
 package mx.edu.utez.adoptame.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,18 +12,41 @@ public class TamanoServiceImp implements TamanoService{
     @Autowired
     TamanoRepository repository;
     @Override
-    public List<Tamano> listAll() {
+    public List<Tamano> listarTamanos() {
         return repository.findAll();
     }
 
     @Override
-    public Tamano save(Tamano tamano) {
-        return repository.save(tamano);
+    public Tamano guardarTamano(Tamano tamano) {
+        Tamano tamanoObjeto = null;
+        try{
+            tamanoObjeto = repository.save(tamano);
+        }catch(Exception e){
+            //
+        }
+        return tamanoObjeto;
     }
 
     @Override
-    public boolean delete(long id) {
-        repository.deleteById(id);
-        return true;
+    public Tamano obtenerTamano(Long id) {
+        Tamano tamanoObjeto = null;
+        Optional<Tamano> tamanoOpcional = repository.findById(id);
+
+        if(tamanoOpcional.isPresent()){
+            tamanoObjeto = tamanoOpcional.get();
+        }
+
+        return tamanoObjeto;
+    }
+
+    @Override
+    public boolean eliminarTamano(long id) {
+        try{
+            repository.deleteById(id);
+            return true;
+        }catch(Exception e){
+            //
+        }
+        return false;
     }
 }

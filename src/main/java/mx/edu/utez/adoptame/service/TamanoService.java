@@ -5,7 +5,8 @@ import java.util.List;
 import mx.edu.utez.adoptame.model.Tamano;
 
 public interface TamanoService {
-    List<Tamano> listAll();
-    Tamano save(Tamano tamano);
-    boolean delete(long id);
+    List<Tamano> listarTamanos();
+    Tamano guardarTamano(Tamano tamano);
+    Tamano obtenerTamano(Long id);
+    boolean eliminarTamano(long id);
 }
