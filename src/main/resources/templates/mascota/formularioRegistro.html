@@ -1,150 +1,156 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
-    <!-- MDB -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet" />
-
-    <title>Registro mascota</title>
+<head th:replace="fragments/imports :: head('Registro de mascotas')">
+    <title>Lista mascotas</title>
 </head>
 
 <body>
-    <div class="mx-4 mt-4">
-        <div class="row">
-            <div class="col-md-3 mb-5">
-                <div th:replace="fragments/menu-options :: admin"></div>
-            </div>
-            <div class="col-md-9">
-                <div class="d-grid gap-4">
-                    <div>
-                        <h2 style="color: #253E5C;">Registro de mascotas</h2>
-                        <p class="h4 fw-light" style="color: #698FAE">Un administrador aceptará o rechazará el registro
-                        </p>
-                    </div>
-                    <div class="card" style="border: solid; color: #253E5C; border-width: thin;">
-                        <div class="card-body ">
-                            <div class="row justify-content-between">
-                                <div class="col-md-5 col-sm-12 mb-3">
-                                    <label for="" style="color: #698FAE;">Nombre</label>
-                                    <div class="input-group flex-nowrap">
-                                        <span class="input-group-text" style="background-color: #253E5C; color: white;"
-                                            id="addon-wrapping">
-                                            <i class="fas fa-tag"></i>
-                                        </span>
-                                        <input type="text" name="nombre" id="nombre" class="form-control"
-                                            placeholder="Ej. Milo" aria-label="nombre"
-                                            aria-describedby="addon-wrapping" />
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-3 col-sm-12 mb-3">
-                                    <label for="" style="color: #698FAE;">Sexo</label>
-                                    <div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" style="border-color: #253E5C;" type="radio"
-                                                name="sexo" value="true" id="hembra" />
-                                            <label class="form-check-label" for="flexRadioDefault1"> Hembra
-                                            </label>
-                                        </div>
+    <div class="container-fluid">
+        <!-- Navbar -->
+        <div class="row mb-3">
+            <navbar th:replace="fragments/navbar :: navbar"></navbar>
+        </div>
+        <!-- Contenido -->
 
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" style="border-color: #253E5C;"
-                                                name="sexo" value="false" id="macho" />
-                                            <label class="form-check-label" for="flexRadioDefault1"> Macho
-                                            </label>
+        <div class="mx-4 mt-4">
+            <div class="row">
+                <div class="col-md-3 mb-5">
+                    <div th:replace="fragments/menu-options :: admin"></div>
+                </div>
+                <div class="col-md-9">
+                    <div class="d-grid gap-4">
+                        <div>
+                            <h2 style="color: #253E5C;">Registro de mascotas</h2>
+                            <p class="h4 fw-light" style="color: #698FAE">Edita un registro específico
+                            </p>
+                        </div>
+                        <div class="card" style="border: solid; color: #253E5C; border-width: thin;">
+                            <div class="card-body ">
+                                <form th:action="@{/mascota/guardarMascota}" method="post" th:object="${mascota}" enctype="multipart/form-data">
+                                    <div class="row justify-content-between">
+                                        <input type="hidden" th:field="*{id}" />
+                                        <div class="col-md-5 col-sm-12 mb-3">
+                                            <label for="nombre" style="color: #698FAE;">Nombre</label>
+                                            <div class="input-group flex-nowrap">
+                                                <span class="input-group-text"
+                                                    style="background-color: #253E5C; color: white;"
+                                                    id="addon-wrapping">
+                                                    <em class="fas fa-tag"></em>
+                                                </span>
+                                                <input type="text" th:field="*{nombre}" id="nombre" class="form-control"
+                                                    placeholder="Ej. Milo" aria-label="nombre"
+                                                    aria-describedby="addon-wrapping" />
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-sm-12 col-12 mb-3">
-                                    <label for="" style="color: #698FAE;">Edad</label>
-                                    <div class="input-group flex-nowrap">
-                                        <span class="input-group-text" style="background-color: #253E5C; color: white;"
-                                            id="addon-wrapping">
-                                            <i class="fas fa-calendar-alt"></i>
-                                        </span>
-                                        <input type="text" name="edad" class="form-control" placeholder="Ej. 6 meses" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row justify-content-between ">
-                                <div class="col-12 col-sm-12 col-md-5 mb-3">
-                                    <label for="" style="color: #698FAE;">Color</label>
-                                    <div class="input-group flex-nowrap">
-                                        <span class="input-group-text" style="background-color: #253E5C; color: white;"
-                                            id="addon-wrapping">
-                                            <i class="fas fa-palette"></i>
-                                        </span>
-                                        <select name="color" class="form-select">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-3 mb-3">
-                                    <label for="" style="color: #698FAE;">Tipo de mascota</label>
-                                    <div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" style="border-color: #253E5C;" type="radio"
-                                                name="tipo" value="true" id="hembra" />
-                                            <label class="form-check-label" for="flexRadioDefault1"> Perro
-                                            </label>
-                                        </div>
+                                        <div class="col-12 col-md-3 col-sm-12 mb-3">
+                                            <label for="" style="color: #698FAE;">Sexo</label>
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" style="border-color: #253E5C;"
+                                                        type="radio" th:field="*{sexo}" th:value="true" id="hembra" />
+                                                    <label class="form-check-label" for="flexRadioDefault1"> Hembra
+                                                    </label>
+                                                </div>
 
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" style="border-color: #253E5C;"
-                                                name="tipo" value="false" id="macho" />
-                                            <label class="form-check-label" for="flexRadioDefault1"> Gato
-                                            </label>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                        style="border-color: #253E5C;" th:field="*{sexo}"
+                                                        th:value="false" id="macho" />
+                                                    <label class="form-check-label" for="flexRadioDefault1"> Macho
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-12 col-12 mb-3">
+                                            <label for="" style="color: #698FAE;">Edad</label>
+                                            <div class="input-group flex-nowrap">
+                                                <span class="input-group-text"
+                                                    style="background-color: #253E5C; color: white;"
+                                                    id="addon-wrapping">
+                                                    <em class="fas fa-calendar-alt"></em>
+                                                </span>
+                                                <input type="text" th:field="*{edad}" class="form-control"
+                                                    placeholder="Ej. 6 meses" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-3 mb-3">
-                                    <label for="" style="color: #698FAE;">Tamaño</label>
-                                    <div class="input-group flex-nowrap">
-                                        <span class="input-group-text" style="background-color: #253E5C; color: white;"
-                                            id="addon-wrapping">
-                                            <i class="fas fa-paw"></i>
-                                        </span>
-                                        <select name="tamano" class="form-select">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                                    <div class="row justify-content-between ">
+                                        <div class="col-12 col-sm-12 col-md-5 mb-3">
+                                            <label for="" style="color: #698FAE;">Color</label>
+                                            <div class="input-group flex-nowrap">
+                                                <span class="input-group-text"
+                                                    style="background-color: #253E5C; color: white;"
+                                                    id="addon-wrapping">
+                                                    <em class="fas fa-palette"></em>
+                                                </span>
+                                                <select class="form-control form-control-lg" th:field="*{color.id}">
+                                                    <option th:each="tmpColor: ${listaColores}"
+                                                        th:value="${tmpColor.id}" th:text="${tmpColor.nombre}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-3 mb-3">
+                                            <label for="" style="color: #698FAE;">Tipo de mascota</label>
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" style="border-color: #253E5C;"
+                                                        type="radio" th:field="*{tipo}" th:value="true" id="hembra" />
+                                                    <label class="form-check-label" for="flexRadioDefault1"> Perro
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio"
+                                                        style="border-color: #253E5C;" th:field="*{tipo}"
+                                                        th:value="false" id="macho" />
+                                                    <label class="form-check-label" for="flexRadioDefault1"> Gato
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-3 mb-3">
+                                            <label for="" style="color: #698FAE;">Tamaño</label>
+                                            <div class="input-group flex-nowrap">
+                                                <span class="input-group-text"
+                                                    style="background-color: #253E5C; color: white;"
+                                                    id="addon-wrapping">
+                                                    <em class="fas fa-paw"></em>
+                                                </span>
+                                                <select class="form-control form-control-lg" th:field="*{tamano.id}">
+                                                    <option th:each="tmpTamanos: ${listaTamanos}" th:value="${tmpTamanos.id}"
+                                                        th:text="${tmpTamanos.nombre}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row justify-content-between d-flex align-items-end">
-                                <div class="col-12 col-sm-12 col-md-5">
-                                    <label class="form-label" style="color:#698FAE;" for="customFile">Imagen</label>
-                                    <input type="file" name="imagen" class="form-control" id="customFile" />
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-3">
-                                    <label for="" style="color: #698FAE;">Caracter</label>
-                                    <div class="input-group flex-nowrap">
-                                        <span class="input-group-text" style="background-color: #253E5C; color: white;"
-                                            id="addon-wrapping">
-                                            <i class="fas fa-basketball-ball"></i>
-                                        </span>
-                                        <select name="caracter" class="form-select">
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-3 mt-3">
-                                    <button type="button" class="btn btn-outline-primary btn-rounded"
-                                        style="color: #253E5C; border-color: #253E5C;" data-mdb-ripple-color="dark"> <i
-                                            class="fas fa-save me-2"></i>
-                                        Registrar mascota</button>
-                                </div>
+                                    <div class="row justify-content-between d-flex align-items-end">
+                                        <div class="col-12 col-sm-12 col-md-5">
+                                            <label class="form-label" style="color:#698FAE;"
+                                                for="customFile">Imagen</label>
+                                            <input type="file" name="imagen" class="form-control" id="customFile" />
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-3">
+                                            <label for="" style="color: #698FAE;">Caracter</label>
+                                            <div class="input-group flex-nowrap">
+                                                <span class="input-group-text"
+                                                    style="background-color: #253E5C; color: white;"
+                                                    id="addon-wrapping">
+                                                    <em class="fas fa-basketball-ball"></em>
+                                                </span>
+                                                <select class="form-control form-control-lg" th:field="*{caracter.id}">
+                                                    <option th:each="tmpCaracter: ${listaCaracteres}" th:value="${tmpCaracter.id}"
+                                                        th:text="${tmpCaracter.nombre}"></option>
+                                                </select>                                           </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-3 mt-3">
+                                            <button type="button" class="btn btn-outline-primary btn-rounded"
+                                                style="color: #253E5C; border-color: #253E5C;"
+                                                data-mdb-ripple-color="dark">
+                                                <em class="fas fa-save me-2"></em>
+                                                Registrar mascota</button>
+                                        </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -152,11 +158,16 @@
             </div>
         </div>
     </div>
+    </div>
 
 
+    <!-- Footer -->
+    <div class="row mt-3">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+    </div>
     <!-- MDB -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
-
+    <script th:src="@{/js/md-bootstrap.min.js}"></script>
 </body>
 
 </html>
