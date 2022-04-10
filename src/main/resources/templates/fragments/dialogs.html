@@ -13,65 +13,90 @@
                aria-label="Close"></button>
          </div>
          <div class="modal-body">
-            <div class="row">
-               <div class="col-12 col-md-6 text-center">
-                  <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top rounded mb-3"
-                     alt="Sunset Over the Sea" />
-               </div>
-
-               <div class="col-12 col-md">
-                  <h1 class="text-center" th:text="${mascota.nombre}"></h1>
-                  <h4>
-                     Sexo
-                     <small class="text-muted" th:text="${mascota.sexo == false} ? 'Macho' : 'Hembra'"></small>
-                  </h4>
-                  <h4>
-                     Edad
-                     <small class="text-muted">[[${mascota.edad}]]</small>
-                  </h4>
-                  <h4>
-                     Color
-                     <small class="text-muted">[[${mascota.color.nombre}]]</small>
-                  </h4>
-                  <h4>
-                     Carácter
-                     <small class="text-muted">[[${mascota.caracter.nombre}]]</small>
-                  </h4>
-                  <h4>
-                     Tipo
-                     <small class="text-muted" th:text="${mascota.tipo == false} ? 'Gato' : 'Perro'"></small>
-                  </h4>
-                  <h4>
-                     Fecha de registro
-                     <small class="text-muted" th:text="${#dates.format(mascota.fechaRegistro, 'dd-MM-yyyy')}"></small>
-                  </h4>
-                  <h4>
-                     Registro
-                     <div th:switch="${mascota.aprobadoRegistro}">
-                        <div th:case="'aprobado'">
-                           <small class="text-muted"><span
-                                 class="badge badge-pill badge-success mt-2">Aprobado</span></small>
+            <div class="mb-3">
+               <div class="row">
+                  <div class="col-lg-4 text-center">
+                     <img src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
+                        alt="Trendy Pants and Shoes" class="img-fluid rounded mb-3" />
+                  </div>
+                  <div class="col-lg-8">
+                     <div>
+                        <div class="row">
+                           <div class="col-lg">
+                              <h2 th:text="${mascota.nombre}"></h2>
+                           </div>
+                           <div class="col-12 col-lg text-center">
+                              <p>
+                                 Fecha de registro:
+                                 <small class="text-muted"
+                                    th:text="${#dates.format(mascota.fechaRegistro, 'dd-MM-yyyy')}"></small>
+                              </p>
+                           </div>
                         </div>
-                        <div th:case="'pendiente'">
-                           <p lass="text-muted">
-                              <span class="badge badge-pill badge-warning mt-2">Pendiente</span>
-                           </p>
+                        <p class="note note-light">
+                           <strong>Detalles: </strong> [[${mascota.detalles}]]
+                        </p>
+                        <div class="row text-center">
+                           <div class="col-12 col-lg">
+                              <div class="row d-flex align-items-start">
+                                 <div class="col-6 col-lg-5">
+                                    <div class="h5">Validación: </div>
+                                 </div>
+                                 <div class="col-6 col-lg">
+                                    <div th:switch="${mascota.aprobadoRegistro}">
+                                       <div th:case="'aprobado'">
+                                          <div class="h5">
+                                             <span class="badge badge-pill badge-success">Aprobado</span>
+                                          </div>
+                                       </div>
+                                       <div th:case="'pendiente'">
+                                          <div class="h5">
+                                             <span class="badge badge-pill badge-warning">Pendiente</span>
+                                          </div>
+                                       </div>
+                                       <div th:case="'rechazado'">
+                                          <div class="h5">
+                                             <span class="badge badge-pill badge-danger">Rechazado</span>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-12 col-lg-5 text-center">
+                              <div class="h5"
+                                 th:text="${mascota.disponibleAdopcion == true}? 'Disponible':'No disponible'"></div>
+                           </div>
                         </div>
-                        <div th:case="'rechazado'">
-                           <p lass="text-muted">
-                              <span class="badge badge-pill badge-danger mt-2">Rechazado</span>
-                           </p>
+                        <div class="row">
+                           <div class="col-12 col-lg">
+                              <ul class="list-group mt-3">
+                                 <li class="list-group-item" style="border-color: #253E5C;"
+                                    th:text="${mascota.tipo == true}? 'Tipo: Perro':'Tipo: Gato'">Tipo
+                                 </li>
+                                 <li class="list-group-item" style="border-color: #253E5C;"
+                                    th:text="${mascota.sexo == false} ? 'Sexo: Macho' : 'Sexo: Hembra'">
+                                 </li>
+                                 <li class="list-group-item" style="border-color: #253E5C;"
+                                    th:text="'Color: ' + ${mascota.color.nombre}">Color</li>
+                              </ul>
+                           </div>
+                           <div class="col-12 col-lg">
+                              <ul class="list-group mt-3">
+                                 <li class="list-group-item" style="border-color: #253E5C;"
+                                    th:text="'Edad: ' + ${mascota.edad}">Edad
+                                 </li>
+                                 <li class="list-group-item" style="border-color: #253E5C;"
+                                    th:text="'Tamaño: ' + ${mascota.tamano.nombre}">Tam</li>
+                                 <li class="list-group-item" style="border-color: #253E5C;"
+                                    th:text="'Caracter: ' + ${mascota.caracter.nombre}">Caracter</li>
+                              </ul>
+                           </div>
                         </div>
                      </div>
-                  </h4>
-                  <h4 th:utext="${mascota.detalles}"></h4>
+                  </div>
                </div>
             </div>
-         </div>
-
-         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
          </div>
       </div>
    </div>
@@ -92,12 +117,13 @@
             <h1 th:text="${mascota.nombre}"></h1>
             <div>
                <form th:action="@{/mascota/borrarMascota}" method="post">
-                  <button type="button" class="btn btn-outline-danger" data-mdb-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-outline-danger btn-rounded"
+                     data-mdb-dismiss="modal">Cancelar</button>
                   <input type="hidden" th:value="${mascota.id}" name="idMascota" />
-                  <button type="submit" class="btn btn-danger">Eliminar</button>
+                  <button type="submit" class="btn btn-danger btn-rounded">Eliminar</button>
                </form>
             </div>
          </div>
-      </div> 
+      </div>
    </div>
 </div>
