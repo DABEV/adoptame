@@ -42,6 +42,9 @@ public class Mascota {
 
     @Column(columnDefinition = "tinyint not null default 0")
     private Boolean  disponibleAdopcion;
+
+    @Column(columnDefinition = "tinyint not null default 1")
+    private Boolean activo;
     
     @Column(columnDefinition = "longtext null")
 	private String detalles;
@@ -73,6 +76,16 @@ public class Mascota {
     }
 
     
+    public Boolean getActivo() {
+        return activo;
+    }
+
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+
     public Boolean getDisponibleAdopcion() {
         return disponibleAdopcion;
     }

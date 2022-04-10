@@ -9,7 +9,8 @@
       <div class="modal-content">
          <div class="modal-header text-white" style="background-color: #253E5C;">
             <h5 id="labelModal" class="modal-title">Detalles de la mascota</h5>
-            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
+            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
+               aria-label="Close"></button>
          </div>
          <div class="modal-body">
             <div class="row">
@@ -73,5 +74,30 @@
             <button type="button" class="btn btn-primary">Save changes</button>
          </div>
       </div>
+   </div>
+</div>
+
+<div th:fragment="eliminarMascota(id)" class="modal fade" th:id="${'eliminar' + id}" tabindex="-1"
+   aria-labelledby="labelModalEliminar" aria-hidden="true">
+   <!-- dialog eliminar mascota-->
+   <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+         <div class="modal-header text-white bg-danger">
+            <h5 id="labelModalEliminar" class="modal-title">Eliminar mascota</h5>
+            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
+               aria-label="Close"></button>
+         </div>
+         <div class="modal-body text-center">
+            <label>¿Desea eliminar a?</label>
+            <h1 th:text="${mascota.nombre}"></h1>
+            <div>
+               <form th:action="@{/mascota/borrarMascota}" method="post">
+                  <button type="button" class="btn btn-outline-danger" data-mdb-dismiss="modal">Cancelar</button>
+                  <input type="hidden" th:value="${mascota.id}" name="idMascota" />
+                  <button type="submit" class="btn btn-danger">Eliminar</button>
+               </form>
+            </div>
+         </div>
+      </div> 
    </div>
 </div>

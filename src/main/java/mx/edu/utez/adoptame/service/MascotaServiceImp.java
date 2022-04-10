@@ -17,16 +17,16 @@ public class MascotaServiceImp implements MascotaService {
 
     @Override
     public List<Mascota> listarMascotas() {
-        return mascotaRepository.findAll();
+        return mascotaRepository.findByActivo(true);
     }
 
     @Override
     public Mascota guardarMascota(Mascota mascota) {
         Mascota mascotaResultante = null;
-        try{
+        try {
             mascotaResultante = mascotaRepository.save(mascota);
-        }catch(Exception e){
-            //log
+        } catch (Exception e) {
+            // log
         }
         return mascotaResultante;
     }
@@ -36,7 +36,7 @@ public class MascotaServiceImp implements MascotaService {
         Mascota mascotaResultante = null;
         Optional<Mascota> mascotaOpcional = mascotaRepository.findById(id);
 
-        if(mascotaOpcional.isPresent()){
+        if (mascotaOpcional.isPresent()) {
             mascotaResultante = mascotaOpcional.get();
         }
 
@@ -45,11 +45,15 @@ public class MascotaServiceImp implements MascotaService {
 
     @Override
     public boolean eliminarMascota(Long id) {
-        try{
-            mascotaRepository.deleteById(id);
-            return true;
-        }catch(Exception e){
-            //Log
+        try {
+            Optional<Mascota> mascotaOpcional = mascotaRepository.findById(id);
+            if (mascotaOpcional.isPresent()) {
+                mascotaOpcional.get().setActivo(false);
+                mascotaRepository.save(mascotaOpcional.get());
+                return true;
+            }
+        } catch (Exception e) {
+            // Log
         }
         return false;
     }
@@ -58,5 +62,5 @@ public class MascotaServiceImp implements MascotaService {
     public boolean validarRegistro(Mascota mascota) {
         return false;
     }
-    
+
 }

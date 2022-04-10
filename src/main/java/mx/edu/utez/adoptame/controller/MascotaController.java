@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.edu.utez.adoptame.model.Caracter;
 import mx.edu.utez.adoptame.model.Color;
 import mx.edu.utez.adoptame.model.Mascota;
+import mx.edu.utez.adoptame.model.Tamano;
 import mx.edu.utez.adoptame.service.ColorServiceImp;
 import mx.edu.utez.adoptame.service.MascotaServiceImp;
 import mx.edu.utez.adoptame.util.ImagenUtileria;
@@ -40,10 +42,10 @@ public class MascotaController {
     @GetMapping("/consultaUnica/{id}")
     public String consultaUnica(@PathVariable long id, Model model) {
         Mascota mascota = mascotaServiceImp.obtenerMascota(id);
-		if (mascota != null) {
-			model.addAttribute("mascota", mascota);
-			return "mascota/detalles";
-		}
+        if (mascota != null) {
+            model.addAttribute("mascota", mascota);
+            return "mascota/detalles";
+        }
         return redirectListar;
     }
 
@@ -54,13 +56,11 @@ public class MascotaController {
             model.addAttribute("mascota", mascota);
 
             List<Color> colores = colorServiceImp.listarColores();
-            /*
-             * List<Caracter> listaCaracter = caracterService.listar();
-             * List<Tamano> listaTamano = tamanoService.listar();
-             * 
-             * model.addAttribute("listaCaracteres", listaCaracter);
-             * model.addAttribute("listaTamanos", listaTamano);
-             */
+            // List<Caracter> listaCaracter = caracterServiceImp.listar();
+            // List<Tamano> listaTamano = tamanoServiceImp.listar();
+
+            // model.addAttribute("listaCaracteres", listaCaracter);
+            // model.addAttribute("listaTamanos", listaTamano);
             model.addAttribute("listaColores", colores);
             return "mascota/formularioRegistro";
         }
@@ -117,8 +117,14 @@ public class MascotaController {
     }
 
     @PostMapping("/borrarMascota")
-    public String borrarMascota() {
-        return "";
+    public String borrarMascota(@RequestParam("idMascota") long id) {
+        boolean respuesta = mascotaServiceImp.eliminarMascota(id);
+        if(respuesta){
+            //log exito
+        }else{
+            //log fallo
+        }
+        return redirectListar;
     }
 
 }

@@ -35,7 +35,8 @@
                         th:attr="data-mdb-target=${'#detalles'+ index.count}">
                         <em class="far fa-eye fa-lg"></em>
                     </a>
-                    <a class="mx-1" style="color: #74422B;" href="#!" role="button">
+                    <a class="mx-1" style="color: #74422B;" data-mdb-toggle="modal"
+                        th:attr="data-mdb-target=${'#eliminar'+ index.count}" role="button">
                         <em class="far fa-trash-alt fa-lg"></em>
                     </a>
                 </div>
@@ -45,6 +46,7 @@
                     </a>
                 </div>
                 <div th:replace="fragments/dialogs :: detallesMascota(${index.count})"></div>
+                <div th:replace="fragments/dialogs :: eliminarMascota(${index.count})"></div>
             </div>
         </div>
     </div>
