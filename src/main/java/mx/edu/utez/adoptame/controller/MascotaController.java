@@ -23,6 +23,8 @@ import mx.edu.utez.adoptame.util.ImagenUtileria;
 @RequestMapping("/mascota")
 public class MascotaController {
 
+    private String redirectListar = "redirect:/mascota/consultarTodas";
+
     @Autowired
     MascotaServiceImp mascotaServiceImp;
 
@@ -36,8 +38,13 @@ public class MascotaController {
     }
 
     @GetMapping("/consultaUnica/{id}")
-    public String consultaUnica() {
-        return "";
+    public String consultaUnica(@PathVariable long id, Model model) {
+        Mascota mascota = mascotaServiceImp.obtenerMascota(id);
+		if (mascota != null) {
+			model.addAttribute("mascota", mascota);
+			return "mascota/detalles";
+		}
+        return redirectListar;
     }
 
     @GetMapping("/actualizar/{id}")
@@ -58,7 +65,7 @@ public class MascotaController {
             return "mascota/formularioRegistro";
         }
         attributes.addFlashAttribute("msg_error", "Registro no encontrado");
-        return "redirect:/mascota/consultarTodas";
+        return redirectListar;
     }
 
     @GetMapping("/registrar")
@@ -101,7 +108,7 @@ public class MascotaController {
         Mascota respuesta = mascotaServiceImp.guardarMascota(mascota);
         if (respuesta != null) {
             attributes.addFlashAttribute("msg_success", "Registro exitoso");
-            return "redirect:/mascota/consultarTodas";
+            return redirectListar;
         } else {
             attributes.addFlashAttribute("msg_error", "Registro fallido");
             return "redirect:/mascotas/registrar";

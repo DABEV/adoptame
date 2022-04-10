@@ -1,3 +1,77 @@
 <div th:fragment="detalles-blog">
-   <!-- dialog detalles blog--> 
+   <!-- dialog detalles blog-->
+</div>
+
+<div th:fragment="detallesMascota(id)" class="modal fade" th:id="${'detalles' + id}" tabindex="-1"
+   aria-labelledby="labelModal" aria-hidden="true">
+   <!-- dialog detalles mascota-->
+   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+         <div class="modal-header text-white" style="background-color: #253E5C;">
+            <h5 id="labelModal" class="modal-title">Detalles de la mascota</h5>
+            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <div class="row">
+               <div class="col-12 col-md-6 text-center">
+                  <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top rounded mb-3"
+                     alt="Sunset Over the Sea" />
+               </div>
+
+               <div class="col-12 col-md">
+                  <h1 class="text-center" th:text="${mascota.nombre}"></h1>
+                  <h4>
+                     Sexo
+                     <small class="text-muted" th:text="${mascota.sexo == false} ? 'Macho' : 'Hembra'"></small>
+                  </h4>
+                  <h4>
+                     Edad
+                     <small class="text-muted">[[${mascota.edad}]]</small>
+                  </h4>
+                  <h4>
+                     Color
+                     <small class="text-muted">[[${mascota.color.nombre}]]</small>
+                  </h4>
+                  <h4>
+                     Carácter
+                     <small class="text-muted">[[${mascota.caracter.nombre}]]</small>
+                  </h4>
+                  <h4>
+                     Tipo
+                     <small class="text-muted" th:text="${mascota.tipo == false} ? 'Gato' : 'Perro'"></small>
+                  </h4>
+                  <h4>
+                     Fecha de registro
+                     <small class="text-muted" th:text="${#dates.format(mascota.fechaRegistro, 'dd-MM-yyyy')}"></small>
+                  </h4>
+                  <h4>
+                     Registro
+                     <div th:switch="${mascota.aprobadoRegistro}">
+                        <div th:case="'aprobado'">
+                           <small class="text-muted"><span
+                                 class="badge badge-pill badge-success mt-2">Aprobado</span></small>
+                        </div>
+                        <div th:case="'pendiente'">
+                           <p lass="text-muted">
+                              <span class="badge badge-pill badge-warning mt-2">Pendiente</span>
+                           </p>
+                        </div>
+                        <div th:case="'rechazado'">
+                           <p lass="text-muted">
+                              <span class="badge badge-pill badge-danger mt-2">Rechazado</span>
+                           </p>
+                        </div>
+                     </div>
+                  </h4>
+                  <h4 th:utext="${mascota.detalles}"></h4>
+               </div>
+            </div>
+         </div>
+
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+         </div>
+      </div>
+   </div>
 </div>

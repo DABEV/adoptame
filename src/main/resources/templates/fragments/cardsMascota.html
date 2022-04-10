@@ -3,47 +3,48 @@
         <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top"
             alt="Sunset Over the Sea" />
         <div class="card-body pb-0">
-            <h5 class="card-title" th:text="${mascota.nombre}">Card title</h5>
             <div class="row">
-                <div class="col-3">
+                <div class="col">
+                    <h5 class="card-title" th:text="${mascota.nombre}">Card title</h5>
+                </div>
+                <div class="col-3 text-end">
                     <span th:text="${mascota.tipo == true} ? 'Perro' : 'Gato' " class="badge rounded-pill"
                         style="background-color: #253E5C; color: white;">mascota</span>
-                </div>
-                <div class="col text-end">
-                    <p><small th:text="${mascota.fechaRegistro}">18 de Marzo 2022</small></p>
                 </div>
             </div>
         </div>
         <ul class="list-group list-group-flush">
+            <li class="list-group-item" style="border-color: #253E5C;"
+                th:text="${mascota.disponibleAdopcion == true}? 'Disponible':'No disponible'">Edad
+            </li>
             <li class="list-group-item" style="border-color: #253E5C;" th:text="'Edad: ' + ${mascota.edad}">Edad
             </li>
-            <li class="list-group-item" style="border-color: #253E5C;" th:text="'Color: ' + ${mascota.color.nombre}">
-                Color</li>
             <li class="list-group-item" style="border-color: #253E5C;"
                 th:text="'Caracter: ' + ${mascota.caracter.nombre}">Caracter</li>
-            <li class="list-group-item" style="border-color: #253E5C;" th:text="'Tamaño: ' + ${mascota.tamano.nombre}">
-                Tamaño</li>
         </ul>
 
         <!--Botones del card-->
         <div class="card-body pt-2 pb-2">
             <div class="row justify-content-between">
                 <div class="col">
-                    <a style="color: #74422B;" th:href="@{/mascota/actualizar/{id} (id=${mascota.id})}" role="button">
-                        <em class="far fa-edit"></em>
+                    <a class="mx-1" style="color: #74422B;" th:href="@{/mascota/actualizar/{id} (id=${mascota.id})}"
+                        role="button">
+                        <em class="far fa-edit fa-lg"></em>
                     </a>
-                    <a style="color: #74422B;" href="#!" role="button">
-                        <em class="far fa-heart"></em>
+                    <a class="mx-1" style="color: #74422B;" role="button" data-mdb-toggle="modal"
+                        th:attr="data-mdb-target=${'#detalles'+ index.count}">
+                        <em class="far fa-eye fa-lg"></em>
                     </a>
-                    <a style="color: #74422B;" href="#!" role="button">
-                        <em class="far fa-heart"></em>
+                    <a class="mx-1" style="color: #74422B;" href="#!" role="button">
+                        <em class="far fa-trash-alt fa-lg"></em>
                     </a>
                 </div>
                 <div class="col-1">
                     <a style="color: #74422B;" href="#!" role="button">
-                        <em class="far fa-heart"></em>
+                        <em class="far fa-heart fa-lg"></em>
                     </a>
                 </div>
+                <div th:replace="fragments/dialogs :: detallesMascota(${index.count})"></div>
             </div>
         </div>
     </div>

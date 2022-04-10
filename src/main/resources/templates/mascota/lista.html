@@ -60,7 +60,7 @@
                         <div class="mb-4 mt-3">
                             <div class="row  justify-content-center">
                                 <!--For each-->
-                                <div class="col-12 col-md-4 col-sm-12 mb-4" th:each="mascota: ${listaMascotas}">
+                                <div class="col-12 col-md-4 col-sm-12 mb-4" th:each="mascota,index: ${listaMascotas}">
                                     <div th:replace="fragments/cardsMascota :: card-mascota"></div>
                                 </div>
                             </div>
@@ -69,8 +69,9 @@
                 </div>
             </div>
         </div>
+
     </div>
-    </div>
+
     <!-- Footer -->
     <div class="row mt-3">
         <footer th:replace="fragments/footer :: footer"></footer>
