@@ -2,12 +2,19 @@ package mx.edu.utez.adoptame.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import mx.edu.utez.adoptame.model.Donacion;
 
 public interface DonacionService {
-    List<Donacion> listarDonaciones();
-    Donacion guardarDonacion(Donacion donacion);
-    Donacion actualizarDonacion(Donacion favorito);
-    Donacion obtenerDonacion(Long id);
-    boolean eliminarDonacion(Long id);
+    public boolean guardarDonacion(Donacion donacion);
+
+    public List<Donacion> listarDonaciones();
+
+    public boolean eliminarDonacion(Long id);
+
+    public Donacion obtenerDonacion(Long id);
+
+    public Page<Donacion> listarPaginacion(Pageable page);
 }
