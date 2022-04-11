@@ -17,8 +17,10 @@ import mx.edu.utez.adoptame.model.Caracter;
 import mx.edu.utez.adoptame.model.Color;
 import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Tamano;
+import mx.edu.utez.adoptame.service.CaracterServiceImpl;
 import mx.edu.utez.adoptame.service.ColorServiceImp;
 import mx.edu.utez.adoptame.service.MascotaServiceImp;
+import mx.edu.utez.adoptame.service.TamanoServiceImp;
 import mx.edu.utez.adoptame.util.ImagenUtileria;
 
 @Controller
@@ -29,6 +31,12 @@ public class MascotaController {
 
     @Autowired
     MascotaServiceImp mascotaServiceImp;
+
+    @Autowired
+    TamanoServiceImp tamanoServiceImp;
+
+    @Autowired
+    CaracterServiceImpl caracterServiceImp;
 
     @Autowired
     ColorServiceImp colorServiceImp;
@@ -56,11 +64,11 @@ public class MascotaController {
             model.addAttribute("mascota", mascota);
 
             List<Color> colores = colorServiceImp.listarColores();
-            // List<Caracter> listaCaracter = caracterServiceImp.listar();
-            // List<Tamano> listaTamano = tamanoServiceImp.listar();
+            List<Caracter> listaCaracter = caracterServiceImp.listar();
+            List<Tamano> listaTamano = tamanoServiceImp.listar();
 
-            // model.addAttribute("listaCaracteres", listaCaracter);
-            // model.addAttribute("listaTamanos", listaTamano);
+            model.addAttribute("listaCaracteres", listaCaracter);
+            model.addAttribute("listaTamanos", listaTamano);
             model.addAttribute("listaColores", colores);
             return "mascota/formularioRegistro";
         }
