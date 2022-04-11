@@ -1,23 +1,17 @@
 package mx.edu.utez.adoptame.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "respuestas")
 public class Respuesta {
-    @Id
     private Integer codigo;
-    
-    @Column(nullable = false, length = 100)
     private String titulo;
-    
-    @Column(nullable = true)
     private String mensaje;
-    
-    public Respuesta() {
+
+    public Respuesta(){
+    }
+
+    public Respuesta(Integer codigo, String titulo, String mensaje) {
+        this.codigo = codigo;
+        this.titulo = titulo;
+        this.mensaje = mensaje;
     }
 
     public Integer getCodigo() {
