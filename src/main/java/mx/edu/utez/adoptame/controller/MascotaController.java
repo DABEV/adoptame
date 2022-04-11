@@ -64,8 +64,8 @@ public class MascotaController {
             model.addAttribute("mascota", mascota);
 
             List<Color> colores = colorServiceImp.listarColores();
-            List<Caracter> listaCaracter = caracterServiceImp.listar();
-            List<Tamano> listaTamano = tamanoServiceImp.listar();
+            List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
+            List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
 
             model.addAttribute("listaCaracteres", listaCaracter);
             model.addAttribute("listaTamanos", listaTamano);
@@ -79,13 +79,11 @@ public class MascotaController {
     @GetMapping("/registrar")
     public String registrar(Mascota mascota, Model model) {
         List<Color> colores = colorServiceImp.listarColores();
-        /*
-         * List<Caracter> listaCaracter = caracterService.listar();
-         * List<Tamano> listaTamano = tamanoService.listar();
-         * 
-         * model.addAttribute("listaCaracteres", listaCaracter);
-         * model.addAttribute("listaTamanos", listaTamano);
-         */
+        List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
+        List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
+
+        model.addAttribute("listaCaracteres", listaCaracter);
+        model.addAttribute("listaTamanos", listaTamano);
         model.addAttribute("listaColores", colores);
         return "mascota/formularioRegistro";
     }
