@@ -1,42 +1,43 @@
 package mx.edu.utez.adoptame.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.edu.utez.adoptame.model.Rol;
+import mx.edu.utez.adoptame.repository.RolRepository;
 
 @Service
 public class RolServiceImp implements RolService {
 
+    @Autowired
+    private RolRepository repository;
+
     @Override
     public List<Rol> listarRoles() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        List<Rol> roles = new ArrayList<>();
 
-    @Override
-    public Rol guardarRol(Rol rol) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        try {
+            roles = repository.findAll();
+        } catch (Exception e) {
+            // log
+        }
 
-    @Override
-    public Rol actualizarRol(Rol rol) {
-        // TODO Auto-generated method stub
-        return null;
+        return roles;
     }
 
     @Override
     public Rol obtenerRol(Long id) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        Rol rol = null;
 
-    @Override
-    public boolean eliminarRol(Long id) {
-        // TODO Auto-generated method stub
-        return false;
+        try {
+            rol = repository.getById(id);
+        } catch (Exception e) {
+            // log
+        }
+
+        return rol;
     }
-    
 }

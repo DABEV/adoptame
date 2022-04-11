@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head th:replace="fragments/imports :: head('Mi cuenta')">
-    </head>
-    <head>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+    <head th:insert="fragments/imports :: head('Mi cuenta')">
         <link th:href="@{/css/form.css}" rel="stylesheet" />
+        <title>Mi cuenta</title>
     </head>
     <body>
         <div class="container-fluid">
