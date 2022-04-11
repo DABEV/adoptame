@@ -116,14 +116,9 @@ public class MascotaController {
 
     }
 
-    @PostMapping("/borrarMascota")
-    public String borrarMascota(@RequestParam("idMascota") long id) {
-        boolean respuesta = mascotaServiceImp.eliminarMascota(id);
-        if(respuesta){
-            //log exito
-        }else{
-            //log fallo
-        }
+    @GetMapping("/borrarMascota/{id}")
+    public String borrarMascota(@PathVariable long id) {
+        mascotaServiceImp.eliminarMascota(id);
         return redirectListar;
     }
 
