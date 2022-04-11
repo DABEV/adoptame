@@ -126,11 +126,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="detalles" style="color: #698FAE;">Detalles</label>
+                                        <div class="input-group flex-nowrap">
+                                            <span class="input-group-text"
+                                                style="background-color: #253E5C; color: white;" id="addon-wrapping">
+                                                <em class="fas fa-paw"></em>
+                                            </span>
+                                            <input type="text" th:field="*{detalles}" id="detalles" class="form-control"
+                                                placeholder="Ej. Juega todo el día" aria-label="detalles"
+                                                aria-describedby="addon-wrapping" />
+                                        </div>
+                                    </div>
                                     <div class="row justify-content-between d-flex align-items-end">
                                         <div class="col-12 col-sm-12 col-md-5">
                                             <label class="form-label" style="color:#698FAE;"
                                                 for="customFile">Imagen</label>
-                                            <input type="file" name="imagen" class="form-control" id="customFile" />
+                                            <input type="file" name="imagenMascota" class="form-control"
+                                                id="customFile" />
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-3">
                                             <label for="" style="color: #698FAE;">Caracter</label>
@@ -148,7 +161,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-3 mt-3 text-center">
-                                            <button type="button" class="btn btn-outline-primary btn-rounded"
+                                            <button type="submit" class="btn btn-outline-primary btn-rounded"
                                                 style="color: #253E5C; border-color: #253E5C;"
                                                 data-mdb-ripple-color="dark">
                                                 <em class="fas fa-save me-2"></em>

@@ -94,16 +94,17 @@ public class MascotaController {
         if (mascota.getId() == null) {
             mascota.setAprobadoRegistro("pendiente");
             mascota.setDisponibleAdopcion(false);
+            mascota.setActivo(true);
 
         } else {
             Mascota mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
             mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
             mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
             mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
+            mascota.setActivo(mascotaExistente.getActivo());
         }
 
         if (!multipartFile.isEmpty()) {
-            // Establecer directorio local para subida de archivos; en prod: /var/www/html
             String ruta = "C:/mascotas/img-mascotas/";
             String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
             if (nombreImagen != null) {
@@ -117,7 +118,7 @@ public class MascotaController {
             return redirectListar;
         } else {
             attributes.addFlashAttribute("msg_error", "Registro fallido");
-            return "redirect:/mascotas/registrar";
+            return "redirect:/mascota/registrar";
         }
 
     }
