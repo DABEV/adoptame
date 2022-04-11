@@ -1,7 +1,6 @@
 <div th:fragment="card-mascota">
     <div class="card" style="border: solid; color: #253E5C; border-width: thin;">
-        <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top"
-            alt="Sunset Over the Sea" />
+        <img th:src="@{/imagenes/{i} (i= ${mascota.imagen})}" class="card-img-top" height="200" alt="No encontrada" />
         <div class="card-body pb-0">
             <div class="row">
                 <div class="col">

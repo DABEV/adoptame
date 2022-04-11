@@ -1,5 +1,5 @@
 <div th:fragment="detalles-blog">
-   <!-- dialog detalles blog--> 
+   <!-- dialog detalles blog-->
 </div>
 
 <div th:fragment="donacion" class="modal fade">
@@ -14,17 +14,14 @@
             <div>
                <form th:action="" method="post">
                   <div class="input-group flex-nowrap">
-                     <span class="input-group-text"
-                         style="background-color: #253E5C; color: white;"
-                         id="addon-wrapping">
-                         <em class="fas fa-donate"></em>
+                     <span class="input-group-text" style="background-color: #253E5C; color: white;"
+                        id="addon-wrapping">
+                        <em class="fas fa-donate"></em>
                      </span>
-                     <input type="number" th:field="*{monto}" id="monto" class="form-control"
-                         placeholder="500.00" aria-label="monto"
-                         aria-describedby="addon-wrapping" />
-                 </div>
-                  <button type="button" class="btn btn-outline btn-rounded"
-                     data-mdb-dismiss="modal">Cancelar</button>
+                     <input type="number" th:field="*{monto}" id="monto" class="form-control" placeholder="500.00"
+                        aria-label="monto" aria-describedby="addon-wrapping" />
+                  </div>
+                  <button type="button" class="btn btn-outline btn-rounded" data-mdb-dismiss="modal">Cancelar</button>
                   <input type="hidden" th:value="${usuario.id}" name="idUsuario" />
                   <button type="submit" class="btn btn-info btn-rounded">Donar</button>
                </form>
@@ -48,8 +45,8 @@
             <div class="mb-3">
                <div class="row">
                   <div class="col-lg-4 text-center">
-                     <img src="https://mdbcdn.b-cdn.net/wp-content/uploads/2020/06/vertical.webp"
-                        alt="Trendy Pants and Shoes" class="img-fluid rounded mb-3" />
+                     <img th:src="@{/imagenes/{i} (i= ${mascota.imagen})}" class="img-fluid rounded mb-3"
+                        alt="No encontrada" />
                   </div>
                   <div class="col-lg-8">
                      <div>
@@ -150,7 +147,8 @@
             <div>
                <button type="button" class="btn btn-outline-danger btn-rounded"
                   data-mdb-dismiss="modal">Cancelar</button>
-               <a class="btn btn-danger btn-rounded" th:href="@{/mascota/borrarMascota/{id} (id=${mascota.id})}" >Eliminar</a>
+               <a class="btn btn-danger btn-rounded"
+                  th:href="@{/mascota/borrarMascota/{id} (id=${mascota.id})}">Eliminar</a>
             </div>
          </div>
       </div>
