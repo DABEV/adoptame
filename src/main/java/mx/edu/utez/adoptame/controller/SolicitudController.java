@@ -56,8 +56,8 @@ public class SolicitudController {
     public String guardarSolicitud(Solicitud solicitud, Mascota mascota, Usuario usuario, Model model, RedirectAttributes redirectAttributes){
         if(solicitud.getId() == null){
             solicitud.setAprobado("Pendiente");
-            //solicitud.setAdoptador(usuario);
-            //solicitud.setMascota(mascota);
+            solicitud.setAdoptador(usuario);
+            solicitud.setMascota(mascota);
         }
 
         Solicitud respuesta = solicitudServiceImp.guardarSolicitud(solicitud);

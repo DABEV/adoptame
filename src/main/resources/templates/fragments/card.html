@@ -24,7 +24,9 @@
                     <span class="badge badge-pill badge-success">Aprobado</span>
                   </div>
                   <div th:case="'Pendiente'">
-                    <span class="badge badge-pill badge-warning">Pendiente</span>
+                    <span class="badge badge-pill badge-warning"
+                      >Pendiente</span
+                    >
                   </div>
                   <div th:case="'Rechazado'">
                     <span class="badge badge-pill badge-danger">Rechazado</span>
@@ -42,31 +44,25 @@
             <hr />
             <div align="right">
               <a
+                class="mx-1"
+                style="color: #74422b"
                 th:href="@{/solicitud/voluntario/aprobarSolicitud/{id} (id = ${solicitud.id})}"
                 role="button"
               >
-                <i class="fas fa-check"></i>
+                <em class="fas fa-check fa-lg"></em>
               </a>
-              <a href="#!" role="button">
-                <i class="fas fa-times"></i>
+              <a class="mx-1" href="#!" style="color: #74422b" role="button">
+                <em class="fas fa-times fa-lg"></em>
               </a>
-              <a
-                th:href="@{/solicitud/adoptador/eliminarSolicitud/{id} (id = ${solicitud.id})}"
-                role="button"
-              >
-                <i class="fas fa-times"></i>
-              </a>
-              <!--
               <a
                 class="mx-1"
                 style="color: #74422b"
+                th:href="@{/solicitud/adoptador/eliminarSolicitud/{id} (id = ${solicitud.id})}"
                 role="button"
-                data-mdb-toggle="modal"
-                th:attr="data-mdb-target=${'#detalles'+ index.count}"
               >
-                <em class="far fa-eye fa-lg"></em>
+                <em class="fas fa-times fa-lg"></em>
               </a>
-            --></div>
+            </div>
           </div>
         </div>
       </div>
