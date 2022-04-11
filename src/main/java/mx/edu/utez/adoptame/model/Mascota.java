@@ -39,6 +39,12 @@ public class Mascota {
     
     @Column(nullable = false, length = 20)
     private String aprobadoRegistro;
+
+    @Column(columnDefinition = "tinyint not null default 0")
+    private Boolean  disponibleAdopcion;
+
+    @Column(columnDefinition = "tinyint not null default 1")
+    private Boolean activo;
     
     @Column(columnDefinition = "longtext null")
 	private String detalles;
@@ -66,8 +72,30 @@ public class Mascota {
     private List<Solicitud> solicitudes;
 
     public Mascota() {
+        //Constructor vacío de mascota
     }
+
     
+    public Boolean getActivo() {
+        return activo;
+    }
+
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
+
+    public Boolean getDisponibleAdopcion() {
+        return disponibleAdopcion;
+    }
+
+
+    public void setDisponibleAdopcion(Boolean disponibleAdopcion) {
+        this.disponibleAdopcion = disponibleAdopcion;
+    }
+
+
     public Long getId() {
         return id;
     }

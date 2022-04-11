@@ -24,6 +24,7 @@ public class Color {
     private List<Mascota> mascotas;
 
     public Color() {
+        //Constructor de la entidad vacío
     }
     
     public Long getId() {
