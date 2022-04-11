@@ -1,5 +1,5 @@
 
-i {
+em {
     color: white;
 }
 
@@ -18,11 +18,6 @@ h2 {
 
 .radius {
     border-radius: 30px;
-}
-
-#intro {
-    background-image: url(https://cdn.wallpapersafari.com/32/78/dTuctf.jpg);
-    height: 110vh;
 }
 
 /* Height for devices larger than 576px */

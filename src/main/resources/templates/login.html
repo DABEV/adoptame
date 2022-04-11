@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head th:insert="fragments/imports :: head('Inicio de sesión')">
-    </head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
-        <!-- Login -->
+        <title>Inicio de sesión</title>
+        <i-head th:replace="fragments/imports :: head" />
         <link th:href="@{/css/login.css}" rel="stylesheet" />
+        <style>
+            #intro {
+                background-image: url([[@{/images/fondoLogo.webp}]]);
+                height: 110vh;
+            }
+        </style>
     </head>
     <body>
         <!-- Background image -->
@@ -12,8 +17,8 @@
             <div class="mask d-flex align-items-center h-100">
                 <div class="container">
                     <div class="row justify-content-center">
-                        <div class="col-xl-4 col-md-8">
-                            <form class="bg-white radius shadow-5-strong p-5">
+                        <div class="col-8 col-sm-8 col-md-6 col-lg-6 col-sl-6">
+                            <form th:action="@{/login}" class="bg-white radius shadow-5-strong p-5">
                                 <div class="row mb-4">
                                     <div class="col text-center">
                                         <h2>Inicio de sesión</h2>
@@ -23,43 +28,39 @@
                                 <!-- Email input -->
                                 <div class="input-group mb-3">
                                     <span class="input-group-text bg-span" id="basic-addon1">
-                                        <i class="fas fa-envelope"></i>
+                                        <em class="fas fa-envelope"></em>
                                     </span>
-                                    <input type="email" class="form-control" placeholder="Correo electrónico" aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
 
                                 <!-- Password input -->
                                 <div class="input-group mb-3">
                                     <span class="input-group-text bg-span" id="basic-addon1">
-                                        <i class="fas fa-lock"></i>
+                                        <em class="fas fa-lock"></em>
                                     </span>
-                                    <input type="password" class="form-control" placeholder="Contraseña" aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="password" name="contrasenia" class="form-control" placeholder="Contraseña" aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
 
                                 <!-- Submit button -->
                                 <div class="row mb-4">
-                                    <div class="col">
+                                    <div class="col d-flex justify-content-center">
                                         <button type="submit" class="btn boton radius btn-primary btn-block" >
-                                            <i class="fas fa-sign-in-alt"></i>&nbsp;&nbsp;Ingresar
+                                            <em class="fas fa-sign-in-alt"></em> Ingresar
                                         </button>
                                     </div>
                                 </div>
 
                                 <!-- 2 column grid layout for inline styling -->
-                                <div class="text-center mb-3">
-                                    ¿Has olvidado la contraseña?
-                                    <div class="">
+                                <div class="row text-center mb-3">
+                                    <div class="col">
+                                        <p class="col-12 mb-1">¿Has olvidado la contraseña?</p>
                                         <!-- Simple link -->
                                         <a href="#!"><u>Restablecer contraseña</u></a>
                                     </div>
-                                </div>
-
-                                <!-- 2 column grid layout for inline styling -->
-                                <div class="text-center mb-3">
-                                    ¿Aún no cuentas con usuario?
-                                    <div class="">
+                                    <div class="col">
+                                        <p class="col-12 mb-1">¿Aún no cuentas con usuario?</p>
                                         <!-- Simple link -->
-                                        <a href="#!"><u>Registrate ahora</u></a>
+                                        <a th:href="@{/signup}"><u>Registrate ahora</u></a>
                                     </div>
                                 </div>
                             </form>
@@ -70,6 +71,6 @@
         </div>
         <!-- Background image -->
         <!--Main Navigation-->
-        <scripts th:insert="fragments/imports :: scripts"></scripts>
+        <scripts th:replace="fragments/imports :: scripts"></scripts>
     </body>
 </html>
