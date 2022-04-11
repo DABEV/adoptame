@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Errores</title>
+    <meta name="viewport" content="width=device-width" />
+    <link th:href="@{/css/error.css}" rel="stylesheet" />
+    <link th:href="@{/css/footer.css}" rel="stylesheet" />
+    <link th:href="@{/css/md-bootstrap.min.css}" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="padre container">
+      <div class="hijo">
+        <div>
+          <img
+            alt=""
+            th:src="@{/images/error-{image}.jpg (image = ${respuesta.codigo})}"
+            class="error-img"
+          />
+        </div>
+        <div class="mt-3">
+          <h1><strong th:text="${respuesta.codigo}"></strong></h1>
+          <h1 th:text="${respuesta.titulo}"></h1>
+          <h3 th:text="${respuesta.mensaje}"></h3>
+        </div>
+        <br>
+        <div class="mt-3">
+          <input
+            class="boton btn-rounded"
+            data-mdb-ripple-color="dark"
+            type="button"
+            value="Regresar"
+            onclick="history.back()"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="mt-3">
+      <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+
+    <script th:replace="fragments/imports :: scripts"></script>
+  </body>
+</html>

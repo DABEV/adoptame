@@ -1,0 +1,43 @@
+.padre {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-img {
+  width: 45%;
+  height: 45%;
+}
+
+h1 {
+    color: #253e5c;
+}
+
+h3 {
+    color: #686d72;
+}
+
+.boton {
+  width: 120px;
+  background-color: #253e5c;
+  color: aliceblue;
+}
+
+/* Height for devices larger than 576px */
+@media (max-width: 900px) {
+  .padre {
+    margin-top: 40%;
+  }
+  .error-img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.hijo {
+  text-align: center;
+}
+
+
