@@ -28,8 +28,8 @@ public class Solicitud {
     @JoinColumn(name = "mascota_id", nullable = false)
     private Mascota mascota;
     
-    @Column(columnDefinition = "tinyint not null default 0")
-    private Boolean aprobado;
+    @Column(nullable = false, length = 50)
+    private String aprobado;
     
     @Column(name = "fecha_solicitud", nullable = false)
     @CreationTimestamp
@@ -62,11 +62,11 @@ public class Solicitud {
         this.mascota = mascota;
     }
 
-    public Boolean getAprobado() {
+    public String getAprobado() {
         return aprobado;
     }
 
-    public void setAprobado(Boolean aprobado) {
+    public void setAprobado(String aprobado) {
         this.aprobado = aprobado;
     }
 

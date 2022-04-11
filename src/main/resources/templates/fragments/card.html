@@ -1,37 +1,71 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <body>
-        <!--/* 
-        Cuando esVoluntario = true, entonces mostrará la opción de aprobar, 
-        en caso contrario, solo mostrará la opción de ver la mascota y cancelar la solicitud.
-        */-->
-        <div th:fragment="mascota(nombre, estado, fechaSolicitud, urlImg, esVoluntario)" class="col-md-6 card mb-3">
-            <div class="row g-0">
-                <div class="fixed-container col-md-4">
-                    <amp-img th:src="${urlImg}" layout="fill"></amp-img>
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h6>Mascota: [[${nombre}]]</h6>
-                        <hr />
-                        <h6>Estado: [[${estado} ? 'Aprobado' : 'Rechazado']]</h6>
-                        <hr />
-                        <h6>Fecha de solicitud: [[${fechaSolicitud}]]</h6>
-                        <hr />
-                        <div align="right">
-                            <a th:if="${esVoluntario}" href="#!" role="button">
-                                <i class="fas fa-check"></i>
-                            </a>
-                            <a href="#!" role="button">
-                                <i class="fas fa-times"></i>
-                            </a>
-                            <a href="#!" role="button">
-                                <i class="far fa-eye"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <body>
+    <div th:fragment="mascota" class="col-md-12 card mb-3">
+      <div class="row g-0">
+        <div class="fixed-container col-md-4">
+          <!--<amp-img th:src="${urlImg}" layout="fill"></amp-img>-->
+          <img
+            src="https://nupec.com/wp-content/uploads/2021/05/shutterstock_572500255.jpg"
+            style="height: 100%; width: 100%"
+          />
         </div>
-    </body>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h6>
+              Mascota: <strong th:text="${solicitud.mascota.nombre}"></strong>
+            </h6>
+            <hr />
+            <h6>
+              <div class="row">
+                <div class="col">Estado:</div>
+                <div class="col-9" th:switch="${solicitud.aprobado}">
+                  <div th:case="'Aprobado'">
+                    <span class="badge badge-pill badge-success">Aprobado</span>
+                  </div>
+                  <div th:case="'Pendiente'">
+                    <span class="badge badge-pill badge-warning"
+                      >Pendiente</span
+                    >
+                  </div>
+                  <div th:case="'Rechazado'">
+                    <span class="badge badge-pill badge-danger">Rechazado</span>
+                  </div>
+                </div>
+              </div>
+            </h6>
+            <hr />
+            <h6>
+              Fecha de solicitud:
+              <strong
+                th:text="${#dates.format(solicitud.fechaSolicitud, 'dd-MM-yyyy')}"
+              ></strong>
+            </h6>
+            <hr />
+            <div align="right">
+              <a
+                class="mx-1"
+                style="color: #74422b"
+                th:href="@{/solicitud/voluntario/aprobarSolicitud/{id} (id = ${solicitud.id})}"
+                role="button"
+              >
+                <em class="fas fa-check fa-lg"></em>
+              </a>
+              <a class="mx-1" href="#!" style="color: #74422b" role="button">
+                <em class="fas fa-times fa-lg"></em>
+              </a>
+              <a
+                class="mx-1"
+                style="color: #74422b"
+                th:href="@{/solicitud/adoptador/eliminarSolicitud/{id} (id = ${solicitud.id})}"
+                role="button"
+              >
+                <em class="fas fa-times fa-lg"></em>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
