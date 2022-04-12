@@ -56,6 +56,7 @@
     <div class="card-body">
         <h5 class="card-title fw-normal">Filtros disponibles</h5>
         <form th:action="@{/mascota/filtrar}" method="post">
+            <input type="hidden" name="tipoMascota" th:value="${tipo}"/>
             <div class="mb-3">
                 <label for="" style="color: #B07D5D;">Sexo</label>
                 <div class="input-group flex-nowrap">
@@ -101,6 +102,11 @@
                             <em class="fas fa-filter me-2"></em>
                             Filtrar
                         </button>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7 text-center">
+                    <div class="d-grid mt-2 gap-2">
+                       <a th:href="@{/mascota/consultarTodas/{tipoMascota} (tipoMascota=${tipo})} " class="text-muted">Borrar filtros</a>
                     </div>
                 </div>
             </div>
