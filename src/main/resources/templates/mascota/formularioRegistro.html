@@ -86,7 +86,7 @@
                                                     id="addon-wrapping">
                                                     <em class="fas fa-palette"></em>
                                                 </span>
-                                                <select class="form-control form-control-lg" th:field="*{color.id}">
+                                                <select class="form-select " th:field="*{color.id}">
                                                     <option th:each="tmpColor: ${listaColores}"
                                                         th:value="${tmpColor.id}" th:text="${tmpColor.nombre}"></option>
                                                 </select>
@@ -119,7 +119,7 @@
                                                     id="addon-wrapping">
                                                     <em class="fas fa-paw"></em>
                                                 </span>
-                                                <select class="form-control form-control-lg" th:field="*{tamano.id}">
+                                                <select class="form-select" th:field="*{tamano.id}">
                                                     <option th:each="tmpTamanos: ${listaTamanos}"
                                                         th:value="${tmpTamanos.id}" th:text="${tmpTamanos.nombre}">
                                                     </option>
@@ -154,7 +154,7 @@
                                                     id="addon-wrapping">
                                                     <em class="fas fa-basketball-ball"></em>
                                                 </span>
-                                                <select class="form-control form-control-lg" th:field="*{caracter.id}">
+                                                <select class="form-select" th:field="*{caracter.id}">
                                                     <option th:each="tmpCaracter: ${listaCaracteres}"
                                                         th:value="${tmpCaracter.id}" th:text="${tmpCaracter.nombre}">
                                                     </option>
