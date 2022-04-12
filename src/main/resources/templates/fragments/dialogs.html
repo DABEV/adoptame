@@ -1,156 +1,264 @@
 <div th:fragment="detalles-blog">
-   <!-- dialog detalles blog-->
+  <!-- dialog detalles blog-->
 </div>
 
-<div th:fragment="donacion" class="modal fade">
-   <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-         <div class="modal-header text-white bg-info">
-            <h5 class="modal-title">Enviar donativo</h5>
-            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
-               aria-label="Close"></button>
-         </div>
-         <div class="modal-body text-center">
-            <div>
-               <form th:action="" method="post">
-                  <div class="input-group flex-nowrap">
-                     <span class="input-group-text" style="background-color: #253E5C; color: white;"
-                        id="addon-wrapping">
-                        <em class="fas fa-donate"></em>
-                     </span>
-                     <input type="number" th:field="*{monto}" id="monto" class="form-control" placeholder="500.00"
-                        aria-label="monto" aria-describedby="addon-wrapping" />
-                  </div>
-                  <button type="button" class="btn btn-outline btn-rounded" data-mdb-dismiss="modal">Cancelar</button>
-                  <input type="hidden" th:value="${usuario.id}" name="idUsuario" />
-                  <button type="submit" class="btn btn-info btn-rounded">Donar</button>
-               </form>
-            </div>
-         </div>
+<div
+  th:fragment="donacion"
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Realizar donativo</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
-   </div>
+      <div class="modal-body">
+        <form
+          th:action="@{/donativo/guardarDonativo}"
+          method="post"
+          th:object="${donacion}"
+          enctype="multipart/form-data"
+        >
+          <div class="row justify-content-center">
+            <input type="hidden" th:field="*{id}" />
+            <div class="col-md-5 col-sm-12 mb-3">
+              <label for="monto" style="color: #698fae">Monto</label>
+              <div class="input-group flex-nowrap">
+                <span
+                  class="input-group-text"
+                  style="background-color: #253e5c; color: white"
+                  id="addon-wrapping"
+                >
+                  <em class="fas fa-donate"></em>
+                </span>
+                <input
+                  type="number"
+                  th:field="*{monto}"
+                  id="monto"
+                  class="form-control"
+                  placeholder="500.00"
+                  aria-label="monto"
+                  aria-describedby="addon-wrapping"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-center d-flex">
+            <div class="col-12 col-sm-12 col-md-6 mt-3 text-center">
+              <button
+                type="submit"
+                class="btn btn-outline-primary btn-rounded"
+                style="color: #253e5c; border-color: #253e5c"
+                data-mdb-ripple-color="dark"
+              >
+                <em class="fab fa-cc-paypal"></em>
+                Donar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div th:fragment="detallesMascota(id)" class="modal" th:id="${'detalles' + id}" tabindex="-1"
-   aria-labelledby="labelModal" aria-hidden="true">
-   <!-- dialog detalles mascota-->
-   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
-      <div class="modal-content">
-         <div class="modal-header text-white" style="background-color: #253E5C;">
-            <h5 id="labelModal" class="modal-title">Detalles de la mascota</h5>
-            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
-               aria-label="Close"></button>
-         </div>
-         <div class="modal-body">
-            <div class="mb-3">
-               <div class="row">
-                  <div class="col-lg-4 text-center">
-                     <img th:src="@{/imagenes/{i} (i= ${mascota.imagen})}" class="img-fluid rounded mb-3"
-                        alt="No encontrada" />
-                  </div>
-                  <div class="col-lg-8">
-                     <div>
-                        <div class="row">
-                           <div class="col-lg">
-                              <h2 th:text="${mascota.nombre}"></h2>
-                           </div>
-                           <div class="col-12 col-lg text-center">
-                              <p>
-                                 Fecha de registro:
-                                 <small class="text-muted"
-                                    th:text="${#dates.format(mascota.fechaRegistro, 'dd-MM-yyyy')}"></small>
-                              </p>
-                           </div>
-                        </div>
-                        <p class="note note-light">
-                           <strong>Detalles: </strong> [[${mascota.detalles}]]
-                        </p>
-                        <div class="row text-center">
-                           <div class="col-12 col-lg">
-                              <div class="row d-flex align-items-start">
-                                 <div class="col-6 col-lg-5">
-                                    <div class="h5">Validación: </div>
-                                 </div>
-                                 <div class="col-6 col-lg">
-                                    <div th:switch="${mascota.aprobadoRegistro}">
-                                       <div th:case="'aprobado'">
-                                          <div class="h5">
-                                             <span class="badge badge-pill badge-success">Aprobado</span>
-                                          </div>
-                                       </div>
-                                       <div th:case="'pendiente'">
-                                          <div class="h5">
-                                             <span class="badge badge-pill badge-warning">Pendiente</span>
-                                          </div>
-                                       </div>
-                                       <div th:case="'rechazado'">
-                                          <div class="h5">
-                                             <span class="badge badge-pill badge-danger">Rechazado</span>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                           <div class="col-12 col-lg-5 text-center">
-                              <div class="h5"
-                                 th:text="${mascota.disponibleAdopcion == true}? 'Disponible':'No disponible'"></div>
-                           </div>
-                        </div>
-                        <div class="row">
-                           <div class="col-12 col-lg">
-                              <ul class="list-group mt-3">
-                                 <li class="list-group-item" style="border-color: #253E5C;"
-                                    th:text="${mascota.tipo == true}? 'Tipo: Perro':'Tipo: Gato'">Tipo
-                                 </li>
-                                 <li class="list-group-item" style="border-color: #253E5C;"
-                                    th:text="${mascota.sexo == false} ? 'Sexo: Macho' : 'Sexo: Hembra'">
-                                 </li>
-                                 <li class="list-group-item" style="border-color: #253E5C;"
-                                    th:text="'Color: ' + ${mascota.color.nombre}">Color</li>
-                              </ul>
-                           </div>
-                           <div class="col-12 col-lg">
-                              <ul class="list-group mt-3">
-                                 <li class="list-group-item" style="border-color: #253E5C;"
-                                    th:text="'Edad: ' + ${mascota.edad}">Edad
-                                 </li>
-                                 <li class="list-group-item" style="border-color: #253E5C;"
-                                    th:text="'Tamaño: ' + ${mascota.tamano.nombre}">Tam</li>
-                                 <li class="list-group-item" style="border-color: #253E5C;"
-                                    th:text="'Caracter: ' + ${mascota.caracter.nombre}">Caracter</li>
-                              </ul>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
+<div
+  th:fragment="detallesMascota(id)"
+  class="modal"
+  th:id="${'detalles' + id}"
+  tabindex="-1"
+  aria-labelledby="labelModal"
+  aria-hidden="true"
+>
+  <!-- dialog detalles mascota-->
+  <div
+    class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
+  >
+    <div class="modal-content">
+      <div class="modal-header text-white" style="background-color: #253e5c">
+        <h5 id="labelModal" class="modal-title">Detalles de la mascota</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
-   </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <div class="row">
+            <div class="col-lg-4 text-center">
+              <img
+                th:src="@{/imagenes/{i} (i= ${mascota.imagen})}"
+                class="img-fluid rounded mb-3"
+                alt="No encontrada"
+              />
+            </div>
+            <div class="col-lg-8">
+              <div>
+                <div class="row">
+                  <div class="col-lg">
+                    <h2 th:text="${mascota.nombre}"></h2>
+                  </div>
+                  <div class="col-12 col-lg text-center">
+                    <p>
+                      Fecha de registro:
+                      <small
+                        class="text-muted"
+                        th:text="${#dates.format(mascota.fechaRegistro, 'dd-MM-yyyy')}"
+                      ></small>
+                    </p>
+                  </div>
+                </div>
+                <p class="note note-light">
+                  <strong>Detalles: </strong> [[${mascota.detalles}]]
+                </p>
+                <div class="row text-center">
+                  <div class="col-12 col-lg">
+                    <div class="row d-flex align-items-start">
+                      <div class="col-6 col-lg-5">
+                        <div class="h5">Validación:</div>
+                      </div>
+                      <div class="col-6 col-lg">
+                        <div th:switch="${mascota.aprobadoRegistro}">
+                          <div th:case="'aprobado'">
+                            <div class="h5">
+                              <span class="badge badge-pill badge-success"
+                                >Aprobado</span
+                              >
+                            </div>
+                          </div>
+                          <div th:case="'pendiente'">
+                            <div class="h5">
+                              <span class="badge badge-pill badge-warning"
+                                >Pendiente</span
+                              >
+                            </div>
+                          </div>
+                          <div th:case="'rechazado'">
+                            <div class="h5">
+                              <span class="badge badge-pill badge-danger"
+                                >Rechazado</span
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 col-lg-5 text-center">
+                    <div
+                      class="h5"
+                      th:text="${mascota.disponibleAdopcion == true}? 'Disponible':'No disponible'"
+                    ></div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-lg">
+                    <ul class="list-group mt-3">
+                      <li
+                        class="list-group-item"
+                        style="border-color: #253e5c"
+                        th:text="${mascota.tipo == true}? 'Tipo: Perro':'Tipo: Gato'"
+                      >
+                        Tipo
+                      </li>
+                      <li
+                        class="list-group-item"
+                        style="border-color: #253e5c"
+                        th:text="${mascota.sexo == false} ? 'Sexo: Macho' : 'Sexo: Hembra'"
+                      ></li>
+                      <li
+                        class="list-group-item"
+                        style="border-color: #253e5c"
+                        th:text="'Color: ' + ${mascota.color.nombre}"
+                      >
+                        Color
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-12 col-lg">
+                    <ul class="list-group mt-3">
+                      <li
+                        class="list-group-item"
+                        style="border-color: #253e5c"
+                        th:text="'Edad: ' + ${mascota.edad}"
+                      >
+                        Edad
+                      </li>
+                      <li
+                        class="list-group-item"
+                        style="border-color: #253e5c"
+                        th:text="'Tamaño: ' + ${mascota.tamano.nombre}"
+                      >
+                        Tam
+                      </li>
+                      <li
+                        class="list-group-item"
+                        style="border-color: #253e5c"
+                        th:text="'Caracter: ' + ${mascota.caracter.nombre}"
+                      >
+                        Caracter
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div th:fragment="eliminarMascota(id)" class="modal" th:id="${'eliminar' + id}" tabindex="-1"
-   aria-labelledby="labelModalEliminar" aria-hidden="true">
-   <!-- dialog eliminar mascota-->
-   <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-         <div class="modal-header text-white bg-danger">
-            <h5 id="labelModalEliminar" class="modal-title">Eliminar mascota</h5>
-            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
-               aria-label="Close"></button>
-         </div>
-         <div class="modal-body text-center">
-            <label>¿Desea eliminar a?</label>
-            <h1 th:text="${mascota.nombre}"></h1>
-            <div>
-               <button type="button" class="btn btn-outline-danger btn-rounded"
-                  data-mdb-dismiss="modal">Cancelar</button>
-               <a class="btn btn-danger btn-rounded"
-                  th:href="@{/mascota/borrarMascota/{id} (id=${mascota.id})}">Eliminar</a>
-            </div>
-         </div>
+<div
+  th:fragment="eliminarMascota(id)"
+  class="modal"
+  th:id="${'eliminar' + id}"
+  tabindex="-1"
+  aria-labelledby="labelModalEliminar"
+  aria-hidden="true"
+>
+  <!-- dialog eliminar mascota-->
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-danger">
+        <h5 id="labelModalEliminar" class="modal-title">Eliminar mascota</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
-   </div>
+      <div class="modal-body text-center">
+        <label>¿Desea eliminar a?</label>
+        <h1 th:text="${mascota.nombre}"></h1>
+        <div>
+          <button
+            type="button"
+            class="btn btn-outline-danger btn-rounded"
+            data-mdb-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <a
+            class="btn btn-danger btn-rounded"
+            th:href="@{/mascota/borrarMascota/{id} (id=${mascota.id})}"
+            >Eliminar</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

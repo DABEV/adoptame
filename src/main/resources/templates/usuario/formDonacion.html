@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head th:replace="fragments/imports :: head('Donaciones')">
+    <title>Lista mascotas</title>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- Navbar -->
+        <div class="row mb-3">
+            <navbar th:replace="fragments/navbar :: navbar"></navbar>
+        </div>
+        <!-- Contenido -->
+
+        <div class="mx-4 mt-4 mb-6">
+            <div class="row">
+                <div class="col-md-3 mb-5">
+                    <div th:replace="fragments/menus :: adoptador(activo)"></div>
+                    <div class="mt-3 justify-center">
+                        <button
+                            style="width: 50%;"
+                            type="button"
+                            class="btn btn-outline-primary"
+                            data-mdb-toggle="modal"
+                            data-mdb-target="#exampleModal"
+                        >
+                            Abrir formulario
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-9 mb-3">
+                    <div class="d-grid gap-4">
+                        <div>
+                            <h2 style="color: #253E5C;">Registro de donativos</h2>
+                            <p class="h4 fw-light" style="color: #698FAE">Realizar una donación
+                            </p>
+                        </div>
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Realizar donativo</h5>
+                                  <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form th:action="@{/donativo/guardarDonativo}" method="post" th:object="${donacion}"
+                                    enctype="multipart/form-data">
+                                        <div class="row justify-content-center">
+                                            <input type="hidden" th:field="*{id}" />
+                                            <div class="col-md-5 col-sm-12 mb-3">
+                                                <label for="monto" style="color: #698FAE;">Monto</label>
+                                                <div class="input-group flex-nowrap">
+                                                    <span class="input-group-text"
+                                                        style="background-color: #253E5C; color: white;"
+                                                        id="addon-wrapping">
+                                                        <em class="fas fa-donate"></em>
+                                                    </span>
+                                                    <input type="number" th:field="*{monto}" id="monto" class="form-control"
+                                                        placeholder="500.00" aria-label="monto"
+                                                        aria-describedby="addon-wrapping" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <div class="row justify-content-center d-flex">
+                                        <div class="col-12 col-sm-12 col-md-6 mt-3 text-center">
+                                            <button type="submit" class="btn btn-outline-primary btn-rounded"
+                                                style="color: #253E5C; border-color: #253E5C;"
+                                                data-mdb-ripple-color="dark">
+                                                <em class="fab fa-cc-paypal"></em>
+                                                Donar</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <div class="row mt-3">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+    </div>
+    <!-- MDB -->
+    <script th:src="@{/js/md-bootstrap.min.js}"></script>
+</body>
+
+</html>
