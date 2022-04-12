@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.edu.utez.adoptame.model.Color;
 import mx.edu.utez.adoptame.model.Mascota;
+import mx.edu.utez.adoptame.model.Tamano;
 import mx.edu.utez.adoptame.repository.MascotaRepository;
 
 @Service
@@ -61,6 +63,11 @@ public class MascotaServiceImp implements MascotaService {
     @Override
     public boolean validarRegistro(Mascota mascota) {
         return false;
+    }
+
+    @Override
+    public List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano) {
+        return mascotaRepository.findByColorOrSexoOrTamano(color, sexo, tamano);
     }
 
 }

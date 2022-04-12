@@ -1,6 +1,7 @@
 package mx.edu.utez.adoptame.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,8 +18,10 @@ import mx.edu.utez.adoptame.model.Caracter;
 import mx.edu.utez.adoptame.model.Color;
 import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Tamano;
+import mx.edu.utez.adoptame.service.CaracterServiceImpl;
 import mx.edu.utez.adoptame.service.ColorServiceImp;
 import mx.edu.utez.adoptame.service.MascotaServiceImp;
+import mx.edu.utez.adoptame.service.TamanoServiceImp;
 import mx.edu.utez.adoptame.util.ImagenUtileria;
 
 @Controller
@@ -26,16 +29,28 @@ import mx.edu.utez.adoptame.util.ImagenUtileria;
 public class MascotaController {
 
     private String redirectListar = "redirect:/mascota/consultarTodas";
+    private String listaTamanos = "listaTamanos";
+    private String listaColores = "listaColores";
+    private String listaCaracteres = "listaCaracteres";
+    private String listaMascotas = "listaMascotas";
 
     @Autowired
     MascotaServiceImp mascotaServiceImp;
+
+    @Autowired
+    TamanoServiceImp tamanoServiceImp;
+
+    @Autowired
+    CaracterServiceImpl caracterServiceImp;
 
     @Autowired
     ColorServiceImp colorServiceImp;
 
     @GetMapping("/consultarTodas")
     public String consultarMascotas(Model model) {
-        model.addAttribute("listaMascotas", mascotaServiceImp.listarMascotas());
+        model.addAttribute(listaMascotas, mascotaServiceImp.listarMascotas());
+        model.addAttribute(listaTamanos, tamanoServiceImp.listarTamanos());
+        model.addAttribute(listaColores, colorServiceImp.listarColores());
         return "mascota/lista";
     }
 
@@ -56,12 +71,12 @@ public class MascotaController {
             model.addAttribute("mascota", mascota);
 
             List<Color> colores = colorServiceImp.listarColores();
-            // List<Caracter> listaCaracter = caracterServiceImp.listar();
-            // List<Tamano> listaTamano = tamanoServiceImp.listar();
+            List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
+            List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
 
-            // model.addAttribute("listaCaracteres", listaCaracter);
-            // model.addAttribute("listaTamanos", listaTamano);
-            model.addAttribute("listaColores", colores);
+            model.addAttribute(listaCaracteres, listaCaracter);
+            model.addAttribute(listaTamanos, listaTamano);
+            model.addAttribute(listaColores, colores);
             return "mascota/formularioRegistro";
         }
         attributes.addFlashAttribute("msg_error", "Registro no encontrado");
@@ -71,14 +86,12 @@ public class MascotaController {
     @GetMapping("/registrar")
     public String registrar(Mascota mascota, Model model) {
         List<Color> colores = colorServiceImp.listarColores();
-        /*
-         * List<Caracter> listaCaracter = caracterService.listar();
-         * List<Tamano> listaTamano = tamanoService.listar();
-         * 
-         * model.addAttribute("listaCaracteres", listaCaracter);
-         * model.addAttribute("listaTamanos", listaTamano);
-         */
-        model.addAttribute("listaColores", colores);
+        List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
+        List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
+
+        model.addAttribute(listaCaracteres, listaCaracter);
+        model.addAttribute(listaTamanos, listaTamano);
+        model.addAttribute(listaColores, colores);
         return "mascota/formularioRegistro";
     }
 
@@ -88,16 +101,17 @@ public class MascotaController {
         if (mascota.getId() == null) {
             mascota.setAprobadoRegistro("pendiente");
             mascota.setDisponibleAdopcion(false);
+            mascota.setActivo(true);
 
         } else {
             Mascota mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
             mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
             mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
             mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
+            mascota.setActivo(mascotaExistente.getActivo());
         }
 
         if (!multipartFile.isEmpty()) {
-            // Establecer directorio local para subida de archivos; en prod: /var/www/html
             String ruta = "C:/mascotas/img-mascotas/";
             String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
             if (nombreImagen != null) {
@@ -111,7 +125,7 @@ public class MascotaController {
             return redirectListar;
         } else {
             attributes.addFlashAttribute("msg_error", "Registro fallido");
-            return "redirect:/mascotas/registrar";
+            return "redirect:/mascota/registrar";
         }
 
     }
@@ -122,4 +136,36 @@ public class MascotaController {
         return redirectListar;
     }
 
+    @PostMapping("/filtrar")
+    public String filtrarMascotas(@RequestParam("colorMascota") String colorId,
+            @RequestParam("sexoMascota") String sexoMascota, @RequestParam("tamanoMascota") String tamanoId,
+            Model model) {
+        try {
+            Color color = new Color();
+            Tamano tamano = new Tamano();
+            boolean sexo = false;
+
+            if (!colorId.isEmpty()) {
+                color = colorServiceImp.obtenerColor(Long.parseLong(colorId));
+            }
+            if (!tamanoId.isEmpty()) {
+                tamano = tamanoServiceImp.obtenerTamano(Long.parseLong(tamanoId));
+            }
+            if (!sexoMascota.isEmpty()) {
+                sexo = Boolean.parseBoolean(sexoMascota);
+            }
+
+            List<Mascota> listaFiltrada = mascotaServiceImp.filtrarPorParametros(color, sexo, tamano);
+            listaFiltrada = listaFiltrada.stream().filter(mascota -> mascota.getActivo() == true)
+                    .collect(Collectors.toList());
+            
+            model.addAttribute(listaMascotas, listaFiltrada);
+            model.addAttribute(listaTamanos, tamanoServiceImp.listarTamanos());
+            model.addAttribute(listaColores, colorServiceImp.listarColores());
+            return "mascota/lista";
+
+        } catch (Exception e) {
+            return redirectListar;
+        }
+    }
 }

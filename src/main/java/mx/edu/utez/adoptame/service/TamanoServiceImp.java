@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import mx.edu.utez.adoptame.model.Tamano;
 import mx.edu.utez.adoptame.repository.TamanoRepository;
 
+@Service
 public class TamanoServiceImp implements TamanoService{
     @Autowired
     TamanoRepository repository;
