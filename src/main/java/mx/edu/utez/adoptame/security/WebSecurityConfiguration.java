@@ -28,16 +28,10 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests()
-                .antMatchers("/css/**", "/js/**").permitAll()
+                .antMatchers("/css/**", "/js/**", "/images/**").permitAll()
 
                 // Sección donde se adjuntarán las URL públicas que no ocuparán de autenticación
                 .antMatchers("/", "/signup").permitAll();
-
-                // Sección donde se asignarán permisos a los usuarios dependiendo de su rol
-                //.antMatchers("/mascotas/**").hasAnyAuthority("ROL_VOLUNTARIO")
-                //.antMatchers("/usuarios/**").hasAnyAuthority("ROL_ADOPTADOR")
-                //.antMatchers("/donaciones/**").hasAnyAuthority("ROL_ADOPTADOR")
-                //.antMatchers("/blogs/**").hasAnyAuthority("ROL_ADMINISTRADOR")
     }
 
 }
