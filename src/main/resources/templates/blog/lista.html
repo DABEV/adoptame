@@ -1,56 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista del blog</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
-    <!-- MDB -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet" />
+<head th:replace="fragments/imports :: head('Lista de Mascotas')">
+    <title>Lista de blogs</title>
 </head>
 
 <body>
-
+    <div class="row mb-3">
+        <navbar th:replace="fragments/navbar :: navbar"></navbar>
+    </div>
     <h2 class="text-center mt-5">Lista de blogs</h2>
 
-    <div class="container mt-4">
-        <div class="col-12 col-md-4 col-sm-12 mb-4">
-            <div class="card">
-                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/062.webp" class="card-img-top"
-                    alt="Chicago Skyscrapers" />
-                <div class="card-header">
-                    <h5 class="card-title">title</h5>
-                    <p class="card-text">Fecha</p>
-                </div>
-                <div class="card-body">
-                    <div>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                        the
-                        industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of
-                        type.</div>
-                </div>
-    
-                <div class="card-footer text-muted">
-                    <div class="row justify-content-between">
-                        <a href="" style="color: #dd4b39;" role="button" class="col-1">
-                            <i class="fas fa-pen"></i>
-                        </a>
-                        <a href="" role="button" class="col-1">
-                            <i class="fas fa-trash-alt"></i>
-                        </a>
+    <div class="row mx-4">
+        <div class="col-12 col-md-3 col-sm-12 mt-4">
+            <div th:replace="fragments/menus :: administrador(1)"></div>
+        </div>
+
+        <div class="col-12 col-md-9 col-sm-12">
+            <div class="container">
+                    <button type="button" class="btn btn-primary btn-rounded mt-4"  data-mdb-toggle="modal"
+                        data-mdb-target="#nuevoBlog">Registrar Blog</button>
+
+                <div th:replace="fragments/dialogs :: nuevoBlog"></div>
+                <div class="mt-4 row">
+                    <div class="col-12 col-md-4 col-sm-12 mb-4" th:each="blog, index: ${listaBlog}">
+
+                        <div class="card">
+                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/062.webp" class="card-img-top"
+                                alt="Chicago Skyscrapers" />
+                            <div class="card-header">
+                                <h5 class="card-title" th:text="${blog.titulo}"></h5>
+                                <p class="card-text"
+                                    th:text="'Fecha de registro : ' + ${#dates.format(blog.fechaRegistro, 'dd-MM-yyyy')}">
+                                    Fecha
+                                </p>
+                            </div>
+                            <div class="card-body">
+                                <div th:text="${blog.contenido}"></div>
+                            </div>
+
+                            <div class="card-footer text-muted">
+                                <div class="row justify-content-between">
+                                    <a href="" style="color: #253E5C;" role="button" class="col-1"
+                                        data-mdb-toggle="modal"
+                                        th:attr="data-mdb-target=${'#editar-blog'+ index.count}">
+                                        <em class="fas fa-pen"></em>
+                                    </a>
+                                    <a href="" style="color: #253E5C;" role="button" class="col-1"
+                                        data-mdb-toggle="modal"
+                                        th:attr="data-mdb-target=${'#detalles-blog'+ index.count}">
+                                        <em class="fas fa-eye"></em>
+                                    </a>
+                                    <a href="" style="color: #253E5C;" role="button" class="col-1"
+                                        data-mdb-toggle="modal"
+                                        th:attr="data-mdb-target=${'#eliminar-blog'+ index.count}">
+                                        <em class="fas fa-trash-alt"></em>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:replace="fragments/dialogs :: detallesBlog(${index.count})"></div>
+                        <div th:replace="fragments/dialogs :: editarBlog(${index.count})"></div>
+                        <div th:replace="fragments/dialogs :: eliminarBlog(${index.count})"></div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
-
-    <script type="text/javascript" src="js/mdb.min.js"></script>
-    <!-- Custom scripts -->
-    <script type="text/javascript"></script>
+    <div class="row mt-3">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+    <script type="text/javascript" th:src="@{/js/md-bootstrap.min.js}"></script>
 </body>
 
 </html>

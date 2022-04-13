@@ -1,3 +1,223 @@
-<div th:fragment="detalles-blog">
-   <!-- dialog detalles blog--> 
+<!-- Modal detalles de blog -->
+
+<div th:fragment="detallesBlog(id)" class="modal fade" th:id="${'detalles-blog' + id}" tabindex="-1"
+   aria-labelledby="labelModal" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header text-white" style="background-color: #253E5C;">
+            <h5 class="modal-title" id="labelModal" th:text="'Detalles de : ' + ${blog.titulo}"></h5>
+            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
+               aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <div class="col-md-12">
+               <label style="color: #698FAE;">Titulo</label>
+               <div class="input-group">
+                  <span class="input-group-text" style="background-color: #253E5C; color: white;"><em
+                        class="fas fa-file-signature"></em></span>
+                  <input type="text" class="form-control" disabled th:value="${blog.titulo}" />
+               </div>
+            </div>
+
+            <div class="col-md-12 mt-2">
+               <label style="color: #698FAE;">Contenido</label>
+               <div class="form-outline">
+                  <textarea class="form-control" id="textAreaExample" rows="4" disabled
+                     th:text="${blog.contenido}"></textarea>
+               </div>
+            </div>
+            <div class="col-md-12 mt-2">
+               <label style="color: #698FAE;">Principal</label>
+               <div class="input-group ">
+
+                  <div class="form-check col">
+                     <input class="form-check-input" th:checked="${blog.esPrincipal}" type="radio" disabled />
+                     <label class="form-check-label" for="flexRadioDefault1">Si</label>
+                  </div>
+
+                  <!-- Default checked radio -->
+                  <div class="form-check col">
+                     <input class="form-check-input" type="radio" th:checked="${!blog.esPrincipal}" disabled />
+                     <label class="form-check-label" for="flexRadioDefault2">No
+                     </label>
+                  </div>
+               </div>
+            </div>
+
+            <div class="col-md-12 mt-2">
+               <label style="color: #698FAE;">Fecha de registro</label>
+               <div class="input-group col">
+                  <span class="input-group-text" style="background-color: #253E5C; color: white;"><em
+                        class="far fa-calendar"></em></span>
+                  <input type="text" class="form-control" th:value="${#dates.format(blog.fechaRegistro, 'dd-MM-yyyy')}"
+                     disabled />
+               </div>
+            </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" style="background-color: #253E5C;"
+               data-mdb-dismiss="modal">Cerrar</button>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<!-- Modal registro de blog -->
+<div th:fragment="nuevoBlog" class="modal fade" id="nuevoBlog" tabindex="-1" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header text-white" style="background-color: #253E5C;">
+            <h5 class="modal-title" id="exampleModalLabel">Nuevo blog</h5>
+            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
+               aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form th:action="@{/blog/guardarBlog}" method="POST" th:object="${blog}" enctype="multipart/form-data">
+               <div class="col-md-12">
+                  <label style="color: #698FAE;">Titulo</label>
+                  <div class="input-group col">
+                     <span class="input-group-text" style="background-color: #253E5C; color: white;"><em
+                           class="fas fa-file-signature"></em></span>
+                     <input type="text" class="form-control" th:field="*{titulo}" />
+                  </div>
+               </div>
+               <div class="col-md-12 mt-2">
+                  <label style="color: #698FAE;">Contenido</label>
+                  <div class="form-outline">
+                     <textarea class="form-control" th:field="*{contenido}" rows="4"></textarea>
+                  </div>
+               </div>
+               <div class="col-md-12 mt-2">
+                  <label style="color: #698FAE;">Principal</label>
+                  <div class="input-group ">
+
+                     <div class="form-check col">
+                        <input class="form-check-input" th:field="*{esPrincipal}" value="true" type="radio"
+                           name="flexRadioDefault" id="flexRadioDefault1" />
+                        <label class="form-check-label" for="flexRadioDefault1">Si</label>
+                     </div>
+
+                     <!-- Default checked radio -->
+                     <div class="form-check col">
+                        <input class="form-check-input" th:field="*{esPrincipal}" value="false" type="radio"
+                           name="flexRadioDefault" id="flexRadioDefault2" checked />
+                        <label class="form-check-label" for="flexRadioDefault2">No
+                        </label>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12 mt-2">
+                  <label style="color: #698FAE;">Imagen</label>
+                  <div class="">
+                     <input type="file" name="imagen" class="form-control" id="customFile" />
+                  </div>
+               </div>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal" style="background-color: #253E5C;">Cerrar</button>
+            <button type="submit" class="btn btn-primary" style="background-color: #253E5C;">Guardar</button>
+         </div>
+         </form>
+
+      </div>
+   </div>
+</div>
+
+
+<!-- Modal editar de blog -->
+
+<div th:fragment="editarBlog(id)" class="modal fade" th:id="${'editar-blog' + id}" tabindex="-1"
+   aria-labelledby="labelModal" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header text-white" style="background-color: #253E5C;">
+            <h5 class="modal-title" id="labelModal" th:text="'Editar : ' + ${blog.titulo}"></h5>
+            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
+               aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            <form th:action="@{/blog/actualizarBlog}" method="POST" th:object="${blog}">
+               <div class="col-md-12">
+                  <label style="color: #698FAE;">Titulo</label>
+                  <div class="input-group">
+                     <span class="input-group-text" style="background-color: #253E5C; color: white;"><em
+                           class="fas fa-file-signature"></em></span>
+                     <input type="text" class="form-control" th:value="${blog.titulo}" th:name="titulo" />
+                  </div>
+               </div>
+
+               <div class="col-md-12 mt-2">
+                  <label style="color: #698FAE;">Contenido</label>
+                  <div class="form-outline">
+                     <textarea class="form-control" id="textAreaExample" rows="4" th:name="contenido"
+                        th:text="${blog.contenido}"></textarea>
+                  </div>
+               </div>
+               <div class="col-md-12 mt-2">
+                  <label style="color: #698FAE;">Principal</label>
+                  <div class="input-group ">
+                     <div class="form-check col">
+                        <input class="form-check-input" th:checked="${blog.esPrincipal}" name="flexRadioDefault"
+                           th:name="esPrincipal" value="true" type="radio" id="flexRadioDefault1" />
+                        <label class="form-check-label" for="flexRadioDefault1">Si</label>
+                     </div>
+
+                     <!-- Default checked radio -->
+                     <div class="form-check col">
+                        <input class="form-check-input" type="radio" th:checked="${!blog.esPrincipal}"
+                           th:name="esPrincipal" name="flexRadioDefault" value="false" id="flexRadioDefault2" />
+                        <label class="form-check-label" for="flexRadioDefault2">No
+                        </label>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12 mt-2">
+                  <label style="color: #698FAE;">Imagen</label>
+                  <div>
+                     <input type="file" name="imagen" class="form-control" id="customFile" />
+                  </div>
+               </div>
+
+               <input type="number" hidden th:name="id" th:value="${blog.id}" />
+
+
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" style="background-color: #253E5C;"
+                     data-mdb-dismiss="modal">Cerrar</button>
+                  <button type="submit" class="btn btn-secondary" style="background-color: #253E5C;"
+                     data-mdb-dismiss="modal">Actualizar</button>
+               </div>
+            </form>
+         </div>
+
+      </div>
+   </div>
+</div>
+
+
+
+<div th:fragment="eliminarBlog(id)" class="modal fade" th:id="${'eliminar-blog' + id}" tabindex="-1"
+   aria-labelledby="labelModal" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header text-white" style="background-color: #253E5C;">
+            <h5 class="modal-title" id="labelModal" th:text="'Eliminar : ' + ${blog.titulo}"></h5>
+            <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal"
+               aria-label="Close"></button>
+         </div>
+         <div class="modal-body">
+            ¿Desea eliminar la publicacion <strong th:text="${blog.titulo}"></strong>?
+         </div>
+         <div class="modal-footer">
+            <form th:action="@{/blog/borrarBlog}" method="POST">
+               <button type="button" class="btn btn-secondary" style="background-color: #253E5C;"
+                  data-mdb-dismiss="modal">Cerrar</button>
+               <button type="submit" class="btn btn-secondary" style="background-color: #253E5C;"
+                  data-mdb-dismiss="modal">Eliminar</button>
+               <input type="number" hidden th:value="${blog.id}" name="idBlog" />
+            </form>
+         </div>
+      </div>
+   </div>
 </div>
