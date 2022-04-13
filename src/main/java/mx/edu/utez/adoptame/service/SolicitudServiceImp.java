@@ -56,14 +56,19 @@ public class SolicitudServiceImp implements SolicitudService {
 
     @Override
     public boolean rechazarSolicitud(Long id) {
-        // TODO Auto-generated method stub
+        try{
+            repository.update("Rechazado", id);
+            return true;
+        }catch(Exception e){
+            //log
+        }
         return false;
     }
 
     @Override
-    public boolean aprobarSolicitud(String aprobado,Long id) {
+    public boolean aprobarSolicitud(Long id) {
         try{
-            repository.updateSolicitudesSetAprobadoForIdNative(aprobado, id);
+            repository.update("Aprobado", id);
             return true;
         }catch(Exception e){
             //log

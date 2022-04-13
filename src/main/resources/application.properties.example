@@ -33,3 +33,10 @@ spring.servlet.multipart.enabled=true
 spring.servlet.multipart.max-file-size=5MB
 
 spring.servlet.multipart.location=<your_path>
+
+# Desactivar las páginas de error default de spring
+server.error.whitelabel.enabled=false
+spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.web.ErrorMvcAutoConfiguration
+
+# Ruta default para el controlador de error
+server.error.path=/error

@@ -87,9 +87,21 @@ public class SolicitudController {
         return redirectVoluntario;
     }
 
+    @GetMapping("/voluntario/rechazarSolicitud/{id}")
+    public String rechazarSolicitud(@PathVariable long id, RedirectAttributes redirectAttributes){
+        boolean respuesta = solicitudServiceImp.rechazarSolicitud(id);
+        if(respuesta){
+            redirectAttributes.addFlashAttribute("msg_success", "Solicitud rechazada");
+            return redirectVoluntario;
+        }else{
+            redirectAttributes.addFlashAttribute("msg_error", "Rechazo de solicitud fallida");
+        }
+        return redirectVoluntario;
+    }
+
     @GetMapping("/voluntario/aprobarSolicitud/{id}")
     public String aprobarSolicitud(@PathVariable long id, RedirectAttributes redirectAttributes){
-        boolean respuesta = solicitudServiceImp.aprobarSolicitud("Aprobado", id);
+        boolean respuesta = solicitudServiceImp.aprobarSolicitud(id);
         if(respuesta){
             redirectAttributes.addFlashAttribute("msg_success", "Solicitud aprobada");
             return redirectVoluntario;

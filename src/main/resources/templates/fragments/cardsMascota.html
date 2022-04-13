@@ -1,7 +1,6 @@
 <div th:fragment="card-mascota">
     <div class="card" style="border: solid; color: #253E5C; border-width: thin;">
-        <img src="https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp" class="card-img-top"
-            alt="Sunset Over the Sea" />
+        <img th:src="@{/imagenes/{i} (i= ${mascota.imagen})}" class="card-img-top" height="200" alt="No encontrada" />
         <div class="card-body pb-0">
             <div class="row">
                 <div class="col">
@@ -56,55 +55,61 @@
 <div th:fragment="card-filtro" class="card" style="border: solid; color: #74422B; border-width: thin;">
     <div class="card-body">
         <h5 class="card-title fw-normal">Filtros disponibles</h5>
-        <div class="mb-3">
-            <label for="" style="color: #B07D5D;">Sexo</label>
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text" style="background-color: #74422B; color: white;" id="addon-wrapping">
-                    <em class="fas fa-paw"></em>
-                </span>
-                <select name="sexo" class="form-select">
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="" style="color: #B07D5D;">Tamaño</label>
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text" style="background-color: #74422B; color: white;" id="addon-wrapping">
-                    <em class="fas fa-paw"></em>
-                </span>
-                <select name="tamano" class="form-select">
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="" style="color: #B07D5D;">Color</label>
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text" style="background-color: #74422B; color: white;" id="addon-wrapping">
-                    <em class="fas fa-palette"></em>
-                </span>
-                <select name="color" class="form-select">
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                </select>
-            </div>
-        </div>
-        <div class="row d-flex justify-content-center">
-            <div class="col-12 col-sm-12 col-md-12 col-lg-7">
-                <div class="d-grid gap-2">
-                    <button type="submit" style="border-color: #74422B; color: #74422B;"
-                        class="btn btn-outline-primary btn-rounded">
-                        <em class="fas fa-filter me-2"></em>
-                        Filtrar
-                    </button>
+        <form th:action="@{/mascota/filtrar}" method="post">
+            <input type="hidden" name="tipoMascota" th:value="${tipo}"/>
+            <div class="mb-3">
+                <label for="" style="color: #B07D5D;">Sexo</label>
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" style="background-color: #74422B; color: white;" id="addon-wrapping">
+                        <em class="fas fa-paw"></em>
+                    </span>
+                    <select name="sexoMascota" class="form-select">
+                        <option value="true">Hembra</option>
+                        <option value="false">Macho</option>
+                    </select>
                 </div>
             </div>
-        </div>
+            <div class="mb-3">
+                <label for="" style="color: #B07D5D;">Tamaño</label>
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" style="background-color: #74422B; color: white;" id="addon-wrapping">
+                        <em class="fas fa-paw"></em>
+                    </span>
+                    <select class="form-select" name="tamanoMascota">
+                        <option th:each="tmpTamanos: ${listaTamanos}" th:value="${tmpTamanos.id}"
+                            th:text="${tmpTamanos.nombre}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="" style="color: #B07D5D;">Color</label>
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" style="background-color: #74422B; color: white;" id="addon-wrapping">
+                        <em class="fas fa-palette"></em>
+                    </span>
+                    <select name="colorMascota" class="form-select">
+                        <option th:each="tmpColor: ${listaColores}" th:value="${tmpColor.id}"
+                            th:text="${tmpColor.nombre}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7">
+                    <div class="d-grid gap-2">
+                        <button type="submit" style="border-color: #74422B; color: #74422B;"
+                            class="btn btn-outline-primary btn-rounded">
+                            <em class="fas fa-filter me-2"></em>
+                            Filtrar
+                        </button>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-7 text-center">
+                    <div class="d-grid mt-2 gap-2">
+                       <a th:href="@{/mascota/consultarTodas/{tipoMascota} (tipoMascota=${tipo})} " class="text-muted">Borrar filtros</a>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

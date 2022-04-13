@@ -11,5 +11,5 @@ public interface SolicitudService {
 
     boolean eliminarSolicitud (Long id);
     boolean rechazarSolicitud(Long id);
-    boolean aprobarSolicitud(String aprobado,Long id);
+    boolean aprobarSolicitud(Long id);
 }

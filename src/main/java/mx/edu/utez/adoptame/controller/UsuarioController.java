@@ -29,7 +29,7 @@ public class UsuarioController {
         return "";
     }
 
-    @GetMapping("/mi-cuenta")
+    @GetMapping("/miCuenta")
     public String miCuenta() {
         return "usuario/miCuenta";
     }

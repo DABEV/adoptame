@@ -32,6 +32,7 @@
                                     enctype="multipart/form-data">
                                     <div class="row justify-content-between">
                                         <input type="hidden" th:field="*{id}" />
+                                        <input type="hidden" th:field="*{imagen}" />
                                         <div class="col-md-5 col-sm-12 mb-3">
                                             <label for="nombre" style="color: #698FAE;">Nombre</label>
                                             <div class="input-group flex-nowrap">
@@ -86,7 +87,7 @@
                                                     id="addon-wrapping">
                                                     <em class="fas fa-palette"></em>
                                                 </span>
-                                                <select class="form-control form-control-lg" th:field="*{color.id}">
+                                                <select class="form-select " th:field="*{color.id}">
                                                     <option th:each="tmpColor: ${listaColores}"
                                                         th:value="${tmpColor.id}" th:text="${tmpColor.nombre}"></option>
                                                 </select>
@@ -119,7 +120,7 @@
                                                     id="addon-wrapping">
                                                     <em class="fas fa-paw"></em>
                                                 </span>
-                                                <select class="form-control form-control-lg" th:field="*{tamano.id}">
+                                                <select class="form-select" th:field="*{tamano.id}">
                                                     <option th:each="tmpTamanos: ${listaTamanos}"
                                                         th:value="${tmpTamanos.id}" th:text="${tmpTamanos.nombre}">
                                                     </option>
@@ -127,11 +128,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="mb-3">
+                                        <label for="detalles" style="color: #698FAE;">Detalles</label>
+                                        <div class="input-group flex-nowrap">
+                                            <span class="input-group-text"
+                                                style="background-color: #253E5C; color: white;" id="addon-wrapping">
+                                                <em class="fas fa-paw"></em>
+                                            </span>
+                                            <input type="text" th:field="*{detalles}" id="detalles" class="form-control"
+                                                placeholder="Ej. Juega todo el día" aria-label="detalles"
+                                                aria-describedby="addon-wrapping" />
+                                        </div>
+                                    </div>
                                     <div class="row justify-content-between d-flex align-items-end">
                                         <div class="col-12 col-sm-12 col-md-5">
                                             <label class="form-label" style="color:#698FAE;"
                                                 for="customFile">Imagen</label>
-                                            <input type="file" name="imagen" class="form-control" id="customFile" />
+                                            <input type="file" name="imagenMascota" class="form-control"
+                                                id="customFile" />
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-3">
                                             <label for="" style="color: #698FAE;">Caracter</label>
@@ -141,7 +155,7 @@
                                                     id="addon-wrapping">
                                                     <em class="fas fa-basketball-ball"></em>
                                                 </span>
-                                                <select class="form-control form-control-lg" th:field="*{caracter.id}">
+                                                <select class="form-select" th:field="*{caracter.id}">
                                                     <option th:each="tmpCaracter: ${listaCaracteres}"
                                                         th:value="${tmpCaracter.id}" th:text="${tmpCaracter.nombre}">
                                                     </option>
@@ -149,7 +163,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-3 mt-3 text-center">
-                                            <button type="button" class="btn btn-outline-primary btn-rounded"
+                                            <button type="submit" class="btn btn-outline-primary btn-rounded"
                                                 style="color: #253E5C; border-color: #253E5C;"
                                                 data-mdb-ripple-color="dark">
                                                 <em class="fas fa-save me-2"></em>
