@@ -91,7 +91,7 @@ public class SolicitudController {
     public String rechazarSolicitud(@PathVariable long id, RedirectAttributes redirectAttributes){
         boolean respuesta = solicitudServiceImp.rechazarSolicitud(id);
         if(respuesta){
-            redirectAttributes.addFlashAttribute("msg_success", "Solicitud rechazada");
+            redirectAttributes.addFlashAttribute("msg_success", "Solicitud rechazada exitosamente");
             return redirectVoluntario;
         }else{
             redirectAttributes.addFlashAttribute("msg_error", "Rechazo de solicitud fallida");
@@ -103,7 +103,7 @@ public class SolicitudController {
     public String aprobarSolicitud(@PathVariable long id, RedirectAttributes redirectAttributes){
         boolean respuesta = solicitudServiceImp.aprobarSolicitud(id);
         if(respuesta){
-            redirectAttributes.addFlashAttribute("msg_success", "Solicitud aprobada");
+            redirectAttributes.addFlashAttribute("msg_success", "Solicitud aprobada exitosamente");
             return redirectVoluntario;
         }else{
             redirectAttributes.addFlashAttribute("msg_error", "Aprobación de solicitud fallida");
