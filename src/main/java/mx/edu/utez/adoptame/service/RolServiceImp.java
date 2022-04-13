@@ -40,4 +40,17 @@ public class RolServiceImp implements RolService {
 
         return rol;
     }
+
+    @Override
+    public Rol buscarPorNombre(String nombre) {
+        Rol rol = null;
+
+        try {
+            rol = repository.findByNombre(nombre);
+        } catch (Exception e) {
+            // log
+        }
+
+        return rol;
+    }
 }

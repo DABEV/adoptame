@@ -69,5 +69,18 @@ public class UsuarioServiceImp implements UsuarioService {
 
         return respuesta;
     }
+
+    @Override
+    public Usuario buscarPorCorreo(String correo) {
+        this.usuario = null;
+
+        try {
+            this.usuario = repository.findByCorreo(correo);
+        } catch (Exception e) {
+            // log
+        }
+
+        return this.usuario;
+    }
     
 }
