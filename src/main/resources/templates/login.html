@@ -18,7 +18,7 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-8 col-sm-8 col-md-6 col-lg-6 col-sl-6">
-                            <form th:action="@{/login}" class="bg-white radius shadow-5-strong p-5">
+                            <form th:action="@{/login}" class="bg-white radius shadow-5-strong p-5" method="post">
                                 <div class="row mb-4">
                                     <div class="col text-center">
                                         <h2>Inicio de sesión</h2>
@@ -27,18 +27,18 @@
 
                                 <!-- Email input -->
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text bg-span" id="basic-addon1">
+                                    <span class="input-group-text bg-span" id="basic-addon-correo">
                                         <em class="fas fa-envelope"></em>
                                     </span>
-                                    <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="email" name="correo" class="form-control" placeholder="Correo electrónico" aria-label="Correo" aria-describedby="basic-addon-correo" />
                                 </div>
 
                                 <!-- Password input -->
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text bg-span" id="basic-addon1">
+                                    <span class="input-group-text bg-span" id="basic-addon-contrasena">
                                         <em class="fas fa-lock"></em>
                                     </span>
-                                    <input type="password" name="contrasenia" class="form-control" placeholder="Contraseña" aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="password" name="contrasena" class="form-control" placeholder="Contraseña" aria-label="Contrasena" aria-describedby="basic-addon-contrasena" />
                                 </div>
 
                                 <!-- Submit button -->
@@ -70,7 +70,6 @@
             </div>
         </div>
         <!-- Background image -->
-        <!--Main Navigation-->
         <scripts th:replace="fragments/imports :: scripts"></scripts>
     </body>
 </html>

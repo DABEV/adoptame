@@ -9,4 +9,5 @@ public interface UsuarioService {
     Usuario guardarUsuario(Usuario usuario);
     Usuario obtenerUsuario(Long id);
     boolean eliminarUsuario(Long id);
+    Usuario buscarPorCorreo(String correo);
 }

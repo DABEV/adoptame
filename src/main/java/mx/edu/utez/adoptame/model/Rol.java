@@ -1,5 +1,8 @@
 package mx.edu.utez.adoptame.model;
 
+import java.io.Serializable;
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "roles")
-public class Rol {
+public class Rol implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,5 +37,22 @@ public class Rol {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }    
+    }   
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Rol)) {
+            return false;
+        }
+        Rol rol = (Rol) o;
+        return Objects.equals(id, rol.id) && Objects.equals(nombre, rol.nombre);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nombre);
+    }
+    
 }
