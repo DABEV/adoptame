@@ -1,6 +1,8 @@
 package mx.edu.utez.adoptame.model;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +22,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "usuarios")
-public class Usuario {
+public class Usuario implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -168,5 +170,14 @@ public class Usuario {
 
     public void setSolicitudes(List<Solicitud> solicitudes) {
         this.solicitudes = solicitudes;
+    }
+
+    // Metodo para agregar roles
+    public void addRol(Rol rol) {
+        if (this.roles == null) {
+            this.roles = new HashSet<Rol>();
+        }
+        
+        roles.add(rol);
     }
 }
