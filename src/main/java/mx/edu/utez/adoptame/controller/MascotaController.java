@@ -46,12 +46,25 @@ public class MascotaController {
     @Autowired
     ColorServiceImp colorServiceImp;
 
-    @GetMapping("/consultarTodas")
-    public String consultarMascotas(Model model) {
-        model.addAttribute(listaMascotas, mascotaServiceImp.listarMascotas());
-        model.addAttribute(listaTamanos, tamanoServiceImp.listarTamanos());
-        model.addAttribute(listaColores, colorServiceImp.listarColores());
+    @GetMapping(value = { "/consultarTodas", "/consultarTodas/{tipoMascota}" })
+    public String consultarMascotas(@PathVariable(required = false) String tipoMascota, Model model) {
+        try {
+            if (tipoMascota != null) {
+                boolean tipo = Boolean.parseBoolean(tipoMascota);
+                model.addAttribute(listaMascotas, mascotaServiceImp.listarMascotas(tipo));
+                model.addAttribute("tipo", tipo);
+            } else {
+                model.addAttribute(listaMascotas, mascotaServiceImp.listarMascotas());
+            }
+
+            model.addAttribute(listaTamanos, tamanoServiceImp.listarTamanos());
+            model.addAttribute(listaColores, colorServiceImp.listarColores());
+
+        } catch (Exception e) {
+            // log
+        }
         return "mascota/lista";
+
     }
 
     @GetMapping("/consultaUnica/{id}")
@@ -111,6 +124,8 @@ public class MascotaController {
             mascota.setActivo(mascotaExistente.getActivo());
         }
 
+        boolean tipoMascota = mascota.getTipo();
+
         if (!multipartFile.isEmpty()) {
             String ruta = "C:/mascotas/img-mascotas/";
             String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
@@ -122,7 +137,7 @@ public class MascotaController {
         Mascota respuesta = mascotaServiceImp.guardarMascota(mascota);
         if (respuesta != null) {
             attributes.addFlashAttribute("msg_success", "Registro exitoso");
-            return redirectListar;
+            return "redirect:/mascota/consultarTodas/" + tipoMascota;
         } else {
             attributes.addFlashAttribute("msg_error", "Registro fallido");
             return "redirect:/mascota/registrar";
@@ -138,7 +153,9 @@ public class MascotaController {
 
     @PostMapping("/filtrar")
     public String filtrarMascotas(@RequestParam("colorMascota") String colorId,
-            @RequestParam("sexoMascota") String sexoMascota, @RequestParam("tamanoMascota") String tamanoId,
+            @RequestParam("tipoMascota") boolean tipoMascota,
+            @RequestParam("sexoMascota") String sexoMascota,
+            @RequestParam("tamanoMascota") String tamanoId,
             Model model) {
         try {
             Color color = new Color();
@@ -156,9 +173,16 @@ public class MascotaController {
             }
 
             List<Mascota> listaFiltrada = mascotaServiceImp.filtrarPorParametros(color, sexo, tamano);
-            listaFiltrada = listaFiltrada.stream().filter(mascota -> mascota.getActivo() == true)
+
+            // Filtro para mascotas activas en el sistema
+            listaFiltrada = listaFiltrada.stream().filter(Mascota::getActivo)
                     .collect(Collectors.toList());
-            
+
+            // filtro de tipo
+            listaFiltrada = listaFiltrada.stream().filter(mascota -> mascota.getTipo() == tipoMascota)
+                    .collect(Collectors.toList());
+
+            model.addAttribute("tipo", tipoMascota);
             model.addAttribute(listaMascotas, listaFiltrada);
             model.addAttribute(listaTamanos, tamanoServiceImp.listarTamanos());
             model.addAttribute(listaColores, colorServiceImp.listarColores());

@@ -8,6 +8,7 @@ import mx.edu.utez.adoptame.model.Tamano;
 
 public interface MascotaService {
     List<Mascota> listarMascotas();
+    List<Mascota> listarMascotas(boolean tipoMascota);
     Mascota guardarMascota(Mascota mascota);
     Mascota obtenerMascota(Long id);
     boolean eliminarMascota(Long id);

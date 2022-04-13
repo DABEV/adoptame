@@ -18,6 +18,11 @@ public class MascotaServiceImp implements MascotaService {
     MascotaRepository mascotaRepository;
 
     @Override
+    public List<Mascota> listarMascotas(boolean tipoMascota) {
+        return mascotaRepository.findByActivoAndTipo(true, tipoMascota);
+    }
+
+    @Override
     public List<Mascota> listarMascotas() {
         return mascotaRepository.findByActivo(true);
     }
