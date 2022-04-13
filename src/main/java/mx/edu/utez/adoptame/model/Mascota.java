@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -22,12 +23,14 @@ public class Mascota {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @NotNull
     @Column(nullable = false, length = 50)
     private String nombre;
     
     @Column(columnDefinition = "tinyint not null default 0")
     private Boolean sexo; 
-    
+
+    @NotNull
     @Column(nullable = false, length = 30)
     private String edad; 
     
@@ -45,7 +48,8 @@ public class Mascota {
 
     @Column(columnDefinition = "tinyint not null default 1")
     private Boolean activo;
-    
+
+    @NotNull
     @Column(columnDefinition = "longtext null")
 	private String detalles;
     

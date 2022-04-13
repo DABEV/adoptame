@@ -69,10 +69,14 @@ public class MascotaController {
 
     @GetMapping("/consultaUnica/{id}")
     public String consultaUnica(@PathVariable long id, Model model) {
-        Mascota mascota = mascotaServiceImp.obtenerMascota(id);
-        if (mascota != null) {
-            model.addAttribute("mascota", mascota);
-            return "mascota/detalles";
+        try {
+            Mascota mascota = mascotaServiceImp.obtenerMascota(id);
+            if (mascota != null) {
+                model.addAttribute("mascota", mascota);
+                return "mascota/detalles";
+            }
+        } catch (Exception e) {
+            // log
         }
         return redirectListar;
     }
@@ -80,10 +84,30 @@ public class MascotaController {
     @PostMapping("/actualizar")
     public String editar(@RequestParam("idMascota") long id, @RequestParam("tipoMascota") boolean tipoMascota,
             Model model, RedirectAttributes attributes) {
-        Mascota mascota = mascotaServiceImp.obtenerMascota(id);
-        if (mascota != null) {
-            model.addAttribute("mascota", mascota);
+        try {
+            Mascota mascota = mascotaServiceImp.obtenerMascota(id);
+            if (mascota != null) {
+                model.addAttribute("mascota", mascota);
 
+                List<Color> colores = colorServiceImp.listarColores();
+                List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
+                List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
+
+                model.addAttribute(listaCaracteres, listaCaracter);
+                model.addAttribute(listaTamanos, listaTamano);
+                model.addAttribute(listaColores, colores);
+                return "mascota/formularioRegistro";
+            }
+            attributes.addFlashAttribute("msg_error", "Registro no encontrado");
+        } catch (Exception e) {
+            // log
+        }
+        return redirectListar + "/" + tipoMascota;
+    }
+
+    @GetMapping("/registrar")
+    public String registrar(Mascota mascota, Model model) {
+        try {
             List<Color> colores = colorServiceImp.listarColores();
             List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
             List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
@@ -91,59 +115,52 @@ public class MascotaController {
             model.addAttribute(listaCaracteres, listaCaracter);
             model.addAttribute(listaTamanos, listaTamano);
             model.addAttribute(listaColores, colores);
-            return "mascota/formularioRegistro";
+        } catch (Exception e) {
+            // log
         }
-        attributes.addFlashAttribute("msg_error", "Registro no encontrado");
-        return redirectListar +  "/" + tipoMascota;
-    }
-
-    @GetMapping("/registrar")
-    public String registrar(Mascota mascota, Model model) {
-        List<Color> colores = colorServiceImp.listarColores();
-        List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
-        List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
-
-        model.addAttribute(listaCaracteres, listaCaracter);
-        model.addAttribute(listaTamanos, listaTamano);
-        model.addAttribute(listaColores, colores);
         return "mascota/formularioRegistro";
     }
 
     @PostMapping("/guardarMascota")
     public String guardarMacota(Mascota mascota, Model model, RedirectAttributes attributes,
             @RequestParam("imagenMascota") MultipartFile multipartFile) {
-        if (mascota.getId() == null) {
-            mascota.setAprobadoRegistro("pendiente");
-            mascota.setDisponibleAdopcion(false);
-            mascota.setActivo(true);
+        try {
+            if (mascota.getId() == null) {
+                mascota.setAprobadoRegistro("pendiente");
+                mascota.setDisponibleAdopcion(false);
+                mascota.setActivo(true);
 
-        } else {
-            Mascota mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
-            mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
-            mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
-            mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
-            mascota.setActivo(mascotaExistente.getActivo());
-        }
-
-        boolean tipoMascota = mascota.getTipo();
-
-        if (!multipartFile.isEmpty()) {
-            String ruta = "C:/mascotas/img-mascotas/";
-            String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
-            if (nombreImagen != null) {
-                mascota.setImagen(nombreImagen);
+            } else {
+                Mascota mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
+                mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
+                mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
+                mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
+                mascota.setActivo(mascotaExistente.getActivo());
             }
-        }
 
-        Mascota respuesta = mascotaServiceImp.guardarMascota(mascota);
-        if (respuesta != null) {
-            attributes.addFlashAttribute("msg_success", "Registro exitoso");
-            return redirectListar +  "/" + tipoMascota;
-        } else {
-            attributes.addFlashAttribute("msg_error", "Registro fallido");
-            return "redirect:/mascota/registrar";
-        }
+            boolean tipoMascota = mascota.getTipo();
 
+            if (!multipartFile.isEmpty()) {
+                String ruta = "C:/mascotas/img-mascotas/";
+                String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
+                if (nombreImagen != null) {
+                    mascota.setImagen(nombreImagen);
+                }
+            }
+
+            Mascota respuesta = mascotaServiceImp.guardarMascota(mascota);
+            if (respuesta != null) {
+                attributes.addFlashAttribute("msg_success", "Registro exitoso");
+                return redirectListar + "/" + tipoMascota;
+            } else {
+                attributes.addFlashAttribute("msg_error", "Registro fallido");
+                return "redirect:/mascota/registrar";
+            }
+
+        } catch (Exception e) {
+            // log
+        }
+        return redirectListar;
     }
 
     @GetMapping("/borrarMascota/{id}")
@@ -152,7 +169,7 @@ public class MascotaController {
             Mascota mascota = mascotaServiceImp.obtenerMascota(id);
             if (mascota != null) {
                 mascotaServiceImp.eliminarMascota(id);
-                return redirectListar +  "/"  + mascota.getTipo();
+                return redirectListar + "/" + mascota.getTipo();
             }
         } catch (Exception e) {
             // log
@@ -199,24 +216,21 @@ public class MascotaController {
             return "mascota/lista";
 
         } catch (Exception e) {
-            return redirectListar +  "/" + tipoMascota;
+            return redirectListar + "/" + tipoMascota;
         }
     }
 
     @PostMapping("/validar")
-    public String verificarRegistro(@RequestParam("idMascota") long id, 
-    @RequestParam("verificado") String verificado) {
+    public String verificarRegistro(@RequestParam("idMascota") long id,
+            @RequestParam("verificado") String verificado) {
         try {
-            Mascota mascota = mascotaServiceImp.obtenerMascota(id);
-            if (mascota != null) {
-                mascota.setAprobadoRegistro(verificado);
-                mascotaServiceImp.guardarMascota(mascota);
-                return redirectListar +  "/" + mascota.getTipo();
+            Mascota respuesta = mascotaServiceImp.validarRegistro(id, verificado);
+            if (respuesta != null) {
+                return redirectListar + "/" + respuesta.getTipo();
             }
         } catch (Exception e) {
             // log
         }
-
         return redirectListar;
     }
 }

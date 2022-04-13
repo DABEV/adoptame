@@ -14,5 +14,5 @@ public interface MascotaService {
     boolean eliminarMascota(Long id);
     List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano);
     
-    boolean validarRegistro(Mascota mascota);
+    Mascota validarRegistro(long id, String verificado);
 }
