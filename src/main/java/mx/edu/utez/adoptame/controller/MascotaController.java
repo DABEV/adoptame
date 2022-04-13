@@ -77,8 +77,9 @@ public class MascotaController {
         return redirectListar;
     }
 
-    @GetMapping("/actualizar/{id}")
-    public String editar(@PathVariable long id, Model model, RedirectAttributes attributes) {
+    @PostMapping("/actualizar")
+    public String editar(@RequestParam("idMascota") long id, @RequestParam("tipoMascota") boolean tipoMascota,
+            Model model, RedirectAttributes attributes) {
         Mascota mascota = mascotaServiceImp.obtenerMascota(id);
         if (mascota != null) {
             model.addAttribute("mascota", mascota);
@@ -93,7 +94,7 @@ public class MascotaController {
             return "mascota/formularioRegistro";
         }
         attributes.addFlashAttribute("msg_error", "Registro no encontrado");
-        return redirectListar;
+        return "redirect:/mascota/consultarTodas/" + tipoMascota;
     }
 
     @GetMapping("/registrar")

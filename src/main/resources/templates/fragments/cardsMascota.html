@@ -23,24 +23,29 @@
         </ul>
 
         <!--Botones del card-->
-        <div class="card-body pt-2 pb-2">
-            <div class="row justify-content-between">
+        <div class="card-body ps-3 pt-1 pb-1">
+            <div class="row">
                 <div class="col">
-                    <a class="mx-1" style="color: #74422B;" th:href="@{/mascota/actualizar/{id} (id=${mascota.id})}"
-                        role="button">
-                        <em class="far fa-edit fa-lg"></em>
-                    </a>
-                    <a class="mx-1" style="color: #74422B;" role="button" data-mdb-toggle="modal"
-                        th:attr="data-mdb-target=${'#detalles'+ index.count}">
-                        <em class="far fa-eye fa-lg"></em>
-                    </a>
-                    <a class="mx-1" style="color: #74422B;" data-mdb-toggle="modal"
-                        th:attr="data-mdb-target=${'#eliminar'+ index.count}" role="button">
-                        <em class="far fa-trash-alt fa-lg"></em>
-                    </a>
+                    <form th:action="@{/mascota/actualizar/}" method="post">
+                        <input type="hidden" name="idMascota" th:value="${mascota.id}"/>
+                        <input type="hidden" name="tipoMascota" th:value="${mascota.tipo}" />
+                        <button type="submit" style="color: #74422B; border-color: white;"
+                            class="btn btn-lg btn-outline-success btn-floating" data-mdb-ripple-color="dark">
+                            <em class="far fa-edit fa-lg"></em>
+                        </button>
+
+                        <a class="btn btn-lg btn-outline-success btn-floating" style="color: #74422B; border-color: white;"
+                            role="button" data-mdb-toggle="modal" th:attr="data-mdb-target=${'#detalles'+ index.count}">
+                            <em class="far fa-eye fa-lg"></em>
+                        </a>
+                        <a class="btn btn-lg btn-outline-success btn-floating" style="color: #74422B; border-color: white;"
+                            data-mdb-toggle="modal" th:attr="data-mdb-target=${'#eliminar'+ index.count}" role="button">
+                            <em class="far fa-trash-alt fa-lg"></em>
+                        </a>
+                    </form>
                 </div>
-                <div class="col-2">
-                    <a style="color: #74422B;" href="#!" role="button">
+                <div class="col-3">
+                    <a class="btn btn-lg btn-outline-success btn-floating" style="color: #74422B; border-color: white;" href="#!" role="button">
                         <em class="far fa-heart fa-lg"></em>
                     </a>
                 </div>
@@ -56,7 +61,7 @@
     <div class="card-body">
         <h5 class="card-title fw-normal">Filtros disponibles</h5>
         <form th:action="@{/mascota/filtrar}" method="post">
-            <input type="hidden" name="tipoMascota" th:value="${tipo}"/>
+            <input type="hidden" name="tipoMascota" th:value="${tipo}" />
             <div class="mb-3">
                 <label for="" style="color: #B07D5D;">Sexo</label>
                 <div class="input-group flex-nowrap">
@@ -106,7 +111,8 @@
                 </div>
                 <div class="col-12 col-sm-12 col-md-12 col-lg-7 text-center">
                     <div class="d-grid mt-2 gap-2">
-                       <a th:href="@{/mascota/consultarTodas/{tipoMascota} (tipoMascota=${tipo})} " class="text-muted">Borrar filtros</a>
+                        <a th:href="@{/mascota/consultarTodas/{tipoMascota} (tipoMascota=${tipo})} "
+                            class="text-muted">Borrar filtros</a>
                     </div>
                 </div>
             </div>
