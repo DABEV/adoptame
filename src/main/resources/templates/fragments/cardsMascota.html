@@ -27,25 +27,28 @@
             <div class="row">
                 <div class="col">
                     <form th:action="@{/mascota/actualizar/}" method="post">
-                        <input type="hidden" name="idMascota" th:value="${mascota.id}"/>
+                        <input type="hidden" name="idMascota" th:value="${mascota.id}" />
                         <input type="hidden" name="tipoMascota" th:value="${mascota.tipo}" />
                         <button type="submit" style="color: #74422B; border-color: white;"
                             class="btn btn-lg btn-outline-success btn-floating" data-mdb-ripple-color="dark">
                             <em class="far fa-edit fa-lg"></em>
                         </button>
 
-                        <a class="btn btn-lg btn-outline-success btn-floating" style="color: #74422B; border-color: white;"
-                            role="button" data-mdb-toggle="modal" th:attr="data-mdb-target=${'#detalles'+ index.count}">
+                        <a class="btn btn-lg btn-outline-success btn-floating"
+                            style="color: #74422B; border-color: white;" role="button" data-mdb-toggle="modal"
+                            th:attr="data-mdb-target=${'#detalles'+ index.count}">
                             <em class="far fa-eye fa-lg"></em>
                         </a>
-                        <a class="btn btn-lg btn-outline-success btn-floating" style="color: #74422B; border-color: white;"
-                            data-mdb-toggle="modal" th:attr="data-mdb-target=${'#eliminar'+ index.count}" role="button">
+                        <a class="btn btn-lg btn-outline-success btn-floating"
+                            style="color: #74422B; border-color: white;" data-mdb-toggle="modal"
+                            th:attr="data-mdb-target=${'#eliminar'+ index.count}" role="button">
                             <em class="far fa-trash-alt fa-lg"></em>
                         </a>
                     </form>
                 </div>
                 <div class="col-3">
-                    <a class="btn btn-lg btn-outline-success btn-floating" style="color: #74422B; border-color: white;" href="#!" role="button">
+                    <a class="btn btn-lg btn-outline-success btn-floating" style="color: #74422B; border-color: white;"
+                        href="#!" role="button">
                         <em class="far fa-heart fa-lg"></em>
                     </a>
                 </div>

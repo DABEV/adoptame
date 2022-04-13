@@ -94,7 +94,7 @@ public class MascotaController {
             return "mascota/formularioRegistro";
         }
         attributes.addFlashAttribute("msg_error", "Registro no encontrado");
-        return "redirect:/mascota/consultarTodas/" + tipoMascota;
+        return redirectListar +  "/" + tipoMascota;
     }
 
     @GetMapping("/registrar")
@@ -138,7 +138,7 @@ public class MascotaController {
         Mascota respuesta = mascotaServiceImp.guardarMascota(mascota);
         if (respuesta != null) {
             attributes.addFlashAttribute("msg_success", "Registro exitoso");
-            return "redirect:/mascota/consultarTodas/" + tipoMascota;
+            return redirectListar +  "/" + tipoMascota;
         } else {
             attributes.addFlashAttribute("msg_error", "Registro fallido");
             return "redirect:/mascota/registrar";
@@ -148,7 +148,16 @@ public class MascotaController {
 
     @GetMapping("/borrarMascota/{id}")
     public String borrarMascota(@PathVariable long id) {
-        mascotaServiceImp.eliminarMascota(id);
+        try {
+            Mascota mascota = mascotaServiceImp.obtenerMascota(id);
+            if (mascota != null) {
+                mascotaServiceImp.eliminarMascota(id);
+                return redirectListar +  "/"  + mascota.getTipo();
+            }
+        } catch (Exception e) {
+            // log
+        }
+
         return redirectListar;
     }
 
@@ -190,7 +199,24 @@ public class MascotaController {
             return "mascota/lista";
 
         } catch (Exception e) {
-            return redirectListar;
+            return redirectListar +  "/" + tipoMascota;
         }
+    }
+
+    @PostMapping("/validar")
+    public String verificarRegistro(@RequestParam("idMascota") long id, 
+    @RequestParam("verificado") String verificado) {
+        try {
+            Mascota mascota = mascotaServiceImp.obtenerMascota(id);
+            if (mascota != null) {
+                mascota.setAprobadoRegistro(verificado);
+                mascotaServiceImp.guardarMascota(mascota);
+                return redirectListar +  "/" + mascota.getTipo();
+            }
+        } catch (Exception e) {
+            // log
+        }
+
+        return redirectListar;
     }
 }
