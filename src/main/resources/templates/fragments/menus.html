@@ -24,16 +24,16 @@
     </a>
 </div>
 
-<div th:fragment="administrador(activo)" class="menu list-group shadow-3">
+<div th:fragment="voluntario(activo)" class="menu list-group shadow-3">
     <a href="#" class="list-group-item list-group-item-action disabled">
-        <strong>Menú administrador</strong>
+        <strong>Menú Voluntario</strong>
     </a>
     <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 1 ? 'active' : ''"
         aria-current="true">
         <em class="fas fa-plus-circle"></em>
-        Añadir mascota
+        Registro mascota
     </a>
-    <a href="#" class="list-group-item list-group-item-action active" th:classappend="${activo} == 2 ? 'active' : ''"
+    <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 2 ? 'active' : ''"
         aria-current="true">
         <em class="fas fa-envelope"></em>
         Ver solicitudes de adopción
