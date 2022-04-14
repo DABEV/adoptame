@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import mx.edu.utez.adoptame.model.Usuario;
 import mx.edu.utez.adoptame.repository.UsuarioRepository;
 
 @Service
+@Transactional
 public class UsuarioServiceImp implements UsuarioService {
 
     private Usuario usuario;
@@ -59,15 +61,35 @@ public class UsuarioServiceImp implements UsuarioService {
     @Override
     public boolean eliminarUsuario(Long id) {
         boolean respuesta = false;
-
         try {
             repository.deleteById(id);
             respuesta = !repository.existsById(id);
         } catch (Exception e) {
             // log
         }
-
         return respuesta;
     }
-    
+
+    @Override
+    public Usuario buscarPorCorreo(String correo) {
+        this.usuario = null;
+        try {
+            this.usuario = repository.findByCorreo(correo);
+        } catch (Exception e) {
+            // log
+        }
+        return this.usuario;
+    }
+
+    @Override
+    public boolean cambiarContrasena(String contrasena, String correo) {
+        try {
+            repository.updatePassword(contrasena, correo);
+            return true;
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            exception.printStackTrace();
+            return false;
+        }
+    }
 }

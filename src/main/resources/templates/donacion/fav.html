@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Registro de mascotas</title>
+    <i-head th:replace="fragments/imports :: head" />
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="row mb-3">
+        <navbar th:replace="fragments/navbar :: navbar"></navbar>
+    </div>
+    <!-- Contenido -->
+    <div class="mx-4 mt-4">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-12 col-lg-3 mb-5">
+                <div th:replace="fragments/menus :: adoptador(4)" class="menu list-group shadow-3"></div>
+            </div>
+
+            <div class="col-md-12 col-sm-12 col-12 col-lg-9">
+                <div class="d-grid gap-4">
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <h2 style="color: #253E5C;">Mis mascotas favoritas</h2>
+                            <p class="h4 fw-light" style="color: #698FAE">Consulta tus mascotas favoritas
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mb-4 mt-3">
+                        <div class="row  justify-content-center">
+                            <table class="table align-middle mb-0 bg-white">
+                                <caption hidden >Lista de favoritos</caption>
+                                <!--tabla de favoritos-->
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th scope="col">Imagen</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Sexo</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Fecha de registro</th>
+                                        <th scope="col">Verificación</th>
+                                        <th scope="col" colspan="2">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="mascota,index: ${listaMascotas}">
+                                        <td>
+                                            <img th:src="@{/imagenes/{i} (i= ${mascota.imagen})}"
+                                                class="rounded float-left" width="100" height="100" alt="..." />
+                                        </td>
+                                        <td>[[${mascota.nombre}]]</td>
+                                        <td th:text="${mascota.sexo == false} ? 'Macho' : 'Hembra'" />
+                                        <td th:text="${mascota.tipo == true} ? 'Perro' : 'Gato'" />
+                                        <td th:text="${#dates.format(mascota.fechaRegistro, 'dd-MM-yyyy')}" />
+                                        <td>
+                                            <div th:switch="${mascota.aprobadoRegistro}">
+                                                <div th:case="'aprobado'">
+                                                    <div class="h5">
+                                                        <span class="badge badge-pill badge-success">Aprobado</span>
+                                                    </div>
+                                                </div>
+                                                <div th:case="'pendiente'">
+                                                    <div class="h5">
+                                                        <span class="badge badge-pill badge-warning">Pendiente</span>
+                                                    </div>
+                                                </div>
+                                                <div th:case="'rechazado'">
+                                                    <div class="h5">
+                                                        <span class="badge badge-pill badge-danger">Rechazado</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-lg btn-outline-success btn-floating"
+                                                style="color: #74422B; border-color: white;" role="button"
+                                                data-mdb-toggle="modal"
+                                                th:attr="data-mdb-target=${'#detalles'+ index.count}">
+                                                <em class="far fa-eye fa-lg"></em>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-lg btn-outline-success btn-floating"
+                                                style="color: #74422B; border-color: white;" role="button"
+                                                data-mdb-toggle="modal"
+                                                th:attr="data-mdb-target=${'#eliminarfav'+ index.count}">
+                                                <em class="far fa-trash-alt fa-lg"></em>
+                                            </a>
+                                        </td>
+                                        <div th:replace="fragments/dialogs :: eliminarFavorito(${index.count})"></div>
+                                        <div th:replace="fragments/dialogs :: detallesMascota(${index.count})"></div>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!--Footer-->
+
+    <!--Footer-->
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
+</body>
+
+</html>
