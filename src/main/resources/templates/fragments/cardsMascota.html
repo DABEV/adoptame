@@ -48,12 +48,13 @@
                 </div>
                 <div class="col-3">
                     <a class="btn btn-lg btn-outline-success btn-floating" style="color: #74422B; border-color: white;"
-                        href="#!" role="button">
+                        role="button" data-mdb-toggle="modal" th:attr="data-mdb-target=${'#favorito'+ index.count}">
                         <em class="far fa-heart fa-lg"></em>
                     </a>
                 </div>
                 <div th:replace="fragments/dialogs :: detallesMascota(${index.count})"></div>
                 <div th:replace="fragments/dialogs :: eliminarMascota(${index.count})"></div>
+                <div th:replace="fragments/dialogs :: agregarFavorito(${index.count})"></div>
             </div>
         </div>
     </div>

@@ -7,7 +7,28 @@
     color: #74422b
 }
 
+.menu > button {
+    border-color: #74422b; 
+    color: #74422b
+}
+
+.menu > button.disabled { 
+    color: #74422b
+}
+
 .menu > a.active, .menu > a:hover {
+    background-color: #d5b095; 
+    border-color: #74422b;
+    color: white;
+}
+
+.menu > button.active, .menu > button:hover {
+    background-color: #d5b095; 
+    border-color: #74422b;
+    color: white;
+}
+
+.formMenu > button.active, .formMenu > button:hover {
     background-color: #d5b095; 
     border-color: #74422b;
     color: white;

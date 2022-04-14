@@ -191,6 +191,51 @@
     </div>
   </div>
 </div>
+
+<div th:fragment="agregarFavorito(id)" class="modal" th:id="${'favorito' + id}" tabindex="-1"
+  aria-labelledby="favoritoLabel" aria-hidden="true">
+  <!-- dialog eliminar mascota-->
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-white" style="background-color: #253E5C;">
+        <h5 id="favoritoLabel" class="modal-title">Añadir a favorito</h5>
+        <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <label>¿Desea agregar a fovoritos a?</label>
+        <h1 th:text="${mascota.nombre}"></h1>
+        <form th:action="@{/mascota/guardarFavorito}" method="post">
+          <input type="hidden" th:value="${session.usuario.id}" name="idUsuario" />
+          <input type="hidden" th:value="${mascota.id}" name="idMascota" />
+          <button type="submit" class="btn btn-rounded btn-primary" style="background-color: #253E5C;">Añadir</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:fragment="eliminarFavorito(id)" class="modal" th:id="${'eliminarfav' + id}" tabindex="-1"
+  aria-labelledby="labelModalEliminar" aria-hidden="true">
+  <!-- dialog eliminar mascota-->
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-danger">
+        <h5 id="labelModalEliminar" class="modal-title">Eliminar favorito</h5>
+        <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <label>¿Desea eliminar de favoritos a?</label>
+        <h1 th:text="${mascota.nombre}"></h1>
+        <form th:action="@{/mascota/eliminarFavorito}" method="post">
+          <input type="hidden" th:value="${session.usuario.id}" name="idUsuario" />
+          <input type="hidden" th:value="${mascota.id}" name="idMascota" />
+          <button type="submit" class="btn btn-rounded btn-danger">Eliminar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal detalles de blog -->
 
 <div th:fragment="detallesBlog(id)" class="modal fade" th:id="${'detalles-blog' + id}" tabindex="-1"
