@@ -13,6 +13,7 @@ public interface MascotaService {
     Mascota obtenerMascota(Long id);
     boolean eliminarMascota(Long id);
     List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano);
+    List<Mascota> obtenerRecientes();
     
     Mascota validarRegistro(long id, String verificado);
 }

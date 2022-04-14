@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.edu.utez.adoptame.model.Rol;
 import mx.edu.utez.adoptame.model.Usuario;
+import mx.edu.utez.adoptame.service.MascotaServiceImp;
 import mx.edu.utez.adoptame.service.RolServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 
@@ -33,11 +34,15 @@ public class HomeController {
     @Autowired
     private RolServiceImp rolServiceImp;
 
+    @Autowired
+    private MascotaServiceImp mascotaServiceImp;
+
     // Variables de redirección
     private static final String REDIRECT_LOGIN = "redirect:/login";
 
     @GetMapping("/")
-    public String inicio () {
+    public String inicio (Model model) {
+        model.addAttribute("recientes", mascotaServiceImp.obtenerRecientes());
         return "inicio";
     }
 
@@ -49,7 +54,6 @@ public class HomeController {
 		
         // Añade los datos del usuario a la sesión 
 		session.setAttribute("usuario", usuario);
-        
 		return "redirect:/";
 	}
 

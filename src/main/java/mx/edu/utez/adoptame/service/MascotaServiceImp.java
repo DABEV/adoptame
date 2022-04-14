@@ -1,5 +1,6 @@
 package mx.edu.utez.adoptame.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,6 +92,17 @@ public class MascotaServiceImp implements MascotaService {
     @Override
     public List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano) {
         return mascotaRepository.findByColorOrSexoOrTamano(color, sexo, tamano);
+    }
+
+    @Override
+    public List<Mascota> obtenerRecientes() {
+        List<Mascota> mascotas = new ArrayList<>();
+        try{
+            mascotas = mascotaRepository.obtenerRecientes();
+        }catch (Exception e) {
+            // Log
+        }
+        return mascotas;
     }
 
 }

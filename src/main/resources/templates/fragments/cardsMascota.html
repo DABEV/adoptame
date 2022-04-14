@@ -60,6 +60,44 @@
     </div>
 </div>
 
+<div th:fragment="card-recientes">
+    <div class="card" style="border: solid; color: #253E5C; border-width: thin;">
+        <img th:src="@{/imagenes/{i} (i= ${mascota.imagen})}" class="card-img-top" height="200" alt="No encontrada" />
+        <div class="card-body pb-0">
+            <div class="row">
+                <div class="col">
+                    <h5 class="card-title" th:text="${mascota.nombre}">Card title</h5>
+                </div>
+                <div class="col-3 text-end">
+                    <span th:text="${mascota.tipo == true} ? 'Perro' : 'Gato' " class="badge rounded-pill"
+                        style="background-color: #253E5C; color: white;">mascota</span>
+                </div>
+            </div>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item" style="border-color: #253E5C;"
+                th:text="${mascota.disponibleAdopcion == true}? 'Disponible':'No disponible'">Edad
+            </li>
+            <li class="list-group-item" style="border-color: #253E5C;" th:text="'Edad: ' + ${mascota.edad}">Edad
+            </li>
+            <li class="list-group-item" style="border-color: #253E5C;"
+                th:text="'Caracter: ' + ${mascota.caracter.nombre}">Caracter</li>
+        </ul>
+
+        <!--Botones del card-->
+        <div class="card-body ps-3 pt-1 pb-1">
+            <div class="row">
+                <div class="col">
+                    <a class="btn btn-lg btn-outline-success btn-floating" style="color: #74422B; border-color: white;"
+                        role="button" data-mdb-toggle="modal" th:attr="data-mdb-target=${'#detalles'+ index.count}">
+                        <em class="far fa-eye fa-lg"></em>
+                    </a>
+                </div>
+                <div th:replace="fragments/dialogs :: detallesMascota(${index.count})"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div th:fragment="card-filtro" class="card" style="border: solid; color: #74422B; border-width: thin;">
     <div class="card-body">

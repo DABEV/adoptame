@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import mx.edu.utez.adoptame.model.Color;
 import mx.edu.utez.adoptame.model.Favorito;
 import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Tamano;
+import mx.edu.utez.adoptame.model.Usuario;
 import mx.edu.utez.adoptame.service.CaracterServiceImpl;
 import mx.edu.utez.adoptame.service.ColorServiceImp;
 import mx.edu.utez.adoptame.service.FavoritoServiceImp;
@@ -37,8 +39,9 @@ public class MascotaController {
     private String listaColores = "listaColores";
     private String listaCaracteres = "listaCaracteres";
     private String listaMascotas = "listaMascotas";
-    private String msg_s = "msg_success";
-    private String msg_e = "msg_error";
+    private String msgS = "msg_success";
+    private String msgE = "msg_error";
+    private String favoritos = "mascota/favoritos";
 
     @Autowired
     MascotaServiceImp mascotaServiceImp;
@@ -110,7 +113,7 @@ public class MascotaController {
                 model.addAttribute(listaColores, colores);
                 return "mascota/formularioRegistro";
             }
-            attributes.addFlashAttribute(msg_e, "Registro no encontrado");
+            attributes.addFlashAttribute(msgE, "Registro no encontrado");
         } catch (Exception e) {
             // log
         }
@@ -162,10 +165,10 @@ public class MascotaController {
 
             Mascota respuesta = mascotaServiceImp.guardarMascota(mascota);
             if (respuesta != null) {
-                attributes.addFlashAttribute(msg_s, "Registro exitoso");
+                attributes.addFlashAttribute(msgS, "Registro exitoso");
                 return redirectListar + "/" + tipoMascota;
             } else {
-                attributes.addFlashAttribute(msg_e, "Registro fallido");
+                attributes.addFlashAttribute(msgE, "Registro fallido");
                 return "redirect:/mascota/registrar";
             }
 
@@ -181,13 +184,13 @@ public class MascotaController {
             Mascota mascota = mascotaServiceImp.obtenerMascota(id);
             if (mascota != null) {
                 mascotaServiceImp.eliminarMascota(id);
-                attributes.addFlashAttribute(msg_s, "Borrado con éxito");
+                attributes.addFlashAttribute(msgS, "Borrado con éxito");
                 return redirectListar + "/" + mascota.getTipo();
             }
         } catch (Exception e) {
             // log
         }
-        attributes.addFlashAttribute(msg_e, "Ocurrió un error");
+        attributes.addFlashAttribute(msgE, "Ocurrió un error");
         return redirectListar;
     }
 
@@ -239,7 +242,7 @@ public class MascotaController {
         try {
             Mascota respuesta = mascotaServiceImp.validarRegistro(id, verificado);
             if (respuesta != null) {
-                attributes.addFlashAttribute(msg_s, "Registr agverificado con éxito");
+                attributes.addFlashAttribute(msgS, "Registro verificado con éxito");
                 return redirectListar + "/" + respuesta.getTipo();
             }
         } catch (Exception e) {
@@ -248,14 +251,16 @@ public class MascotaController {
         return redirectListar;
     }
 
-
-    @PostMapping("/favoritos")
-    public String listarFavoritos(@RequestParam("idUsuario") long id, Model model) {
+    @GetMapping("/favoritos")
+    public String listarFavoritos(Authentication authentication, Model model) {
         try {
-            List<Favorito> favoritos = favoritoServiceImp.listarFavoritos(id);
+            String correo = authentication.getName();
+            Usuario usuario = usuarioServiceImp.buscarPorCorreo(correo);
+            
+            List<Favorito> favoritosLista = favoritoServiceImp.listarFavoritos(usuario.getId());
             List<Mascota> mascotas = new ArrayList<>();
             if (!favoritos.isEmpty()) {
-                for (Favorito f : favoritos) {
+                for (Favorito f : favoritosLista) {
                     mascotas.add(f.getMascota());
                 }
             }
@@ -264,9 +269,13 @@ public class MascotaController {
         } catch (Exception e) {
             // log
         }
-        return "mascota/favoritos";
+        return favoritos;
     }
 
+    @GetMapping("/fav")
+    public String red() {
+        return favoritos;
+    }
 
     @PostMapping("/guardarFavorito")
     public String guardarFavorito(@RequestParam("idMascota") long idMascota,
@@ -276,21 +285,21 @@ public class MascotaController {
             Favorito favorito = favoritoServiceImp.obtenerPorMascota(idMascota, idUsuario);
 
             if (favorito != null) {
-                attributes.addFlashAttribute(msg_s, "La mascota ya se encuentra en favoritos");
+                attributes.addFlashAttribute(msgS, "La mascota ya se encuentra en favoritos");
                 return redirectListar + "/" + favorito.getMascota().getTipo();
             } else {
                 Favorito fav = new Favorito();
                 fav.setMascota(mascotaServiceImp.obtenerMascota(idMascota));
                 fav.setUsuario(usuarioServiceImp.obtenerUsuario(idUsuario));
                 Favorito respuesta = favoritoServiceImp.guardarFavorito(fav);
-                attributes.addFlashAttribute(msg_s, "Favorito agregado con éxito");
+                attributes.addFlashAttribute(msgS, "Favorito agregado con éxito");
                 return redirectListar + "/" + respuesta.getMascota().getTipo();
             }
 
         } catch (Exception e) {
             // log
         }
-        attributes.addFlashAttribute(msg_e, "No se pudo agregar");
+        attributes.addFlashAttribute(msgE, "No se pudo agregar");
         return redirectListar;
     }
 
@@ -303,24 +312,24 @@ public class MascotaController {
             if (favorito != null) {
                 boolean respuesta = favoritoServiceImp.eliminarFavorito(favorito.getId());
                 if (respuesta) {
-                    attributes.addFlashAttribute(msg_s, "Eliminado con éxito de favoritos");
+                    attributes.addFlashAttribute(msgS, "Eliminado con éxito de favoritos");
                 }
 
                 // lista de mascotas por usuario
-                List<Favorito> favoritos = favoritoServiceImp.listarFavoritos(idUsuario);
+                List<Favorito> favoritosLista = favoritoServiceImp.listarFavoritos(idUsuario);
                 List<Mascota> mascotas = new ArrayList<>();
                 if (!favoritos.isEmpty()) {
-                    for (Favorito f : favoritos) {
+                    for (Favorito f : favoritosLista) {
                         mascotas.add(f.getMascota());
                     }
                 }
                 model.addAttribute("listaMascotas", mascotas);
-                return "mascota/favoritos";
+                return favoritos;
             }
         } catch (Exception e) {
             // log
         }
-        attributes.addFlashAttribute(msg_e, "No se pudo elimar");
+        attributes.addFlashAttribute(msgE, "No se pudo elimar");
         return redirectListar;
     }
 }

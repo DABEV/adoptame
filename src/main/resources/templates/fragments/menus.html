@@ -17,14 +17,11 @@
         <em class="fas fa-envelope"></em>
         Mis solicitudes de adopción
     </a>
-    <form class="formMenu" th:action="@{/mascota/favoritos}" method="post">
-        <input type="hidden" th:value="${session.usuario.id}" name="idUsuario" />
-        <button type="submit" class="list-group-item list-group-item-action" th:classappend="${activo} == 4 ? 'active' : ''"
-            aria-current="true">
-            <em class="fas fa-heart"></em>
-            Mi lista de favoritos
-        </button>
-    </form>
+    <a th:href="@{/mascota/favoritos}" class="list-group-item list-group-item-action" th:classappend="${activo} == 4 ? 'active' : ''"
+        aria-current="true">
+        <em class="fas fa-heart"></em>
+        Mi lista de favoritos
+    </a>
 </div>
 
 <div th:fragment="administrador(activo)" class="menu list-group shadow-3">
