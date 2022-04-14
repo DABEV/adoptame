@@ -26,8 +26,8 @@
                     <div class="col-12 col-md-4 col-sm-12 mb-4" th:each="blog, index: ${listaBlog}">
 
                         <div class="card">
-                            <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/062.webp" class="card-img-top"
-                                alt="Chicago Skyscrapers" />
+                            <img th:src="@{/imagenes/{i} (i= ${blog.imagen})}" class="card-img-top"
+                                alt="No encontrada" />
                             <div class="card-header">
                                 <h5 class="card-title" th:text="${blog.titulo}"></h5>
                                 <p class="card-text"

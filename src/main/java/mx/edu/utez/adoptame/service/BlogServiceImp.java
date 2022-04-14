@@ -23,24 +23,61 @@ public class BlogServiceImp implements BlogService {
     @Override
     public Blog guardarBlog(Blog blog) {
 
-        return blogRepository.save(blog);
+        try {
+
+            Blog respuesta = blogRepository.save(blog);
+            if (respuesta.getTitulo() != null) {
+                return respuesta;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
     public Blog actualizarBlog(Blog blog) {
 
-        Blog blogActualizar = blogRepository.getById(blog.getId());
+        try {
+            Blog blogActualizar = blogRepository.getById(blog.getId());
 
-        blogActualizar.setContenido(blog.getContenido());
-        blogActualizar.setTitulo(blog.getTitulo());
-        blogActualizar.setEsPrincipal(blog.getEsPrincipal());
-        
-        return blogRepository.save(blogActualizar);
+            if (blog.getImagen() == null) {
+                blogActualizar.setImagen(blogActualizar.getImagen());
+                blogActualizar.setContenido(blog.getContenido());
+                blogActualizar.setTitulo(blog.getTitulo());
+                blogActualizar.setEsPrincipal(blog.getEsPrincipal());
+                blogRepository.save(blogActualizar);
+            } else {
+                blogActualizar.setImagen(blog.getImagen());
+                blogActualizar.setContenido(blog.getContenido());
+                blogActualizar.setTitulo(blog.getTitulo());
+                blogActualizar.setEsPrincipal(blog.getEsPrincipal());
+                blogRepository.save(blogActualizar);
+            }
+
+            return blogActualizar;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 
     @Override
     public Blog obtenerBlog(Long id) {
-        // TODO Auto-generated method stub
+
+        try {
+
+            Blog blog = blogRepository.getById(id);
+
+            if (blog.getTitulo() != null) {
+                return blog;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
