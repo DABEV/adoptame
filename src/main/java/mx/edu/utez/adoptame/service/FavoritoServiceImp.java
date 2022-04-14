@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.edu.utez.adoptame.model.Favorito;
-import mx.edu.utez.adoptame.model.Usuario;
 import mx.edu.utez.adoptame.repository.FavoritoRepository;
 
 @Service
@@ -17,8 +16,8 @@ public class FavoritoServiceImp implements FavoritoService {
     FavoritoRepository favoritoRepository;
 
     @Override
-    public List<Favorito> listarFavoritos(Usuario usuario) {
-        return favoritoRepository.findByUsuario(usuario);
+    public List<Favorito> listarFavoritos(long idUsuario) {
+        return favoritoRepository.findByUsuarioId(idUsuario);
     }
 
     @Override
@@ -35,10 +34,14 @@ public class FavoritoServiceImp implements FavoritoService {
     @Override
     public Favorito obtenerFavorito(Long id) {
         Favorito favoritoResultante = null;
-        Optional<Favorito> favoritoOpcional = favoritoRepository.findById(id);
+        try {
+            Optional<Favorito> favoritoOpcional = favoritoRepository.findById(id);
 
-        if (favoritoOpcional.isPresent()) {
-            favoritoResultante = favoritoOpcional.get();
+            if (favoritoOpcional.isPresent()) {
+                favoritoResultante = favoritoOpcional.get();
+            }
+        } catch (Exception e) {
+            // log
         }
         return favoritoResultante;
     }
@@ -55,6 +58,20 @@ public class FavoritoServiceImp implements FavoritoService {
             // Log
         }
         return false;
+    }
+
+    @Override
+    public Favorito obtenerPorMascota(long idMascota, long idUsuario) {
+        Favorito favorito = null;
+        try {
+            Optional<Favorito> favoritoOpcional = favoritoRepository.findByMascotaIdAndUsuarioId(idMascota, idUsuario);
+            if (favoritoOpcional.isPresent()) {
+                favorito = favoritoOpcional.get();
+            }
+        } catch (Exception e) {
+            // log
+        }
+        return favorito;
     }
 
 }

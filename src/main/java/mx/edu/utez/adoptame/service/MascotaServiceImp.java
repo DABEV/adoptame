@@ -24,7 +24,14 @@ public class MascotaServiceImp implements MascotaService {
 
     @Override
     public List<Mascota> listarMascotas() {
-        return mascotaRepository.findByActivo(true);
+        List<Mascota> mascotas = null;
+        try{
+            mascotas = mascotaRepository.findByActivo(true);
+        }catch (Exception e){
+            //log
+        }
+        return mascotas;
+        
     }
 
     @Override
@@ -66,8 +73,19 @@ public class MascotaServiceImp implements MascotaService {
     }
 
     @Override
-    public boolean validarRegistro(Mascota mascota) {
-        return false;
+    public Mascota validarRegistro(long id, String verificado) {
+        Mascota mascota = null;
+        try {
+            Optional<Mascota> mascotaOpcional = mascotaRepository.findById(id);
+            if (mascotaOpcional.isPresent()) {
+                mascota = mascotaOpcional.get();
+                mascota.setAprobadoRegistro(verificado);
+                mascotaRepository.save(mascota);
+            }
+        } catch (Exception e) {
+            // Log
+        }
+        return mascota;
     }
 
     @Override
