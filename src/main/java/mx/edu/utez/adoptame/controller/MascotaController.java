@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -82,21 +83,8 @@ public class MascotaController {
 
     }
 
-    @GetMapping("/consultaUnica/{id}")
-    public String consultaUnica(@PathVariable long id, Model model) {
-        try {
-            Mascota mascota = mascotaServiceImp.obtenerMascota(id);
-            if (mascota != null) {
-                model.addAttribute("mascota", mascota);
-                return "mascota/detalles";
-            }
-        } catch (Exception e) {
-            // log
-        }
-        return redirectListar;
-    }
-
     @PostMapping("/actualizar")
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
     public String editar(@RequestParam("idMascota") long id, @RequestParam("tipoMascota") boolean tipoMascota,
             Model model, RedirectAttributes attributes) {
         try {
@@ -121,6 +109,7 @@ public class MascotaController {
     }
 
     @GetMapping("/registrar")
+    @PreAuthorize("hasAuthority('ROL_VOLUNTARIO')")
     public String registrar(Mascota mascota, Model model) {
         try {
             List<Color> colores = colorServiceImp.listarColores();
@@ -137,6 +126,7 @@ public class MascotaController {
     }
 
     @PostMapping("/guardarMascota")
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
     public String guardarMacota(Mascota mascota, Model model, RedirectAttributes attributes,
             @RequestParam("imagenMascota") MultipartFile multipartFile) {
         try {
@@ -179,6 +169,7 @@ public class MascotaController {
     }
 
     @GetMapping("/borrarMascota/{id}")
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
     public String borrarMascota(@PathVariable long id, RedirectAttributes attributes) {
         try {
             Mascota mascota = mascotaServiceImp.obtenerMascota(id);
@@ -237,6 +228,7 @@ public class MascotaController {
     }
 
     @PostMapping("/validar")
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
     public String verificarRegistro(@RequestParam("idMascota") long id,
             @RequestParam("verificado") String verificado, RedirectAttributes attributes) {
         try {
@@ -252,11 +244,12 @@ public class MascotaController {
     }
 
     @GetMapping("/favoritos")
+    @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
     public String listarFavoritos(Authentication authentication, Model model) {
         try {
             String correo = authentication.getName();
             Usuario usuario = usuarioServiceImp.buscarPorCorreo(correo);
-            
+
             List<Favorito> favoritosLista = favoritoServiceImp.listarFavoritos(usuario.getId());
             List<Mascota> mascotas = new ArrayList<>();
             if (!favoritos.isEmpty()) {
@@ -272,12 +265,8 @@ public class MascotaController {
         return favoritos;
     }
 
-    @GetMapping("/fav")
-    public String red() {
-        return favoritos;
-    }
-
     @PostMapping("/guardarFavorito")
+    @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
     public String guardarFavorito(@RequestParam("idMascota") long idMascota,
             @RequestParam("idUsuario") long idUsuario,
             Model model, RedirectAttributes attributes) {
@@ -304,6 +293,7 @@ public class MascotaController {
     }
 
     @PostMapping("/eliminarFavorito")
+    @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
     public String eliminarFavorito(@RequestParam("idMascota") long idMascota,
             @RequestParam("idUsuario") long idUsuario,
             Model model, RedirectAttributes attributes) {

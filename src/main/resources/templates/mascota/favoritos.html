@@ -81,7 +81,7 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <a class="btn btn-lg btn-outline-success btn-floating"
+                                            <a sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')" class="btn btn-lg btn-outline-success btn-floating"
                                                 style="color: #74422B; border-color: white;" role="button"
                                                 data-mdb-toggle="modal"
                                                 th:attr="data-mdb-target=${'#eliminarfav'+ index.count}">
