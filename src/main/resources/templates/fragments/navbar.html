@@ -1,62 +1,165 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <body>
-        <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm">
-            <!-- Container wrapper -->
-            <div class="container-fluid">
-                <!-- Toggle button -->
-                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
+  <body>
+    <nav
+      th:fragment="navbar"
+      class="navbar navbar-expand-lg navbar-expand-md navbar-expand-sm"
+    >
+      <!-- Container wrapper -->
+      <div class="container-fluid">
+        <!-- Toggle button -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
 
-                <!-- Collapsible wrapper -->
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Navbar brand -->
-                    <a class="navbar-brand text-white mt-2 mt-lg-0" href="#">
-                        <i style="font-size: 30px;" class="fa-solid fa-paw"></i>&nbsp;&nbsp;
-                        <strong>AdoptaMe</strong>
-                    </a>
-                    <!-- Left links -->
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#"><strong>Inicio</strong></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#"><strong>Perros</strong></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#"><strong>Gatos</strong></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#"><strong>Noticias</strong></a>
-                        </li>
-                    </ul>
-                    <!-- Left links -->
-                </div>
-                <!-- Collapsible wrapper -->
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Navbar brand -->
+          <a class="navbar-brand text-white mt-2 mt-lg-0" th:href="@{/}">
+            <i style="font-size: 30px" class="fa-solid fa-paw"></i>&nbsp;&nbsp;
+            <strong>AdoptaMe</strong>
+          </a>
+          <!-- Left links -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a
+                class="nav-link text-white"
+                th:href="@{/mascota/registrar}"
+                sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')"
+                ><strong>Inicio</strong></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-white"
+                th:href="@{/usuario/miCuenta}"
+                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
+                ><strong>Inicio</strong></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-white"
+                th:href="@{/blog/consultarTodas}"
+                sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')"
+                ><strong>Inicio</strong></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-white"
+                th:href="@{/mascota/consultarTodas/true}"
+                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
+                ><strong>Perros</strong></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-white"
+                th:href="@{/mascota/consultarTodas/false}"
+                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
+                ><strong>Gatos</strong></a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link text-white"
+                th:href="@{/blog/consultarTodas}"
+                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
+                ><strong>Noticias</strong></a
+              >
+            </li>
+          </ul>
+          <!-- Left links -->
+        </div>
+        <!-- Collapsible wrapper -->
 
-                <!-- Right elements -->
-                <div class="d-flex align-items-center">
-                    <!-- Avatar -->
-                    <div class="dropdown">
-                        <a class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#" id="navbarDropdownMenuAvatar" role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-                            <button type="submit" class="text-white btn boton radius btn-outline-primary btn-block">
-                                <i class="fa-solid fa-circle-user"></i>&nbsp;&nbsp; Acceder
-                            </button>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
-                            <li>
-                                <a class="dropdown-item itm-navbar-login" href="#"><i class="fa-solid fa-arrow-right-to-bracket"></i>&nbsp; Iniciar sesión</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item itm-navbar-login" href="#"><i class="fa-solid fa-circle-plus"></i>&nbsp; Registrarse</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <!-- Right elements -->
-            </div>
-            <!-- Container wrapper -->
-        </nav>
-    </body>
+        <!-- Right elements -->
+        <div class="d-flex align-items-center">
+          <div class="dropdown" sec:authorize="isAuthenticated()">
+            <a
+              class="dropdown-toggle d-flex align-items-center hidden-arrow"
+              href="#"
+              id="navbarDropdownMenuAvatar"
+              role="button"
+              data-mdb-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <button
+                type="submit"
+                class="text-white btn boton radius btn-outline-primary btn-block"
+              >
+                <em class="fa-solid fa-circle-user"></em>&nbsp;&nbsp; <span
+                th:if="${session.usuario != null}"
+                th:text="${session.usuario.getNombre()}"
+              ></span>
+              </button>
+            </a>
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="navbarDropdownMenuAvatar"
+            >
+              <li>
+                <a class="dropdown-item" th:href="@{/usuario/miCuenta}">
+                    <em class="fas fa-id-badge"></em>&nbsp;
+                  Perfil</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/logout}">
+                    <em class="fas fa-sign-out-alt"></em>&nbsp; Cerrar
+                  sesión</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="dropdown" sec:authorize="isAuthenticated() == false">
+            <a
+              class="dropdown-toggle d-flex align-items-center hidden-arrow"
+              href="#"
+              id="navbarDropdownMenuAvatar"
+              role="button"
+              data-mdb-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <button
+                type="submit"
+                class="text-white btn boton radius btn-outline-primary btn-block"
+              >
+                <em class="fa-solid fa-circle-user"></em>&nbsp;&nbsp; Acceder
+              </button>
+            </a>
+            <ul
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="navbarDropdownMenuAvatar"
+            >
+              <li>
+                <a class="dropdown-item itm-navbar-login" th:href="@{/login}"
+                  ><em class="fa-solid fa-arrow-right-to-bracket"></em>&nbsp;
+                  Iniciar sesión</a
+                >
+              </li>
+              <li>
+                <a class="dropdown-item itm-navbar-login" th:href="@{/signup}"
+                  ><em class="fa-solid fa-circle-plus"></em>&nbsp;
+                  Registrarse</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Right elements -->
+      </div>
+      <!-- Container wrapper -->
+    </nav>
+  </body>
 </html>

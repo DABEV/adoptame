@@ -1,0 +1,23 @@
+.tooltop {
+  position: relative;
+}
+
+.tooltop .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #d5b095;
+  text-size-adjust: 12;
+  color: rgb(252, 252, 252);
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px 0;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -60px;
+}
+
+.tooltop:hover .tooltiptext {
+  visibility: visible;
+}
