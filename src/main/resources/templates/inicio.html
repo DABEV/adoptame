@@ -28,7 +28,7 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="carousel-item" th:replace="fragments/carousel :: item" th:each="blog: ${noticias}"></div>
             </div>
             <button class="carousel-control-prev" type="button" data-mdb-target="#carouselExampleTouch"
                 data-mdb-slide="prev">

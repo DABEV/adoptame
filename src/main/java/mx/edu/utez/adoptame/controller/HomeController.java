@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.edu.utez.adoptame.model.Rol;
 import mx.edu.utez.adoptame.model.Usuario;
+import mx.edu.utez.adoptame.service.BlogServiceImp;
 import mx.edu.utez.adoptame.service.MascotaServiceImp;
 import mx.edu.utez.adoptame.service.RolServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
@@ -37,12 +38,16 @@ public class HomeController {
     @Autowired
     private MascotaServiceImp mascotaServiceImp;
 
+    @Autowired
+    private BlogServiceImp blogServiceImp;
+
     // Variables de redirección
     private static final String REDIRECT_LOGIN = "redirect:/login";
 
     @GetMapping("/")
     public String inicio (Model model) {
         model.addAttribute("recientes", mascotaServiceImp.obtenerRecientes());
+        model.addAttribute("noticias", blogServiceImp.listaPrincipales());
         return "inicio";
     }
 

@@ -92,4 +92,15 @@ public class BlogServiceImp implements BlogService {
         return false;
     }
 
+    @Override
+    public List<Blog> listaPrincipales() {
+        List<Blog> lista = null;
+        try {
+            lista = blogRepository.findByEsPrincipal(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+
 }
