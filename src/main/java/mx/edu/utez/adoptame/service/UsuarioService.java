@@ -10,4 +10,5 @@ public interface UsuarioService {
     Usuario obtenerUsuario(Long id);
     boolean eliminarUsuario(Long id);
     Usuario buscarPorCorreo(String correo);
+    boolean cambiarContrasena(String contrasena, String correo);
 }

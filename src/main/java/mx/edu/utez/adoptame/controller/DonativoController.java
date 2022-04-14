@@ -21,6 +21,7 @@ public class DonativoController {
 
     @Autowired
     private DonacionServiceImp donacionServiceImp;
+    
 
     @GetMapping("/consultarTodos")
     public String consultarTodos(Model model,
@@ -28,7 +29,7 @@ public class DonativoController {
         Page<Donacion> listaDonaciones = donacionServiceImp
                 .listarPaginacion(PageRequest.of(pageable.getPageNumber(), 5, Sort.by("fechaDonacion").descending()));
         model.addAttribute("listaDonaciones", listaDonaciones);
-        return "usuario/listarDonacion";
+        return "donacion/listaDonaciones";
     }
 
     @GetMapping("/donar")

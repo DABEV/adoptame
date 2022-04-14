@@ -46,3 +46,7 @@ logging.level.root=INFO
 logging.level.mx.edu.utez.adoptame=TRACE
 logging.file.path=./log
 logging.file.name=./log/ejemplo.log
+
+#Cuenta de sendgrid
+#sendgrid.api.key=<apikey>
+#sendgrid.api.email=<correo>
