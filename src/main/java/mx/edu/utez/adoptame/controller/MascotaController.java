@@ -260,7 +260,7 @@ public class MascotaController {
                 }
             }
 
-            model.addAttribute("listaMascotas", mascotas);
+            model.addAttribute(listaMascotas, mascotas);
         } catch (Exception e) {
             // log
         }
