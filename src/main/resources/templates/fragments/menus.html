@@ -28,7 +28,7 @@
     <a href="#" class="list-group-item list-group-item-action disabled">
         <strong>Menú Voluntario</strong>
     </a>
-    <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 1 ? 'active' : ''"
+    <a th:href="@{/mascota/registrar}" class="list-group-item list-group-item-action" th:classappend="${activo} == 1 ? 'active' : ''"
         aria-current="true">
         <em class="fas fa-plus-circle"></em>
         Registro mascota
@@ -38,7 +38,7 @@
         <em class="fas fa-envelope"></em>
         Ver solicitudes de adopción
     </a>
-    <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 3 ? 'active' : ''"
+    <a th:href="@{/usuario/miCuenta}" class="list-group-item list-group-item-action" th:classappend="${activo} == 3 ? 'active' : ''"
         aria-current="true">
         <em class="fas fa-plus-circle"></em>
         Mi cuenta
