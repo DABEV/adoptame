@@ -21,17 +21,17 @@
                 <div class="col-md-9 mb-2">
                     <div class="d-grid gap-4">
                         <div>
-                            <h2>Mi cuenta</h2>
+                            <h2>Mi cuenta [[${usuario.nombre}]]</h2>
                         </div>
-                        <form>
+                        <form th:action="@{/usuario/actualizar}" method="POST" th:object="${usuario}">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">Información básica</h5>
-                                    <div class="row justify-content-between">
-                                        <div class="col-md-1 col-sm-1">
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="col-sm-12 col-md-1">
                                             <em class="vertical-center fa-solid fa-circle-user"></em>
                                         </div>
-                                        <div class="col-md-11 col-sm-11">
+                                        <div class="col-sm-12 col-md-11">
                                             <div class="row">
                                                 <!-- Nombre -->
                                                 <div class="col-md-6 col-sm-12 mb-3">
@@ -40,7 +40,7 @@
                                                         <span class="input-group-text" id="addon-wrapping-nombre">
                                                             <em class="fas fa-tag"></em>
                                                         </span>
-                                                        <input type="text" name="nombre" id="nombre" class="form-control" placeholder="Ej. Rosa María" aria-label="nombre" aria-describedby="addon-wrapping-nombre" />
+                                                        <input type="text" th:field="*{nombre}" class="form-control" placeholder="Ej. Rosa María" aria-label="nombre" aria-describedby="addon-wrapping-nombre" />
                                                     </div>
                                                 </div>
                                                 <!-- Apellido -->
@@ -50,7 +50,7 @@
                                                         <span class="input-group-text" id="addon-wrapping-apellido">
                                                             <em class="fas fa-tag"></em>
                                                         </span>
-                                                        <input type="text" name="apellido" id="apellido" class="form-control" placeholder="Ej. Millán Villareal" aria-label="apellido" aria-describedby="addon-wrapping-apellido" />
+                                                        <input type="text" th:field="*{apellidos}" class="form-control" placeholder="Ej. Millán Villareal" aria-label="apellido" aria-describedby="addon-wrapping-apellido" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -62,7 +62,7 @@
                                                         <span class="input-group-text" id="addon-wrapping-direccion">
                                                             <em class="fas fa-building"></em>
                                                         </span>
-                                                        <input type="text" name="direccion" id="direccion" class="form-control" placeholder="Ej. Ave. México #30, Emiliano Zapata, Morelos." aria-label="direccion" aria-describedby="addon-wrapping-direccion" />
+                                                        <input type="text" th:field="*{direccion}" class="form-control" placeholder="Ej. Ave. México #30, Emiliano Zapata, Morelos." aria-label="direccion" aria-describedby="addon-wrapping-direccion" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -71,10 +71,10 @@
                                                 <div class="col-md-6 col-sm-12 mb-3">
                                                     <label>Correo electrónico: </label>
                                                     <div class="input-group flex-nowrap">
-                                                        <span class="input-group-text" id="addon-wrapping-correoElectronico">
+                                                        <span class="input-group-text" id="addon-wrapping-correo">
                                                             <em class="fas fa-tag"></em>
                                                         </span>
-                                                        <input type="text" name="correoElectronico" id="correoElectronico" class="form-control" placeholder="Ej. usuario@dominio.com" aria-label="correoElectronico" aria-describedby="addon-wrapping-correoElectronico" />
+                                                        <input type="text" th:field="*{correo}" class="form-control" placeholder="Ej. usuario@dominio.com" aria-label="correo" aria-describedby="addon-wrapping-correo" />
                                                     </div>
                                                 </div>
                                                 <!-- Teléfono -->
@@ -84,7 +84,7 @@
                                                         <span class="input-group-text" id="addon-wrapping-telefono">
                                                             <em class="fas fa-phone"></em>
                                                         </span>
-                                                        <input type="text" name="telefono" id="telefono" class="form-control" placeholder="Ej. Millán Villareal" aria-label="telefono" aria-describedby="addon-wrapping-telefono" />
+                                                        <input type="text" th:field="*{telefono}" class="form-control" placeholder="Ej. Millán Villareal" aria-label="telefono" aria-describedby="addon-wrapping-telefono" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -105,17 +105,17 @@
                                                         <span class="input-group-text" id="addon-wrapping-contrasenia">
                                                             <em class="fas fa-lock"></em>
                                                         </span>
-                                                        <input type="text" name="contrasenia" id="contrasenia" class="form-control" aria-label="contrasenia" aria-describedby="addon-wrapping-contrasenia" />
+                                                        <input type="text" th:field="*{contrasena}" class="form-control" aria-label="contrasenia" aria-describedby="addon-wrapping-contrasenia" />
                                                     </div>
                                                 </div>
                                                 <!-- Nueva contraseña -->
                                                 <div class="col-md-6 col-sm-12 mb-3">
                                                     <label>Nueva contraseña: </label>
                                                     <div class="input-group flex-nowrap">
-                                                        <span class="input-group-text" id="addon-wrapping-nueva_contrasenia">
+                                                        <span class="input-group-text" id="addon-wrapping-nuevaContrasena">
                                                             <em class="fas fa-lock"></em>
                                                         </span>
-                                                        <input type="text" name="nueva_contrasenia" id="nueva_contrasenia" class="form-control" aria-label="nueva_contrasenia" aria-describedby="addon-wrapping-nueva_contrasenia" />
+                                                        <input type="text" name="nuevaContrasena" class="form-control" aria-label="nuevaContrasena" aria-describedby="addon-wrapping-nuevaContrasena" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -124,10 +124,10 @@
                                                 <div class="col-md-12 col-sm-12 mb-3">
                                                     <label>Repetir Contraseña(s): </label>
                                                     <div class="input-group flex-nowrap">
-                                                        <span class="input-group-text" id="addon-wrapping-repetir_contrasenia">
+                                                        <span class="input-group-text" id="addon-wrapping-repetirContrasena">
                                                             <em class="fas fa-lock"></em>
                                                         </span>
-                                                        <input type="text" name="repetir_contrasenia" id="repetir_contrasenia" class="form-control" aria-label="repetir_contrasenia" aria-describedby="addon-wrapping-repetir_contrasenia" />
+                                                        <input type="text" name="repetirContrasena" class="form-control" aria-label="repetirContrasena" aria-describedby="addon-wrapping-repetirContrasena" />
                                                     </div>
                                                 </div>
                                             </div>

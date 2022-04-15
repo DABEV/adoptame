@@ -1,69 +1,29 @@
-package mx.edu.utez.adoptame.model;
+package mx.edu.utez.adoptame.dto;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.CreationTimestamp;
-
-@Entity
-@Table(name = "usuarios")
-public class Usuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(nullable = false, length = 50)
-    private String nombre;
-    
-    @Column(nullable = false, length = 50)
-    private String apellidos;
-    
-    @Column(nullable = false)
-    private String direccion;
-    
-    @Column(nullable = false, unique = true)
-    private String correo;
-    
-    @Column(nullable = true, length = 25)
-    private String telefono;
-    
-    @Column(nullable = false)
-    private String contrasena;
-    
-    @Column(name = "fecha_registro", nullable = false)
-    @CreationTimestamp
+public class UsuarioDto implements Serializable {
+    private Long id;    
+    private String nombre;    
+    private String apellidos;    
+    private String direccion;    
+    private String correo;    
+    private String telefono;    
+    private String contrasena;    
     private Date fechaRegistro;
-
-    @Column(columnDefinition = "tinyint not null")
-    private boolean habilitado;
-
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "rol_id"))
-    private Set<Rol> roles;
-
-    @OneToMany(mappedBy = "donador")
-    private List<Donacion> donativos;
-
-    @OneToMany(mappedBy = "usuario")
-    private List<Favorito> favoritos;
-
-    @OneToMany(mappedBy = "adoptador")
-    private List<Solicitud> solicitudes;
+    private Boolean habilitado;
+    private Set<RolDto> roles;
+    private List<DonacionDto> donativos;
+    private List<FavoritoDto> favoritos;
+    private List<SolicitudDto> solicitudes;
     
+    public UsuarioDto() {
+    }
+
     public Long getId() {
         return id;
     }
@@ -71,7 +31,7 @@ public class Usuario {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public String getNombre() {
         return nombre;
     }
@@ -128,59 +88,59 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public boolean isHabilitado() {
+    public Boolean getHabilitado() {
         return habilitado;
     }
 
-    public boolean getHabilitado() {
+    public Boolean isHabilitado() {
         return habilitado;
     }
 
-    public void setHabilitado(boolean habilitado) {
+    public void setHabilitado(Boolean habilitado) {
         this.habilitado = habilitado;
     }
 
-    public Set<Rol> getRoles() {
+    public Set<RolDto> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Rol> roles) {
+    public void setRoles(Set<RolDto> roles) {
         this.roles = roles;
     }
 
-    public List<Donacion> getDonativos() {
+    public List<DonacionDto> getDonativos() {
         return donativos;
     }
 
-    public void setDonativos(List<Donacion> donativos) {
+    public void setDonativos(List<DonacionDto> donativos) {
         this.donativos = donativos;
     }
 
-    public List<Favorito> getFavoritos() {
+    public List<FavoritoDto> getFavoritos() {
         return favoritos;
     }
 
-    public void setFavoritos(List<Favorito> favoritos) {
+    public void setFavoritos(List<FavoritoDto> favoritos) {
         this.favoritos = favoritos;
     }
 
-    public List<Solicitud> getSolicitudes() {
+    public List<SolicitudDto> getSolicitudes() {
         return solicitudes;
     }
 
-    public void setSolicitudes(List<Solicitud> solicitudes) {
+    public void setSolicitudes(List<SolicitudDto> solicitudes) {
         this.solicitudes = solicitudes;
     }
 
     // Metodo para agregar roles
-    public void addRol(Rol rol) {
+    public void addRol(RolDto rol) {
         if (this.roles == null) {
             this.roles = new HashSet<>();
         }
         
         roles.add(rol);
     }
-
+    
     @Override
     public String toString() {
         return "{" +

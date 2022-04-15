@@ -1,27 +1,11 @@
-package mx.edu.utez.adoptame.model;
+package mx.edu.utez.adoptame.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "roles")
-public class Rol implements Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RolDto implements Serializable {
     private Long id;
-    
-    @Column(nullable = false, length = 50, unique = true)
-    private String nombre;
-
-    public Rol() {
-    }
+    private String nombre;    
 
     public Long getId() {
         return id;
@@ -43,10 +27,10 @@ public class Rol implements Serializable{
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof Rol)) {
+        if (!(o instanceof RolDto)) {
             return false;
         }
-        Rol rol = (Rol) o;
+        RolDto rol = (RolDto) o;
         return Objects.equals(id, rol.id) && Objects.equals(nombre, rol.nombre);
     }
 
@@ -61,5 +45,5 @@ public class Rol implements Serializable{
             " id='" + getId() + "'" +
             ", nombre='" + getNombre() + "'" +
             "}";
-    }    
+    }
 }

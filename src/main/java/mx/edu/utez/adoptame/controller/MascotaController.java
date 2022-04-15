@@ -132,15 +132,12 @@ public class MascotaController {
 
     @PostMapping("/guardarMascota")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
-    public String guardarMacota(@Valid @ModelAttribute("mascota") Mascota mascota, Model model, RedirectAttributes attributes,
-            @RequestParam("imagenMascota") MultipartFile multipartFile, BindingResult result) {
+    public String guardarMacota(@Valid @ModelAttribute("mascota") Mascota mascota, BindingResult result, Model model, RedirectAttributes attributes,
+            @RequestParam("imagenMascota") MultipartFile multipartFile) {
         try {
-            System.err.println("antes");
             if (result.hasErrors()) {
-                System.err.println("erorres");
                 return formRegistro;
             } else {
-                System.err.println("registro");
                 if (mascota.getId() == null) {
                     mascota.setAprobadoRegistro("pendiente");
                     mascota.setDisponibleAdopcion(false);

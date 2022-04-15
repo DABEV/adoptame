@@ -87,7 +87,6 @@ public class UsuarioServiceImp implements UsuarioService {
             repository.updatePassword(contrasena, correo);
             return true;
         } catch (Exception exception) {
-            System.out.println(exception.getMessage());
             exception.printStackTrace();
             return false;
         }

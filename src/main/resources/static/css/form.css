@@ -13,8 +13,8 @@ form > .card {
 }
 
 /* Icono derecho */
-.card-body > .row > div > i {
-    font-size: 5rem;
+.card-body > .row > div > em {
+    font-size: 4rem;
 }
 
 /* Etiqueta de un campo del formulario */

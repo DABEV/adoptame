@@ -3,6 +3,7 @@ package mx.edu.utez.adoptame.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,12 +11,14 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import mx.edu.utez.adoptame.model.Rol;
+import mx.edu.utez.adoptame.dto.RolDto;
+import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Usuario;
 import mx.edu.utez.adoptame.service.BlogServiceImp;
 import mx.edu.utez.adoptame.service.MascotaServiceImp;
@@ -25,6 +28,11 @@ import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 @Controller
 @RequestMapping("/")
 public class HomeController {
+
+    private static final String REDIRECT_LOGIN = "redirect:/login";
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
 	private PasswordEncoder passwordEncoder;
@@ -41,9 +49,6 @@ public class HomeController {
     @Autowired
     private BlogServiceImp blogServiceImp;
 
-    // Variables de redirección
-    private static final String REDIRECT_LOGIN = "redirect:/login";
-
     @GetMapping("/")
     public String inicio (Model model) {
         model.addAttribute("recientes", mascotaServiceImp.obtenerRecientes());
@@ -53,9 +58,7 @@ public class HomeController {
 
     @GetMapping("/index")
 	public String mostrarIndex(Authentication authentication, HttpSession session) {
-		String correo = authentication.getName();
-
-		Usuario usuario = usuarioServiceImp.buscarPorCorreo(correo);
+		UsuarioDto usuario = modelMapper.map(usuarioServiceImp.buscarPorCorreo(authentication.getName()), UsuarioDto.class);
 		
         // Añade los datos del usuario a la sesión 
 		session.setAttribute("usuario", usuario);
@@ -68,32 +71,31 @@ public class HomeController {
     }
 
     @GetMapping("/signup")
-    public String signup (Model model, Usuario usuario) {
+    public String signup (Model model, @ModelAttribute("usuario") UsuarioDto usuarioDto) {
         return "signup";
     }
 
     @PostMapping("/signup")
-	public String guardarUsuario(@RequestParam("tipoUsuario") String tipoUsuario, Usuario usuario, RedirectAttributes redirectAttributes) {
+	public String guardarUsuario(@RequestParam("tipoUsuario") String tipoUsuario, @ModelAttribute("usuario") UsuarioDto usuarioDto, RedirectAttributes redirectAttributes) {
 
         try {
             // Encriptar la contraseña
-            String contrasenaEncriptada = passwordEncoder.encode(usuario.getContrasena());
+            String contrasenaEncriptada = passwordEncoder.encode(usuarioDto.getContrasena());
     
             // Asignar la contraseña encriptada
-            usuario.setContrasena(contrasenaEncriptada);
+            usuarioDto.setContrasena(contrasenaEncriptada);
     
             // Aplicar tratemiento al telefono para solo guardar los numeros
-            String telefono = usuario.getTelefono().replaceAll("[\\s\\(\\)\\-]+", "");
-            usuario.setTelefono(telefono);
+            String telefono = usuarioDto.getTelefono().replaceAll("[\\s\\(\\)\\-]+", "");
+            usuarioDto.setTelefono(telefono);
     
             // Habilitar la cuenta por defecto
-            usuario.setHabilitado(true);
-    
-            // Asignar un rol de usuario de acuerdo al tipo seleccionado en el formulario
-            Rol rol = null;
-            rol = rolServiceImp.buscarPorNombre(tipoUsuario.equals("voluntario") ? "ROL_VOLUNTARIO": "ROL_ADOPTADOR");
-
-            usuario.addRol(rol);
+            usuarioDto.setHabilitado(true);
+ 
+            Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
+            
+            // Asignar un rol de usuarioDto de acuerdo al tipo seleccionado en el formulario
+            usuario.addRol(rolServiceImp.buscarPorNombre(tipoUsuario.equals("voluntario") ? "ROL_VOLUNTARIO": "ROL_ADOPTADOR"));
     
             boolean respuesta = usuarioServiceImp.guardarUsuario(usuario) != null;
 

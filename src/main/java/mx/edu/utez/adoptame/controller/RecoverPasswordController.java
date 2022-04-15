@@ -1,5 +1,6 @@
 package mx.edu.utez.adoptame.controller;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -10,13 +11,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.edu.utez.adoptame.service.EmailServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
-import mx.edu.utez.adoptame.model.Usuario;
+import mx.edu.utez.adoptame.dto.UsuarioDto;
 
 @Controller
 public class RecoverPasswordController {
 
 	@Autowired
-	EmailServiceImp emailServiceImpl;
+	private ModelMapper modelMapper;
+
+	@Autowired
+	private EmailServiceImp emailServiceImpl;
 
 	@Autowired
 	private UsuarioServiceImp userServiceImpl;
@@ -55,7 +59,7 @@ public class RecoverPasswordController {
 		// Encoder password
 		String contrasenaEncriptada = passwordEncoder.encode(nuevaContrasena);
 		// Search user_name
-		Usuario user = userServiceImpl.buscarPorCorreo(correo);
+		UsuarioDto user = modelMapper.map(userServiceImpl.buscarPorCorreo(correo), UsuarioDto.class);
 		// Update password
 		boolean respuestaCambio = userServiceImpl.cambiarContrasena(contrasenaEncriptada, user.getCorreo());
 		// Get full user_name
