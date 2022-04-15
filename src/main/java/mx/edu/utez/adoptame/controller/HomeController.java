@@ -49,7 +49,6 @@ public class HomeController {
 		
         // Añade los datos del usuario a la sesión 
 		session.setAttribute("usuario", usuario);
-		session.setAttribute("id", usuario.getId());
         
 		return "redirect:/";
 	}
