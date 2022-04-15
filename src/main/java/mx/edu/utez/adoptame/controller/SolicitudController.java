@@ -1,6 +1,8 @@
 package mx.edu.utez.adoptame.controller;
 
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +30,8 @@ public class SolicitudController {
     private String redirectAdoptador = "redirect:/solicitud/adoptador/consultarTodas";
     private String redirectVoluntario = "redirect:/solicitud/voluntario/consultarTodas";
 
+    private Logger logger = LoggerFactory.getLogger(SolicitudController.class);
+
     @Autowired
     SolicitudServiceImp solicitudServiceImp;
 
@@ -48,7 +52,7 @@ public class SolicitudController {
 
             model.addAttribute("listaSolicitud", solicitados);
         }catch(Exception e){
-            //log
+            logger.error("Error al intentar listar las solicitudes");
         }
         return "solicitud/adoptador";
     }
@@ -63,7 +67,7 @@ public class SolicitudController {
                 return "solicitud/adoptador";
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar listar las solicitudes");
         }
         return redirectAdoptador;
     }
@@ -80,7 +84,7 @@ public class SolicitudController {
                 redirectAttributes.addFlashAttribute("msg_error", "Eliminación de solicitud fallida");
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar eliminar la solicitud");
         }
         return redirectAdoptador;
     }
@@ -114,11 +118,10 @@ public class SolicitudController {
                 return redirectAdoptador;
             } else {
                 redirectAttributes.addFlashAttribute("msg_error", "Registro de solicitud fallido");
-                // return "mascota/detallesMascota"
                 return redirectAdoptador;
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar registrar una solicitud de adopción");
         }
         return redirectAdoptador;
     }
@@ -140,7 +143,7 @@ public class SolicitudController {
                 return "solicitud/voluntario";
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar listar las solicitudes");
         }
 
         return redirectVoluntario;
@@ -158,7 +161,7 @@ public class SolicitudController {
                 redirectAttributes.addFlashAttribute("msg_error", "Rechazo de solicitud fallida");
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar rechazar una solicitud de adopción");
         }
         return redirectVoluntario;
     }
@@ -175,7 +178,7 @@ public class SolicitudController {
                 redirectAttributes.addFlashAttribute("msg_error", "Aprobación de solicitud fallida");
             }
         } catch (Exception e) {
-            //log
+            logger.error("Error al intentar aprobar una solicitud de adopción");
         }
         return redirectVoluntario;
     }

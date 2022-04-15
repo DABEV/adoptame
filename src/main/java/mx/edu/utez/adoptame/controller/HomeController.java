@@ -3,8 +3,12 @@ package mx.edu.utez.adoptame.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -30,6 +34,8 @@ import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 public class HomeController {
 
     private static final String REDIRECT_LOGIN = "redirect:/login";
+
+    private Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
     private ModelMapper modelMapper;
@@ -107,13 +113,14 @@ public class HomeController {
                 return "redirect:/signup";
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar crear una nueva cuenta");
         }
 
         return REDIRECT_LOGIN;
 	}
     
     @GetMapping("/logout")
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO') or hasAuthority('ROL_ADOPTADOR')")
     public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
@@ -121,6 +128,7 @@ public class HomeController {
             redirectAttributes.addFlashAttribute("msg_success", "¡Sesión cerrada! Hasta luego");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("msg_error", "Ocurrió un error al cerrar la sesión, intenta de nuevo.");
+            logger.error("Error al intentar cerrar sesión");
         }
         
         return REDIRECT_LOGIN;
