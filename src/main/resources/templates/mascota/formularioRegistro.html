@@ -44,6 +44,10 @@
                                                 <input type="text" th:field="*{nombre}" id="nombre" class="form-control"
                                                     placeholder="Ej. Milo" aria-label="nombre"
                                                     aria-describedby="addon-wrapping" />
+
+                                                <div th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"
+                                                    class="badge badge-danger">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-3 col-sm-12 mb-3">

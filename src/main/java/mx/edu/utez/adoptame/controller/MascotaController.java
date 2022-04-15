@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +47,7 @@ public class MascotaController {
     private String msgS = "msg_success";
     private String msgE = "msg_error";
     private String favoritos = "mascota/favoritos";
+    private String formRegistro = "mascota/formularioRegistro";
 
     @Autowired
     MascotaServiceImp mascotaServiceImp;
@@ -99,7 +104,7 @@ public class MascotaController {
                 model.addAttribute(listaCaracteres, listaCaracter);
                 model.addAttribute(listaTamanos, listaTamano);
                 model.addAttribute(listaColores, colores);
-                return "mascota/formularioRegistro";
+                return formRegistro;
             }
             attributes.addFlashAttribute(msgE, "Registro no encontrado");
         } catch (Exception e) {
@@ -122,44 +127,51 @@ public class MascotaController {
         } catch (Exception e) {
             // log
         }
-        return "mascota/formularioRegistro";
+        return formRegistro;
     }
 
     @PostMapping("/guardarMascota")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
-    public String guardarMacota(Mascota mascota, Model model, RedirectAttributes attributes,
-            @RequestParam("imagenMascota") MultipartFile multipartFile) {
+    public String guardarMacota(@Valid @ModelAttribute("mascota") Mascota mascota, Model model, RedirectAttributes attributes,
+            @RequestParam("imagenMascota") MultipartFile multipartFile, BindingResult result) {
         try {
-            if (mascota.getId() == null) {
-                mascota.setAprobadoRegistro("pendiente");
-                mascota.setDisponibleAdopcion(false);
-                mascota.setActivo(true);
-
+            System.err.println("antes");
+            if (result.hasErrors()) {
+                System.err.println("erorres");
+                return formRegistro;
             } else {
-                Mascota mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
-                mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
-                mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
-                mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
-                mascota.setActivo(mascotaExistente.getActivo());
-            }
+                System.err.println("registro");
+                if (mascota.getId() == null) {
+                    mascota.setAprobadoRegistro("pendiente");
+                    mascota.setDisponibleAdopcion(false);
+                    mascota.setActivo(true);
 
-            boolean tipoMascota = mascota.getTipo();
-
-            if (!multipartFile.isEmpty()) {
-                String ruta = "C:/mascotas/img-mascotas/";
-                String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
-                if (nombreImagen != null) {
-                    mascota.setImagen(nombreImagen);
+                } else {
+                    Mascota mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
+                    mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
+                    mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
+                    mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
+                    mascota.setActivo(mascotaExistente.getActivo());
                 }
-            }
 
-            Mascota respuesta = mascotaServiceImp.guardarMascota(mascota);
-            if (respuesta != null) {
-                attributes.addFlashAttribute(msgS, "Registro exitoso");
-                return redirectListar + "/" + tipoMascota;
-            } else {
-                attributes.addFlashAttribute(msgE, "Registro fallido");
-                return "redirect:/mascota/registrar";
+                boolean tipoMascota = mascota.getTipo();
+
+                if (!multipartFile.isEmpty()) {
+                    String ruta = "C:/mascotas/img-mascotas/";
+                    String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
+                    if (nombreImagen != null) {
+                        mascota.setImagen(nombreImagen);
+                    }
+                }
+
+                Mascota respuesta = mascotaServiceImp.guardarMascota(mascota);
+                if (respuesta != null) {
+                    attributes.addFlashAttribute(msgS, "Registro exitoso");
+                    return redirectListar + "/" + tipoMascota;
+                } else {
+                    attributes.addFlashAttribute(msgE, "Registro fallido");
+                    return "redirect:/mascota/registrar";
+                }
             }
 
         } catch (Exception e) {
