@@ -105,4 +105,15 @@ public class MascotaServiceImp implements MascotaService {
         return mascotas;
     }
 
+    @Override
+    public List<Mascota> obtenerPendientes() {
+        List<Mascota> mascotas = new ArrayList<>();
+        try{
+            mascotas = mascotaRepository.findByAprobadoRegistro("pendiente");
+        }catch (Exception e) {
+            // Log
+        }
+        return mascotas;
+    }
+
 }

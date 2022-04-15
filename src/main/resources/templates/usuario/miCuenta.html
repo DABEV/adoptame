@@ -17,10 +17,14 @@
         <div class="row">
             <!-- Menú -->
             <div class="col-md-3 mb-2">
-                <div th:replace="fragments/menus :: adoptador(1)">
+                <div sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')" th:replace="fragments/menus :: adoptador(1)">
+                </div>
+                <div sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')" th:replace="fragments/menus :: voluntario(3)">
+                </div>
+                <div sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')" th:replace="fragments/menus :: administrador(2)">
                 </div>
             </div>
-            <div class="col-md-9 mb-2">
+            <div class="col-md-9 mb-6">
                 <div class="d-grid gap-4">
                     <div>
                         <h2>Mi cuenta [[${usuario.nombre}]]</h2>
@@ -92,8 +96,9 @@
                                                     <span class="input-group-text" id="addon-wrapping-telefono">
                                                         <em class="fas fa-phone"></em>
                                                     </span>
-                                                    <input type="text" th:field="*{telefono}" class="form-control"
-                                                        placeholder="Ej. Millán Villareal" aria-label="telefono"
+                                                    <input type="text" th:field="*{telefono}"
+                                                        class="form-control phone-mask"
+                                                        placeholder="Ej .(777) - 000 - 00 - 00" aria-label="telefono"
                                                         aria-describedby="addon-wrapping-telefono" />
                                                 </div>
                                             </div>

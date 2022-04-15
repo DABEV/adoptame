@@ -126,4 +126,12 @@
   </script>
   <!-- MDB -->
   <script th:src="@{/js/md-bootstrap.min.js}"></script>
+
+  <!--Mascara-->
+  <script th:src="@{/js/jquery.mask.min.js}"></script>
+  <script>
+		$(document).ready(function () {
+			$('.phone-mask').mask('(000)000-00-00');
+		});
+	</script>
 </scripts>

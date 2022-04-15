@@ -13,6 +13,7 @@ public interface MascotaRepository  extends JpaRepository<Mascota, Long> {
     List<Mascota> findByActivo(Boolean activo);
     List<Mascota> findByActivoAndTipo(Boolean activo, boolean tipo);
     List<Mascota> findByColorOrSexoOrTamano(Color color, boolean sexo, Tamano tamano);
+    List<Mascota> findByAprobadoRegistro(String aprobadoRegistro);
 
     @Query(value = "select * from mascotas order by fecha_registro limit 3", nativeQuery = true)
     List<Mascota> obtenerRecientes();

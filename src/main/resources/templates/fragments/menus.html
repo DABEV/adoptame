@@ -38,4 +38,25 @@
         <em class="fas fa-envelope"></em>
         Ver solicitudes de adopción
     </a>
+    <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 3 ? 'active' : ''"
+        aria-current="true">
+        <em class="fas fa-plus-circle"></em>
+        Mi cuenta
+    </a>
+</div>
+
+<div th:fragment="administrador(activo)" class="menu list-group shadow-3">
+    <a href="#" class="list-group-item list-group-item-action disabled">
+        <strong>Menú Administrador</strong>
+    </a>
+    <a th:href="@{/mascota/solicitudesRegistro}" class="list-group-item list-group-item-action" th:classappend="${activo} == 1 ? 'active' : ''"
+        aria-current="true">
+        <em class="fas fa-envelope"></em>
+        Ver solicitudes de registro
+    </a>
+    <a th:href="@{/usuario/miCuenta}" class="list-group-item list-group-item-action" th:classappend="${activo} == 2 ? 'active' : ''"
+        aria-current="true">
+        <em class="fas fa-plus-circle"></em>
+        Mi cuenta
+    </a>
 </div>

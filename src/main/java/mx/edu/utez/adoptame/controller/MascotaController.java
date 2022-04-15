@@ -136,8 +136,9 @@ public class MascotaController {
     }
 
     @PostMapping("/guardarMascota")
-    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
-    public String guardarMacota(@Valid @ModelAttribute("mascota") MascotaDto mascotaDto, BindingResult result, Model model,
+    @PreAuthorize("hasAuthority('ROL_VOLUNTARIO')")
+    public String guardarMacota(@Valid @ModelAttribute("mascota") MascotaDto mascotaDto, BindingResult result,
+            Model model,
             RedirectAttributes attributes,
             @RequestParam("imagenMascota") MultipartFile multipartFile) {
         try {
@@ -253,6 +254,18 @@ public class MascotaController {
         }
     }
 
+    @GetMapping("/solicitudesRegistro")
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
+    public String solicitudesRegistro(Model model) {
+        try {
+            List<Mascota> lista =  mascotaServiceImp.obtenerPendientes();
+            model.addAttribute("listaPendientes", lista);
+        } catch (Exception e) {
+            //log
+        }
+        return "mascota/solicitudesRegistro";
+    }
+
     @PostMapping("/validar")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
     public String verificarRegistro(@RequestParam("idMascota") long id,
@@ -261,7 +274,7 @@ public class MascotaController {
             Mascota respuesta = mascotaServiceImp.validarRegistro(id, verificado);
             if (respuesta != null) {
                 attributes.addFlashAttribute(msgS, "Registro verificado con éxito");
-                return redirectListar + "/" + respuesta.getTipo();
+                return "redirect:/mascota/solicitudesRegistro";
             }
         } catch (Exception e) {
             // log
