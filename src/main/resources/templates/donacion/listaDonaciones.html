@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <i-head th:replace="fragments/imports :: head" />
-    <link th:href="@{/css/form.css}" rel="stylesheet" />
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de donaciones</title>
+    <i-head th:replace="fragments/imports :: head" />
 </head>
+
 <body>
     <!-- Navbar -->
     <div class="row mb-3">
@@ -24,15 +22,31 @@
                     <div class="row">
                         <div class="col-lg-7">
                             <h2 style="color: #253E5C;">Mis donaciones</h2>
-                            <p class="h4 fw-light" style="color: #698FAE">Palabra clave</p>
+                        </div>
+                        <div class="col-lg-5">
+                            <form>
+                                <div class="row mb-4 d-flex justify-content-center">
+                                    <div class="col-12 col-sm-12 col-md-10 mb-3">
+                                        <div class="form-outline">
+                                            <input type="text" id="busqueda" placeholder="Palabra clave ..."
+                                                class="form-control" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-1">
+                                        <button type="button" class="btn btn-primary btn-floating"
+                                            style="background-color: #253E5C;">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                            </form>
                         </div>
                     </div>
                     <div class="mb-4 mt-3">
                         <div class="row  justify-content-center">
                             <table class="table align-middle mb-0 bg-white">
-                                <caption hidden >Lista de donaciones</caption>
+                                <caption hidden>Lista de donaciones</caption>
                                 <!--tabla de donaciones-->
-                                <thead>
+                                <thead class="bg-light">
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Monto</th>
@@ -43,52 +57,71 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="tmpDonacion: ${listaDonaciones}">
+                                    <tr th:each="tmpDonacion,count: ${listaDonaciones}">
                                         <!-- # -->
-                                        <th scope="row">1</th>
+                                        <td th:text="${count.count}"></td>
                                         <!-- Monto -->
                                         <td>[[${tmpDonacion.monto}]]</td>
                                         <!-- Fecha donacion -->
-                                        <td th:text="${#dates.format(donacion.fechaDonacion, 'dd-MM-yyyy')}"></td>
+                                        <td th:text="${#dates.format(tmpDonacion.fechaDonacion, 'dd-MM-yyyy')}"></td>
+                                        <!-- Autorización -->
                                         <td>[[${tmpDonacion.autorizacion}]]</td>
+                                        <!-- Estado -->
                                         <td>
                                             <div th:switch="${tmpDonacion.estado}">
-                                                <div th:case="'aprobado'">
+                                                <div th:case="true">
                                                     <div class="h5">
                                                         <span class="badge badge-pill badge-success">Aprobado</span>
                                                     </div>
                                                 </div>
-                                                <div th:case="'pendiente'">
+                                                <div th:case="false">
                                                     <div class="h5">
                                                         <span class="badge badge-pill badge-warning">Pendiente</span>
                                                     </div>
                                                 </div>
-                                                <div th:case="'rechazado'">
-                                                    <div class="h5">
-                                                        <span class="badge badge-pill badge-danger">Rechazado</span>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </td>
+
+                                        <!-- Acciones -->
                                         <td>
-                                            <a  class="btn btn-lg btn-outline-success btn-floating"
-                                                style="color: #74422B; border-color: white;" role="button"
-                                                data-mdb-toggle="modal"
-                                                href=""
-                                            >
-                                                <em class="far fa-download fa-lg"></em>
+                                            <a class="btn btn-lg btn-outline-success btn-floating"
+                                                style="color: #74422B; border-color: white;" role="button" href="">
+                                                <i class="fas fa-download"></i>
                                             </a>
                                         </td>
-
-                                    </tr>
-                                </tbody>
-                            </table>
                         </div>
+                        </tr>
+                        </tbody>
+                        </table>
+                        <!-- Listado paginacion -->
+                        <nav th:if="${listaDonaciones.totalPages > 0}" aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${listaDonaciones.number == 0 ? 'disabled' : ''}">
+                                    <a th:href="@{/donativo/consultarTodos(page=${listaDonaciones.number - 1})}"
+                                        class="page-link">Anterior</a>
+                                </li>
+
+                                <li class="page-item" th:classappend="${i eq listaDonaciones.number + 1} ? 'active'"
+                                    th:each="i : ${#numbers.sequence( 1, listaDonaciones.totalPages, 1)}">
+                                    <a class="page-link"
+                                        th:href="@{/donativo/consultarTodos?page={tmpPag} (tmpPag=${i-1}) }"
+                                        th:text="${i}" th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+                                </li>
+                                <li class="page-item"
+                                    th:classappend="${listaDonaciones.number == (listaDonaciones.totalPages - 1) ? 'disabled' : ''}">
+                                    <a th:href="@{/donativo/consultarTodos(page=${listaDonaciones.number + 1})}"
+                                        class="page-link">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
 
 </body>
+
 </html>
