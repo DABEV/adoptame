@@ -36,6 +36,10 @@ import mx.edu.utez.adoptame.service.TamanoServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 import mx.edu.utez.adoptame.util.ImagenUtileria;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Controller
 @RequestMapping("/mascota")
 public class MascotaController {
@@ -71,6 +75,9 @@ public class MascotaController {
     @Autowired
     private ModelMapper modelMapper;
 
+    
+    private Logger logger = LoggerFactory.getLogger(MascotaController.class);
+
     @GetMapping(value = { "/consultarTodas", "/consultarTodas/{tipoMascota}" })
     public String consultarMascotas(@PathVariable(required = false) String tipoMascota, Model model) {
         try {
@@ -86,7 +93,7 @@ public class MascotaController {
             model.addAttribute(listaColores, colorServiceImp.listarColores());
 
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar listar a todas las mascotas");
         }
         return "mascota/lista";
 
@@ -112,7 +119,7 @@ public class MascotaController {
             }
             attributes.addFlashAttribute(msgE, "Registro no encontrado");
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar acceder a actualzar una mascota");
         }
         return redirectListar + "/" + tipoMascota;
     }
@@ -129,7 +136,7 @@ public class MascotaController {
             model.addAttribute(listaTamanos, listaTamano);
             model.addAttribute(listaColores, colores);
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar acceder al registro de una mascota");
         }
         return formRegistro;
     }
@@ -189,7 +196,7 @@ public class MascotaController {
             }
 
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar guardar una mascota");
         }
         return redirectListar;
     }
@@ -205,7 +212,7 @@ public class MascotaController {
                 return redirectListar + "/" + mascota.getTipo();
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar borrar una mascota");
         }
         attributes.addFlashAttribute(msgE, "Ocurrió un error");
         return redirectListar;
@@ -241,8 +248,9 @@ public class MascotaController {
             return "mascota/lista";
 
         } catch (Exception e) {
-            return redirectListar + "/" + tipoMascota;
+            logger.error("Error al intentar filtrar una mascota");
         }
+        return redirectListar + "/" + tipoMascota;
     }
 
     @GetMapping("/solicitudesRegistro")
@@ -252,7 +260,7 @@ public class MascotaController {
             List<Mascota> lista =  mascotaServiceImp.obtenerPendientes();
             model.addAttribute("listaPendientes", lista);
         } catch (Exception e) {
-            //log
+            logger.error("Error al intentar solicitar el registro de una mascota");
         }
         return "mascota/solicitudesRegistro";
     }
@@ -268,7 +276,7 @@ public class MascotaController {
                 return "redirect:/mascota/solicitudesRegistro";
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar verificar a una mascota");
         }
         return redirectListar;
     }
@@ -290,7 +298,7 @@ public class MascotaController {
 
             model.addAttribute(listaMascotas, mascotas);
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar listar favoritos");
         }
         return favoritos;
     }
@@ -316,7 +324,7 @@ public class MascotaController {
             }
 
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar guardar favoritos");
         }
         attributes.addFlashAttribute(msgE, "No se pudo agregar");
         return redirectListar;
@@ -347,7 +355,7 @@ public class MascotaController {
                 return favoritos;
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar eliminar un favorito");
         }
         attributes.addFlashAttribute(msgE, "No se pudo elimar");
         return redirectListar;

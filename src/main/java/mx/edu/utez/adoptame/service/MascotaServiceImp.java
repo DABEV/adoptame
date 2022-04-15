@@ -12,8 +12,13 @@ import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Tamano;
 import mx.edu.utez.adoptame.repository.MascotaRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class MascotaServiceImp implements MascotaService {
+
+    private Logger logger = LoggerFactory.getLogger(MascotaServiceImp.class);
 
     private String aprobado = "aprobado";
 
@@ -32,7 +37,7 @@ public class MascotaServiceImp implements MascotaService {
         try {
             mascotas = mascotaRepository.findByActivoAndAprobadoRegistroAndDisponibleAdopcion(true, aprobado, true);
         } catch (Exception e) {
-            // log
+            logger.error("hubo un error al intentar listar una mascota");
         }
         return mascotas;
 
@@ -44,7 +49,7 @@ public class MascotaServiceImp implements MascotaService {
         try {
             mascotaResultante = mascotaRepository.save(mascota);
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar guardar una mascota");
         }
         return mascotaResultante;
     }
@@ -52,12 +57,14 @@ public class MascotaServiceImp implements MascotaService {
     @Override
     public Mascota obtenerMascota(Long id) {
         Mascota mascotaResultante = null;
-        Optional<Mascota> mascotaOpcional = mascotaRepository.findById(id);
-
-        if (mascotaOpcional.isPresent()) {
-            mascotaResultante = mascotaOpcional.get();
+        try {
+            Optional<Mascota> mascotaOpcional = mascotaRepository.findById(id);
+            if (mascotaOpcional.isPresent()) {
+                mascotaResultante = mascotaOpcional.get();
+            }
+        } catch (Exception e) {
+            logger.error("Error al intentar obtener una mascota");
         }
-
         return mascotaResultante;
     }
 
@@ -71,7 +78,7 @@ public class MascotaServiceImp implements MascotaService {
                 return true;
             }
         } catch (Exception e) {
-            // Log
+            logger.error("Error al intentar eliminar una mascota");
         }
         return false;
     }
@@ -87,7 +94,7 @@ public class MascotaServiceImp implements MascotaService {
                 mascotaRepository.save(mascota);
             }
         } catch (Exception e) {
-            // Log
+            logger.error("Error al intentar validar una mascota");
         }
         return mascota;
     }
@@ -100,14 +107,14 @@ public class MascotaServiceImp implements MascotaService {
                     tipoMascota, aprobado, true);
             List<Mascota> parametros = mascotaRepository.findByColorOrSexoOrTamano(color, sexo, tamano);
 
-            for (Mascota m : parametros){
-                if(activos.contains(m)){
+            for (Mascota m : parametros) {
+                if (activos.contains(m)) {
                     mascotas.add(m);
                 }
             }
 
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar filtrar una mascota");
         }
         return mascotas;
     }
@@ -118,7 +125,7 @@ public class MascotaServiceImp implements MascotaService {
         try {
             mascotas = mascotaRepository.obtenerRecientes();
         } catch (Exception e) {
-            // Log
+            logger.error("Error al intentar obtener las mascotas recientes");
         }
         return mascotas;
     }
@@ -129,7 +136,7 @@ public class MascotaServiceImp implements MascotaService {
         try {
             mascotas = mascotaRepository.findByAprobadoRegistro("pendiente");
         } catch (Exception e) {
-            // Log
+            logger.error("Error al intentar obtener las mascotas pendientes de aprobación");
         }
         return mascotas;
     }
