@@ -1,5 +1,7 @@
 package mx.edu.utez.adoptame.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,14 @@ import mx.edu.utez.adoptame.util.ImagenUtileria;
 @RequestMapping("/blog")
 public class BlogController {
 
+    private String msgSuccess = "msg_success";
+    private String registroExitoso = "Registro exitoso";
+    private String msgError = "msg_error";
+    private String registroFallido = "Registro fallido";
+
+
+    private Long id;
+
     @Autowired
     BlogServiceImp blogServiceImp;
 
@@ -26,6 +36,7 @@ public class BlogController {
 
     @GetMapping("/consultarTodas")
     public String consultarBlogs(Blog blog, Model model) {
+
 
         try {
             model.addAttribute("listaBlog", blogServiceImp.listarBlogs());
@@ -44,7 +55,7 @@ public class BlogController {
 
     @PostMapping("/guardarBlog")
     public String guardarBlog(Blog blog, Model model, RedirectAttributes redirectAttributes,
-            @RequestParam("imagenBlog") MultipartFile multipartFile) {
+            @RequestParam("imagenBlog") MultipartFile multipartFile, HttpSession session) {
 
         try {
             if (!multipartFile.isEmpty()) {
@@ -55,9 +66,9 @@ public class BlogController {
                 }
             }
 
-            Blog respuesta = blogServiceImp.guardarBlog(blog);
+            Blog respuesta = blogServiceImp.guardarBlog(blog, session);
             if (respuesta != null) {
-                redirectAttributes.addFlashAttribute("msg_success", "Registro exitoso");
+                redirectAttributes.addFlashAttribute(msgSuccess, registroExitoso);
             } else {
                 redirectAttributes.addFlashAttribute("msg_error", "Registro fallido");
             }
@@ -84,9 +95,9 @@ public class BlogController {
 
             Blog respuesta = blogServiceImp.actualizarBlog(blog);
             if (respuesta != null) {
-                redirectAttributes.addFlashAttribute("msg_success", "Registro exitoso");
+                redirectAttributes.addFlashAttribute(msgSuccess, registroExitoso);
             } else {
-                redirectAttributes.addFlashAttribute("msg_error", "Registro fallido");
+                redirectAttributes.addFlashAttribute(msgError, registroFallido);
             }
 
         } catch (Exception e) {
@@ -101,9 +112,9 @@ public class BlogController {
         try {
             Boolean respuestaEliminacion = blogServiceImp.eliminarBlog(id);
             if (Boolean.TRUE.equals(respuestaEliminacion)) {
-                redirectAttributes.addFlashAttribute("msg_success", "Registro exitoso");
+                redirectAttributes.addFlashAttribute(msgSuccess, registroExitoso);
             } else {
-                redirectAttributes.addFlashAttribute("msg_error", "Registro fallido");
+                redirectAttributes.addFlashAttribute(msgError, registroFallido);
             }
         } catch (Exception e) {
             e.printStackTrace();

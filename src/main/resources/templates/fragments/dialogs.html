@@ -347,7 +347,7 @@
           <div class="col-md-12 mt-2">
             <label style="color: #698FAE;">Imagen</label>
             <div class="">
-              <input type="file" name="imagen" class="form-control" id="customFile" />
+              <input type="file" name="imagenBlog" class="form-control" id="customFile" />
             </div>
           </div>
       </div>
@@ -374,7 +374,7 @@
         <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form th:action="@{/blog/actualizarBlog}" method="POST" th:object="${blog}">
+        <form th:action="@{/blog/actualizarBlog}" method="POST" th:object="${blog}" enctype="multipart/form-data">
           <div class="col-md-12">
             <label style="color: #698FAE;">Titulo</label>
             <div class="input-group">
@@ -410,10 +410,8 @@
             </div>
           </div>
           <div class="col-md-12 mt-2">
-            <label style="color: #698FAE;">Imagen</label>
-            <div>
-              <input type="file" name="imagen" class="form-control" id="customFile" />
-            </div>
+            <label style="color: #698FAE;" for="customFile">Imagen</label>
+              <input type="file" name="imagenBlog" class="form-control" id="customFile" />
           </div>
 
           <input type="number" hidden th:name="id" th:value="${blog.id}" />
