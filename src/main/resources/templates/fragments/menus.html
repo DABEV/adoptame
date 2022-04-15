@@ -2,7 +2,7 @@
     <a href="#" class="list-group-item list-group-item-action disabled">
         <strong>Menú adoptador</strong>
     </a>
-    <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 1 ? 'active' : ''"
+    <a th:href="@{/usuario/miCuenta}" class="list-group-item list-group-item-action" th:classappend="${activo} == 1 ? 'active' : ''"
         aria-current="true">
         <em class="fas fa-plus-circle"></em>
         Mi cuenta
