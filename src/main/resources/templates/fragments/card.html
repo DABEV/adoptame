@@ -4,7 +4,11 @@
     <div th:fragment="mascota" class="col-md-12 card mb-3">
       <div class="row g-0">
         <div class="container col-md-4">
-          <img th:src="@{/imagenes/{i} (i= ${solicitud.mascota.imagen})}" style="height: 100%; width: 100%" alt="No encontrada" />
+          <img
+            th:src="@{/imagenes/{i} (i= ${solicitud.mascota.imagen})}"
+            style="height: 100%; width: 100%"
+            alt="No encontrada"
+          />
         </div>
         <div class="col-md-8">
           <div class="card-body">
@@ -70,7 +74,9 @@
                 sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
                 role="button"
               >
-                <em class="fas fa-times fa-lg"><h6 class="tooltiptext">Cancelar</h6></em>
+                <em class="fas fa-times fa-lg"
+                  ><h6 class="tooltiptext">Cancelar</h6></em
+                >
               </a>
             </div>
           </div>

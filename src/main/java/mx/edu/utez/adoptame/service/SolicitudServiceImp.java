@@ -16,6 +16,11 @@ public class SolicitudServiceImp implements SolicitudService {
     SolicitudRepository repository;
 
     @Override
+    public List<Solicitud> listarSolicitudAdoptador(long idUsuario) {
+        return repository.findByAdoptadorId(idUsuario);
+    }
+
+    @Override
     public List<Solicitud> listarSolicitudes() {
         return repository.findAll();
     }
