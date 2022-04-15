@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Solicitud;
 import mx.edu.utez.adoptame.model.Usuario;
+import mx.edu.utez.adoptame.service.MascotaServiceImp;
 import mx.edu.utez.adoptame.service.SolicitudServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 
@@ -25,13 +27,15 @@ public class SolicitudController {
 
     private String redirectAdoptador = "redirect:/solicitud/adoptador/consultarTodas";
     private String redirectVoluntario = "redirect:/solicitud/voluntario/consultarTodas";
-    private String listaSolicitud = "solicitud/adoptador/consultarTodas";
 
     @Autowired
     SolicitudServiceImp solicitudServiceImp;
 
     @Autowired
     UsuarioServiceImp usuarioServiceImp;
+
+    @Autowired
+    MascotaServiceImp mascotaServiceImp;
 
     @GetMapping("/adoptador/consultarTodas")
     @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
@@ -83,13 +87,25 @@ public class SolicitudController {
 
     @PostMapping("/adoptador/guardarSolicitud")
     @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
-    public String guardarSolicitud(Solicitud solicitud, Mascota mascota, Usuario usuario, Model model,
+    public String guardarSolicitud(@RequestParam("idMascota") long id, Authentication authentication, Solicitud solicitud, Model model,
             RedirectAttributes redirectAttributes) {
         try {
-            if (solicitud.getId() == null) {
+            String correo = authentication.getName();
+            Usuario usuario = usuarioServiceImp.buscarPorCorreo(correo);
+            Mascota mascota = mascotaServiceImp.obtenerMascota(id);
+            List<Solicitud> solicitados = solicitudServiceImp.listarUsuarioSolicitud(mascota.getId());
+            if (solicitados.isEmpty()) {
                 solicitud.setAprobado("Pendiente");
                 solicitud.setAdoptador(usuario);
                 solicitud.setMascota(mascota);
+            }else{
+                redirectAttributes.addFlashAttribute("msg_warning", "Esta mascota ya ha sido solicitada");
+                if(Boolean.FALSE.equals(mascota.getSexo())){
+                    return "redirect:/mascota/consultarTodas/false";
+                }else{
+                    return "redirect:/mascota/consultarTodas/true";
+                }
+                
             }
 
             Solicitud respuesta = solicitudServiceImp.guardarSolicitud(solicitud);

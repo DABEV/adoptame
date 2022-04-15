@@ -6,6 +6,7 @@ import mx.edu.utez.adoptame.model.Solicitud;
 
 public interface SolicitudService {
     List<Solicitud> listarSolicitudAdoptador(long idUsuario);
+    List<Solicitud> listarUsuarioSolicitud(long idMascota);
     List<Solicitud> listarSolicitudes ();
     Solicitud guardarSolicitud (Solicitud solicitud);
     Solicitud obtenerSolicitud (Long id);

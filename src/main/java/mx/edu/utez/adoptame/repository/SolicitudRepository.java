@@ -18,4 +18,5 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
     void update(@Param("aprobado") String aprobado,@Param("id") long id);
 
     List<Solicitud> findByAdoptadorId(long idUsuario);
+    List<Solicitud> findByMascotaId(long idMascota);
 }

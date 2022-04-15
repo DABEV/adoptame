@@ -131,6 +131,12 @@
                     </ul>
                   </div>
                 </div>
+                <div class="col-12 col-lg mt-3" sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')" style="text-align: right;">
+                  <form th:action="@{/solicitud/adoptador/guardarSolicitud}" method="post">
+                    <input type="hidden" th:value="${mascota.id}" name="idMascota" />
+                    <button type="submit" class="btn btn-rounded btn-outline-primary" style="border-color: #253E5C; color: #253E5C;">Solicitar adopción</button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
