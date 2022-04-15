@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,16 +47,15 @@ public class UsuarioController {
     }
 
     @GetMapping("/miCuenta")
-    public String miCuenta(Authentication authentication, @ModelAttribute("usuario") UsuarioDto usuarioDto) {
+    public String miCuenta(Authentication authentication, @ModelAttribute("usuario") UsuarioDto usuarioDto,
+            Model model) {
         try {
             Usuario usuario = usuarioServiceImp.buscarPorCorreo(authentication.getName());
             usuarioDto = modelMapper.map(usuario, UsuarioDto.class);
-
-            System.out.println(usuarioDto);
-
-            if (usuarioDto != null)
+            if (usuarioDto != null) {
+                model.addAttribute("usuario", usuarioDto);
                 return "usuario/miCuenta";
-                
+            }
             return REDIRECT_LOGOUT;
         } catch (Exception e) {
             // log
@@ -63,5 +63,5 @@ public class UsuarioController {
 
         return REDIRECT_LOGOUT;
     }
-    
+
 }

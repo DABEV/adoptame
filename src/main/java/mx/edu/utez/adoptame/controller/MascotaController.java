@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.edu.utez.adoptame.dto.MascotaDto;
 import mx.edu.utez.adoptame.model.Caracter;
 import mx.edu.utez.adoptame.model.Color;
 import mx.edu.utez.adoptame.model.Favorito;
@@ -50,22 +52,25 @@ public class MascotaController {
     private String formRegistro = "mascota/formularioRegistro";
 
     @Autowired
-    MascotaServiceImp mascotaServiceImp;
+    private MascotaServiceImp mascotaServiceImp;
 
     @Autowired
-    TamanoServiceImp tamanoServiceImp;
+    private TamanoServiceImp tamanoServiceImp;
 
     @Autowired
-    CaracterServiceImpl caracterServiceImp;
+    private CaracterServiceImpl caracterServiceImp;
 
     @Autowired
-    ColorServiceImp colorServiceImp;
+    private ColorServiceImp colorServiceImp;
 
     @Autowired
-    FavoritoServiceImp favoritoServiceImp;
+    private FavoritoServiceImp favoritoServiceImp;
 
     @Autowired
-    UsuarioServiceImp usuarioServiceImp;
+    private UsuarioServiceImp usuarioServiceImp;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping(value = { "/consultarTodas", "/consultarTodas/{tipoMascota}" })
     public String consultarMascotas(@PathVariable(required = false) String tipoMascota, Model model) {
@@ -115,7 +120,7 @@ public class MascotaController {
 
     @GetMapping("/registrar")
     @PreAuthorize("hasAuthority('ROL_VOLUNTARIO')")
-    public String registrar(Mascota mascota, Model model) {
+    public String registrar(@ModelAttribute("mascota") MascotaDto mascota, Model model) {
         try {
             List<Color> colores = colorServiceImp.listarColores();
             List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
@@ -132,9 +137,21 @@ public class MascotaController {
 
     @PostMapping("/guardarMascota")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
-    public String guardarMacota(@Valid @ModelAttribute("mascota") Mascota mascota, BindingResult result, Model model, RedirectAttributes attributes,
+    public String guardarMacota(@Valid @ModelAttribute("mascota") MascotaDto mascotaDto, BindingResult result, Model model,
+            RedirectAttributes attributes,
             @RequestParam("imagenMascota") MultipartFile multipartFile) {
         try {
+
+            Mascota mascota = modelMapper.map(mascotaDto, Mascota.class);
+
+            List<Color> colores = colorServiceImp.listarColores();
+            List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
+            List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
+
+            model.addAttribute(listaCaracteres, listaCaracter);
+            model.addAttribute(listaTamanos, listaTamano);
+            model.addAttribute(listaColores, colores);
+
             if (result.hasErrors()) {
                 return formRegistro;
             } else {
