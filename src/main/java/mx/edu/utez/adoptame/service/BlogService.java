@@ -10,4 +10,5 @@ public interface BlogService {
     Blog actualizarBlog (Blog blog);
     Blog obtenerBlog(Long id);
     boolean eliminarBlog(Long id);
+    List<Blog> listaPrincipales();
 }

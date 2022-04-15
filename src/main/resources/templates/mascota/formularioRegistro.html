@@ -17,7 +17,7 @@
         <div class="mx-4 mt-4 mb-6">
             <div class="row">
                 <div class="col-md-3 mb-5">
-                    <div th:replace="fragments/menus :: administrador(1)" class="menu list-group shadow-3"></div>
+                    <div th:replace="fragments/menus :: voluntario(1)" class="menu list-group shadow-3"></div>
                 </div>
                 <div class="col-md-9 mb-3">
                     <div class="d-grid gap-4">
@@ -44,6 +44,10 @@
                                                 <input type="text" th:field="*{nombre}" id="nombre" class="form-control"
                                                     placeholder="Ej. Milo" aria-label="nombre"
                                                     aria-describedby="addon-wrapping" />
+
+                                                <div th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"
+                                                    class="badge badge-danger">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-3 col-sm-12 mb-3">
