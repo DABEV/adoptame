@@ -15,24 +15,27 @@ import mx.edu.utez.adoptame.repository.MascotaRepository;
 @Service
 public class MascotaServiceImp implements MascotaService {
 
+    private String aprobado = "aprobado";
+
     @Autowired
     MascotaRepository mascotaRepository;
 
     @Override
     public List<Mascota> listarMascotas(boolean tipoMascota) {
-        return mascotaRepository.findByActivoAndTipo(true, tipoMascota);
+        return mascotaRepository.findByActivoAndTipoAndAprobadoRegistroAndDisponibleAdopcion(true, tipoMascota,
+                aprobado, true);
     }
 
     @Override
     public List<Mascota> listarMascotas() {
         List<Mascota> mascotas = null;
-        try{
-            mascotas = mascotaRepository.findByActivo(true);
-        }catch (Exception e){
-            //log
+        try {
+            mascotas = mascotaRepository.findByActivoAndAprobadoRegistroAndDisponibleAdopcion(true, aprobado, true);
+        } catch (Exception e) {
+            // log
         }
         return mascotas;
-        
+
     }
 
     @Override
@@ -90,16 +93,31 @@ public class MascotaServiceImp implements MascotaService {
     }
 
     @Override
-    public List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano) {
-        return mascotaRepository.findByColorOrSexoOrTamano(color, sexo, tamano);
+    public List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano, boolean tipoMascota) {
+        List<Mascota> mascotas = new ArrayList<>();
+        try {
+            List<Mascota> activos = mascotaRepository.findByActivoAndTipoAndAprobadoRegistroAndDisponibleAdopcion(true,
+                    tipoMascota, aprobado, true);
+            List<Mascota> parametros = mascotaRepository.findByColorOrSexoOrTamano(color, sexo, tamano);
+
+            for (Mascota m : parametros){
+                if(activos.contains(m)){
+                    mascotas.add(m);
+                }
+            }
+
+        } catch (Exception e) {
+            // log
+        }
+        return mascotas;
     }
 
     @Override
     public List<Mascota> obtenerRecientes() {
         List<Mascota> mascotas = new ArrayList<>();
-        try{
+        try {
             mascotas = mascotaRepository.obtenerRecientes();
-        }catch (Exception e) {
+        } catch (Exception e) {
             // Log
         }
         return mascotas;
@@ -108,9 +126,9 @@ public class MascotaServiceImp implements MascotaService {
     @Override
     public List<Mascota> obtenerPendientes() {
         List<Mascota> mascotas = new ArrayList<>();
-        try{
+        try {
             mascotas = mascotaRepository.findByAprobadoRegistro("pendiente");
-        }catch (Exception e) {
+        } catch (Exception e) {
             // Log
         }
         return mascotas;

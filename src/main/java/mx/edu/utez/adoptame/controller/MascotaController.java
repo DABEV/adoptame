@@ -2,7 +2,6 @@ package mx.edu.utez.adoptame.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -233,15 +232,7 @@ public class MascotaController {
                 sexo = Boolean.parseBoolean(sexoMascota);
             }
 
-            List<Mascota> listaFiltrada = mascotaServiceImp.filtrarPorParametros(color, sexo, tamano);
-
-            // Filtro para mascotas activas en el sistema
-            listaFiltrada = listaFiltrada.stream().filter(Mascota::getActivo)
-                    .collect(Collectors.toList());
-
-            // filtro de tipo
-            listaFiltrada = listaFiltrada.stream().filter(mascota -> mascota.getTipo() == tipoMascota)
-                    .collect(Collectors.toList());
+            List<Mascota> listaFiltrada = mascotaServiceImp.filtrarPorParametros(color, sexo, tamano, tipoMascota);
 
             model.addAttribute("tipo", tipoMascota);
             model.addAttribute(listaMascotas, listaFiltrada);
