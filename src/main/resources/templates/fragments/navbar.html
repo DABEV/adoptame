@@ -57,7 +57,7 @@
               <a
                 class="nav-link text-white"
                 th:href="@{/mascota/consultarTodas/true}"
-                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
+                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR', 'ROL_VOLUNTARIO')"
                 ><strong>Perros</strong></a
               >
             </li>
@@ -65,7 +65,7 @@
               <a
                 class="nav-link text-white"
                 th:href="@{/mascota/consultarTodas/false}"
-                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
+                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR', 'ROL_VOLUNTARIO')"
                 ><strong>Gatos</strong></a
               >
             </li>
