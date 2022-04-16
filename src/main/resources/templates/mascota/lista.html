@@ -22,7 +22,8 @@
                     <div class="row d-flex justify-content-center mt-5">
                         <div class="col-lg-10">
                             <div class="d-grid gap-2">
-                                <a sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')" type="button" th:href="@{/mascota/registrar}" style="background-color: #253E5C;"
+                                <a sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')" type="button"
+                                    th:href="@{/mascota/registrar}" style="background-color: #253E5C;"
                                     class="btn btn-primary mb-4 btn-rounded">
                                     <me class="fas fa-plus-circle me-2"></me>
                                     Añadir nueva mascota
@@ -39,6 +40,24 @@
                                 <p class="h4 fw-light" style="color: #698FAE">Consulta la información de las mascotas
                                     registradas
                                 </p>
+                            </div>
+                            <div class="col-lg-5">
+                                <form th:action="@{/mascota/filtroclave}" method="post">
+                                    <input type="hidden" name="tipoMascota" th:value="${tipo}" />
+                                    <div class="row mb-4 d-flex justify-content-center">
+                                        <div class="col-12 col-sm-12 col-md-10 mb-3">
+                                            <div class="form-outline">
+                                                <input name="textoClave" type="text" id="busqueda" placeholder="Palabra clave ..."
+                                                    class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-sm-12 col-md-1">
+                                            <button type="submit" class="btn btn-primary btn-floating"
+                                                style="background-color: #253E5C;">
+                                                <em class="fas fa-search"></em>
+                                            </button>
+                                        </div>
+                                </form>
                             </div>
                         </div>
                         <div class="mb-4 mt-3">

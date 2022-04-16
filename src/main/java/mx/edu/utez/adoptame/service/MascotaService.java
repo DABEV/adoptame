@@ -22,6 +22,7 @@ public interface MascotaService {
     List<Mascota> obtenerRecientes();
     List<Mascota> obtenerPendientes();
     Mascota validarRegistro(long id, String verificado);
+    List<Mascota> filtrarPalabraClave(String texto, boolean tipoMascota);
 
     List<Mascota> procedimientoRegistrarMascota(Long idUsuario, String aprobadoRegistro, String detalles, String edad,
             Date fechaRegistro, String imagen, String nombre, Boolean sexo, Boolean tipo, Long caracterId,

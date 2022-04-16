@@ -39,7 +39,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/css/**", "/js/**", "/images/**").permitAll()
 
             // Sección donde se adjuntarán las URL públicas que no ocuparán de autenticación
-            .antMatchers("/", "/signup", "/reset/password/**", "/imagenes/**", "/mascota/consultarTodas/**", "/mascota/filtrar").permitAll()
+            .antMatchers("/", "/signup", "/reset/password/**", "/imagenes/**", "/mascota/consultarTodas/**", "/mascota/filtrar", "/mascota/filtroclave").permitAll()
 
             // Las demas URL requieren autenticacion
             .anyRequest().authenticated()

@@ -219,4 +219,15 @@ public class MascotaServiceImp implements MascotaService {
         return mascotas;
     }
 
+    @Override
+    public List<Mascota> filtrarPalabraClave(String texto, boolean tipoMascota) {
+        List<Mascota> mascotas = new ArrayList<>();
+        try {
+            mascotas = mascotaRepository.filtroPlabrasClave(texto, tipoMascota);
+        } catch (Exception e) {
+            logger.error("Error al intentar obtener las mascotas por palabra clave");
+        }
+        return mascotas;
+    }
+
 }

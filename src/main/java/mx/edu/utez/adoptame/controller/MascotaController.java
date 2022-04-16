@@ -38,7 +38,6 @@ import mx.edu.utez.adoptame.service.TamanoServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 import mx.edu.utez.adoptame.util.ImagenUtileria;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +76,6 @@ public class MascotaController {
     @Autowired
     private ModelMapper modelMapper;
 
-    
     private Logger logger = LoggerFactory.getLogger(MascotaController.class);
 
     @GetMapping(value = { "/consultarTodas", "/consultarTodas/{tipoMascota}" })
@@ -290,7 +288,7 @@ public class MascotaController {
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
     public String solicitudesRegistro(Model model) {
         try {
-            List<Mascota> lista =  mascotaServiceImp.obtenerPendientes();
+            List<Mascota> lista = mascotaServiceImp.obtenerPendientes();
             model.addAttribute("listaPendientes", lista);
         } catch (Exception e) {
             logger.error("Error al intentar solicitar el registro de una mascota");
@@ -392,5 +390,22 @@ public class MascotaController {
         }
         attributes.addFlashAttribute(msgE, "No se pudo elimar");
         return redirectListar;
+    }
+
+    @PostMapping("/filtroclave")
+    public String palabrasClave(@RequestParam("textoClave") String texto,
+            @RequestParam("tipoMascota") boolean tipoMascota, Model model) {
+        
+        model.addAttribute("tipo", tipoMascota);
+        model.addAttribute(listaTamanos, tamanoServiceImp.listarTamanos());
+        model.addAttribute(listaColores, colorServiceImp.listarColores());
+        try {
+            List<Mascota> mascotas = mascotaServiceImp.filtrarPalabraClave(texto, tipoMascota);
+            model.addAttribute(listaMascotas, mascotas);
+            return "mascota/lista";
+        } catch (Exception e) {
+            logger.error("Error al intentar obtener las mascotas pendientes de aprobación");
+        }
+        return redirectListar + "/" + tipoMascota;
     }
 }
