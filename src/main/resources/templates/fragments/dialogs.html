@@ -468,3 +468,169 @@
     </div>
   </div>
 </div>
+
+<div
+th:fragment="eliminarSolicitud(id)"
+th:id="${'eliminar-solicitud' + id}"
+  class="modal fade"
+  id="exampleModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-danger">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Confirmar cancelación
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <a
+          role="button"
+          class="btn btn-danger btn-rounded"
+          style="color: white;"
+          th:href="@{/solicitud/adoptador/eliminarSolicitud/{id} (id = ${solicitud.id})}"
+        >
+          Cancelar solicitud
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+th:fragment="rechazarSolicitud(id)"
+th:id="${'rechazar-solicitud' + id}"
+  class="modal fade"
+  id="rechazarModal"
+  tabindex="-1"
+  aria-labelledby="rechazarModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-white bg-danger">
+        <h5 class="modal-title" id="rechazarModalLabel">
+          Confirmar rechazo de solicitud
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <a
+          role="button"
+          class="btn btn-danger btn-rounded"
+          style="color: white;"
+          th:href="@{/solicitud/voluntario/rechazarSolicitud/{id} (id = ${solicitud.id})}"
+        >
+          Rechazar solicitud
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+th:fragment="aprobarSolicitud(id)"
+th:id="${'aprobar-solicitud' + id}"
+  class="modal fade"
+  id="aprobarModal"
+  tabindex="-1"
+  aria-labelledby="aprobarModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-white" style="background-color: #253E5C;">
+        <h5 class="modal-title" id="aprobarModalLabel">
+          Confirmar aprobación de solicitud
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <a
+          role="button"
+          class="btn btn-rounded"
+          style="color: white; background-color: #253E5C;"
+          th:href="@{/solicitud/voluntario/aprobarSolicitud/{id} (id = ${solicitud.id})}"
+        >
+          Aprobar solicitud
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:fragment="detallesSolicitud(id)" class="modal" th:id="${'detalles' + id}" tabindex="-1"
+  aria-labelledby="labelModal" aria-hidden="true">
+  <!-- dialog detalles mascota-->
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header text-white" style="background-color: #253e5c">
+        <h5 id="labelModal" class="modal-title">Detalles de la solicitud</h5>
+        <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <div class="row">
+            <div class="col-lg-4 text-center">
+              <img th:src="@{/imagenes/{i} (i= ${solicitud.mascota.imagen})}" class="img-fluid rounded mb-3"
+                alt="No encontrada" />
+            </div>
+            <div class="col-lg-8">
+              <div>
+                <div class="row">
+                  <div class="col-lg" style="text-align: left;">
+                    <h2 th:text="${solicitud.mascota.nombre}"></h2>
+                  </div>
+                  <div class="col-12 col-lg text-center">
+                    <p>
+                      Fecha de solicitud:
+                      <small class="text-muted" th:text="${#dates.format(solicitud.fechaSolicitud, 'dd-MM-yyyy')}"></small>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-12 col-lg" style="text-align: left;">
+                  <p class="note note-light">
+                    <strong>Disponibilidad: </strong><u th:text="${solicitud.mascota.disponibleAdopcion == true}? 'Aún disponible para adoptar':'Ya no está disponible'"></u>
+                  </p>
+                </div>
+                <div class="col-12 col-lg">
+                  <ul class="list-group mt-3" style="text-align: left;">
+                    <li class="list-group-item" style="border-color: #253e5c"
+                        th:text="'Solicita: ' + ${solicitud.adoptador.nombre} + ' ' + ${solicitud.adoptador.apellidos}">
+                    </li>
+                    <li class="list-group-item" style="border-color: #253e5c"
+                        th:text="'Dirección: ' + ${solicitud.adoptador.direccion}">
+                        Tam
+                    </li>
+                    <li class="list-group-item" style="border-color: #253e5c"
+                        th:text="'Teléfono: ' + ${solicitud.adoptador.telefono}">
+                        Tam
+                    </li>  
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

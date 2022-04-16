@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Solicitud;
 import mx.edu.utez.adoptame.model.Usuario;
@@ -32,6 +31,10 @@ public class SolicitudController {
 
     private String redirectAdoptador = "redirect:/solicitud/adoptador/consultarTodas";
     private String redirectVoluntario = "redirect:/solicitud/voluntario/consultarTodas";
+    private String msgE = "msg_error";
+    private String msgS = "msg_success";
+    private String msgW = "msg_warning";
+    private String listaSolicitud = "listaSolicitud";
 
     private Logger logger = LoggerFactory.getLogger(SolicitudController.class);
 
@@ -53,9 +56,9 @@ public class SolicitudController {
 
             List<Solicitud> solicitados = solicitudServiceImp.listarSolicitudAdoptador(usuario.getId());
 
-            model.addAttribute("listaSolicitud", solicitados);
-        }catch(Exception e){
-            logger.error("Error al intentar listar las solicitudes");
+            model.addAttribute(listaSolicitud, solicitados);
+        } catch (Exception e) {
+            logger.error("Error al listar las solicitudes");
         }
         return "solicitud/adoptador";
     }
@@ -66,7 +69,7 @@ public class SolicitudController {
         try {
             Solicitud solicitud = solicitudServiceImp.obtenerSolicitud(id);
             if (solicitud != null) {
-                model.addAttribute("listaSolicitud", solicitud);
+                model.addAttribute(listaSolicitud, solicitud);
                 return "solicitud/adoptador";
             }
         } catch (Exception e) {
@@ -82,10 +85,10 @@ public class SolicitudController {
         try {
             boolean respuesta = solicitudServiceImp.eliminarSolicitud(id, session);
             if (respuesta) {
-                redirectAttributes.addFlashAttribute("msg_success", "Solicitud eliminada de manera exitosa");
+                redirectAttributes.addFlashAttribute(msgS, "Solicitud eliminada de manera exitosa");
                 return redirectAdoptador;
             } else {
-                redirectAttributes.addFlashAttribute("msg_error", "Eliminación de solicitud fallida");
+                redirectAttributes.addFlashAttribute(msgE, "Eliminación de solicitud fallida");
             }
         } catch (Exception e) {
             logger.error("Error al intentar eliminar la solicitud");
@@ -95,37 +98,45 @@ public class SolicitudController {
 
     @PostMapping("/adoptador/guardarSolicitud")
     @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
-    public String guardarSolicitud(@RequestParam("idMascota") long id, Authentication authentication, Solicitud solicitud, Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+    public String guardarSolicitud(@RequestParam("idMascota") long id, Authentication authentication,
+            Solicitud solicitud, Model model, RedirectAttributes redirectAttributes, HttpSession session) {
         Solicitud respuesta = null;
 
         try {
             String correo = authentication.getName();
             Usuario usuario = usuarioServiceImp.buscarPorCorreo(correo);
             Mascota mascota = mascotaServiceImp.obtenerMascota(id);
-            List<Solicitud> solicitados = solicitudServiceImp.listarUsuarioSolicitud(mascota.getId());
-            if (solicitados.isEmpty()) {
+            List<Solicitud> solicitados = solicitudServiceImp.listarUsuarioSolicitud(id, usuario.getId());
+            if (solicitados.isEmpty() && mascota.getAprobadoRegistro().equals("aprobado")
+                    && Boolean.TRUE.equals(mascota.getDisponibleAdopcion())) {
                 solicitud.setAprobado("Pendiente");
                 solicitud.setAdoptador(usuario);
                 solicitud.setMascota(mascota);
+            } else if (Boolean.FALSE.equals(mascota.getDisponibleAdopcion())) {
+                redirectAttributes.addFlashAttribute(msgW, "Esta mascota ya no se encuentra disponible para adopción");
+                if (Boolean.FALSE.equals(mascota.getSexo())) {
+                    return "redirect:/mascota/consultarTodas/false";
+                } else {
+                    return "redirect:/mascota/consultarTodas/true";
+                }
             } else {
-                Solicitud solicitudAnterior = solicitudServiceImp.obtenerSolicitud(solicitud.getId());
-                UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
-                Long idUsuario = usuarioDto.getId();
-
-                solicitudServiceImp.procedimientoActualizarSolicitud(idUsuario, solicitudAnterior.getAprobado(),
-                        solicitudAnterior.getFechaSolicitud(), solicitudAnterior.getAdoptador().getId(),
-                        solicitudAnterior.getMascota().getId(),
-                        solicitud.getAprobado(), solicitud.getFechaSolicitud(), solicitud.getAdoptador().getId(),
-                        solicitud.getMascota().getId());
-                respuesta = solicitudServiceImp.guardarSolicitud(solicitud);
+                redirectAttributes.addFlashAttribute(msgW, "Ya has solicitado esta mascota");
+                if (Boolean.FALSE.equals(mascota.getSexo())) {
+                    return "redirect:/mascota/consultarTodas/false";
+                } else {
+                    return "redirect:/mascota/consultarTodas/true";
+                }
             }
 
             respuesta = solicitudServiceImp.guardarSolicitud(solicitud);
+
             if (respuesta != null) {
-                redirectAttributes.addFlashAttribute("msg_success", "Registro de solicitud exitoso");
+                solicitudServiceImp.procedimientoRegistrarSolicitud(usuario.getId(), respuesta.getAprobado(),
+                        respuesta.getFechaSolicitud(), respuesta.getAdoptador().getId(), respuesta.getMascota().getId());
+                redirectAttributes.addFlashAttribute(msgS, "Registro de solicitud exitoso");
                 return redirectAdoptador;
             } else {
-                redirectAttributes.addFlashAttribute("msg_error", "Registro de solicitud fallido");
+                redirectAttributes.addFlashAttribute(msgE, "Registro de solicitud fallido");
                 return redirectAdoptador;
             }
         } catch (Exception e) {
@@ -161,12 +172,18 @@ public class SolicitudController {
     @PreAuthorize("hasAuthority('ROL_VOLUNTARIO')")
     public String rechazarSolicitud(@PathVariable long id, RedirectAttributes redirectAttributes) {
         try {
+            Solicitud solicitud = solicitudServiceImp.obtenerSolicitud(id);
+
+            if(solicitud.getAprobado().equals("Aprobado")){
+                redirectAttributes.addFlashAttribute(msgW, "No puedes rechazar una solicitud que ya fue aprobada");
+                return redirectVoluntario;
+            }
             boolean respuesta = solicitudServiceImp.rechazarSolicitud(id);
             if (respuesta) {
-                redirectAttributes.addFlashAttribute("msg_success", "Solicitud rechazada exitosamente");
+                redirectAttributes.addFlashAttribute(msgS, "Solicitud rechazada exitosamente");
                 return redirectVoluntario;
             } else {
-                redirectAttributes.addFlashAttribute("msg_error", "Rechazo de solicitud fallida");
+                redirectAttributes.addFlashAttribute(msgE, "Rechazo de solicitud fallida");
             }
         } catch (Exception e) {
             logger.error("Error al intentar rechazar una solicitud de adopción");
@@ -178,12 +195,29 @@ public class SolicitudController {
     @PreAuthorize("hasAuthority('ROL_VOLUNTARIO')")
     public String aprobarSolicitud(@PathVariable long id, RedirectAttributes redirectAttributes) {
         try {
-            boolean respuesta = solicitudServiceImp.aprobarSolicitud(id);
-            if (respuesta) {
-                redirectAttributes.addFlashAttribute("msg_success", "Solicitud aprobada exitosamente");
+            Solicitud solicitud = solicitudServiceImp.obtenerSolicitud(id);
+            Mascota mascota = mascotaServiceImp.obtenerMascota(solicitud.getMascota().getId());
+            if(solicitud.getAprobado().equals("Aprobado") && Boolean.FALSE.equals(mascota.getDisponibleAdopcion())){
+                redirectAttributes.addFlashAttribute(msgW, "Esta solicitud ya fue aprobada");
                 return redirectVoluntario;
-            } else {
-                redirectAttributes.addFlashAttribute("msg_error", "Aprobación de solicitud fallida");
+            }else if(Boolean.FALSE.equals(mascota.getDisponibleAdopcion())){
+                redirectAttributes.addFlashAttribute(msgW, "Esta mascota ya no está disponible para ser adoptada");
+                return redirectVoluntario;
+            }else{
+                Mascota mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
+                    mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
+                    mascota.setDisponibleAdopcion(false);
+                    mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
+                    mascota.setActivo(mascotaExistente.getActivo());
+
+                Mascota actualizar = mascotaServiceImp.guardarMascota(mascota);
+                boolean respuesta = solicitudServiceImp.aprobarSolicitud(id);
+                if (respuesta && actualizar != null) {
+                    redirectAttributes.addFlashAttribute(msgS, "Solicitud aprobada exitosamente");
+                    return redirectVoluntario;
+                } else {
+                    redirectAttributes.addFlashAttribute(msgE, "Aprobación de solicitud fallida");
+                }
             }
         } catch (Exception e) {
             logger.error("Error al intentar aprobar una solicitud de adopción");

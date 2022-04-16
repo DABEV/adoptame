@@ -28,8 +28,8 @@ public class SolicitudServiceImp implements SolicitudService {
     }
 
     @Override
-    public List<Solicitud> listarUsuarioSolicitud(long idMascota) {
-        return repository.findByMascotaId(idMascota);
+    public List<Solicitud> listarUsuarioSolicitud(long idMascota, long idUsuario) {
+        return repository.findByMascotaIdAndAdoptadorId(idMascota, idUsuario);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SolicitudServiceImp implements SolicitudService {
             solicitudResultado = repository.save(solicitud);
             
         } catch (Exception e) {
-            // log
+            e.printStackTrace();
         }
         return solicitudResultado;
     }
@@ -73,7 +73,7 @@ public class SolicitudServiceImp implements SolicitudService {
 
             return true;
         } catch (Exception e) {
-            // log
+            e.printStackTrace();
         }
         return false;
     }
@@ -84,7 +84,7 @@ public class SolicitudServiceImp implements SolicitudService {
             repository.update("Rechazado", id);
             return true;
         } catch (Exception e) {
-            // log
+            e.printStackTrace();
         }
         return false;
     }
@@ -95,7 +95,7 @@ public class SolicitudServiceImp implements SolicitudService {
             repository.update("Aprobado", id);
             return true;
         } catch (Exception e) {
-            // log
+            e.printStackTrace();
         }
         return false;
     }
