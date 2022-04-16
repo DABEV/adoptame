@@ -131,10 +131,12 @@
                     </ul>
                   </div>
                 </div>
-                <div class="col-12 col-lg mt-3" sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')" style="text-align: right;">
+                <div class="col-12 col-lg mt-3" sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
+                  style="text-align: right;">
                   <form th:action="@{/solicitud/adoptador/guardarSolicitud}" method="post">
                     <input type="hidden" th:value="${mascota.id}" name="idMascota" />
-                    <button type="submit" class="btn btn-rounded btn-outline-primary" style="border-color: #253E5C; color: #253E5C;">Solicitar adopción</button>
+                    <button type="submit" class="btn btn-rounded btn-outline-primary"
+                      style="border-color: #253E5C; color: #253E5C;">Solicitar adopción</button>
                   </form>
                 </div>
               </div>
@@ -259,7 +261,6 @@
 </div>
 
 <!-- Modal detalles de blog -->
-
 <div th:fragment="detallesBlog(id)" class="modal fade" th:id="${'detalles-blog' + id}" tabindex="-1"
   aria-labelledby="labelModal" aria-hidden="true">
   <div class="modal-dialog">
@@ -332,7 +333,7 @@
       </div>
       <div class="modal-body">
         <form th:action="@{/blog/guardarBlog}" method="POST" th:object="${blog}" enctype="multipart/form-data">
-          <div class="col-md-12">
+          <div class="col-lg">
             <label style="color: #698FAE;">Titulo</label>
             <div class="input-group col">
               <span class="input-group-text" style="background-color: #253E5C; color: white;"><em
@@ -342,7 +343,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-12 mt-2">
+          <div class="col-lg">
             <label style="color: #698FAE;">Contenido</label>
             <div class="form-outline">
               <textarea class="form-control" th:field="*{contenido}" rows="4"></textarea>
@@ -350,7 +351,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-12 mt-2">
+          <div class="col-lg mt-2">
             <label style="color: #698FAE;">Principal</label>
             <div class="input-group ">
 
@@ -390,7 +391,6 @@
 
 
 <!-- Modal editar de blog -->
-
 <div th:fragment="editarBlog(id)" class="modal fade" th:id="${'editar-blog' + id}" tabindex="-1"
   aria-labelledby="labelModal" aria-hidden="true">
   <div class="modal-dialog">
@@ -461,24 +461,21 @@
 </div>
 
 
-
 <div th:fragment="eliminarBlog(id)" class="modal fade" th:id="${'eliminar-blog' + id}" tabindex="-1"
   aria-labelledby="labelModal" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header text-white" style="background-color: #253E5C;">
-        <h5 class="modal-title" id="labelModal" th:text="'Eliminar : ' + ${blog.titulo}"></h5>
+      <div class="modal-header text-white bg-danger">
+        <h5 class="modal-title" id="labelModal">Eliminar noticia</h5>
         <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body text-center">
         ¿Desea eliminar la publicacion <strong th:text="${blog.titulo}"></strong>?
       </div>
-      <div class="modal-footer">
+      <div class="mb-3 text-center">
         <form th:action="@{/blog/borrarBlog}" method="POST">
-          <button type="button" class="btn btn-secondary" style="background-color: #253E5C;"
-            data-mdb-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-secondary" style="background-color: #253E5C;"
-            data-mdb-dismiss="modal">Eliminar</button>
+          <button type="button" class="btn btn-outline-danger btn-rounded" data-mdb-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-danger btn-rounded" data-mdb-dismiss="modal">Eliminar</button>
           <input type="number" hidden th:value="${blog.id}" name="idBlog" />
         </form>
       </div>

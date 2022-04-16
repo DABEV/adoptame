@@ -43,13 +43,15 @@ public class UsuarioController {
 
     @GetMapping("/miCuenta")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO') or hasAuthority('ROL_ADOPTADOR')")
-    public String miCuenta(Authentication authentication, @ModelAttribute("usuario") UsuarioDto usuarioDto) {
+    public String miCuenta(Authentication authentication, Model model, @ModelAttribute("usuario") UsuarioDto usuarioDto) {
         try {
             Usuario usuario = usuarioServiceImp.buscarPorCorreo(authentication.getName());
             usuarioDto = modelMapper.map(usuario, UsuarioDto.class);
 
-            if (usuarioDto != null)
+            if (usuarioDto != null){
+                model.addAttribute("usuario", usuarioDto);
                 return "usuario/miCuenta";
+            }
             return REDIRECT_LOGOUT;
         } catch (Exception e) {
             logger.error("Error al intentar cargar la cuenta del usuario");
