@@ -140,35 +140,51 @@
               </div>
             </div>
           </div>
-          <!-- Sólo para administradores-->
-          <div th:if="${mascota.aprobadoRegistro == 'pendiente'}" sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')">
-            <hr class="mt-3 mb-4">
-            <form th:action="@{/mascota/validar}" method="post">
-              <input type="hidden" name="idMascota" th:value="${mascota.id}" />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-              <div class="row text-center justify-content-center">
-                <label class="h4 mb-3" style="color: #698FAE;">¿Aceptar registro?</label>
-                <div class="col-lg-5 mb-3">
-                  <div class="input-group ">
-                    <div class="form-check col">
-                      <input class="form-check-input" name="verificado" value="aprobado" type="radio" id="aceptar"
-                        checked />
-                      <label class="form-check-label" for="aceptar">Si</label>
-                    </div>
-                    <div class="form-check col">
-                      <input class="form-check-input" name="verificado" value="rechazado" type="radio" id="rechazar" />
-                      <label class="form-check-label" for="rechazar">No
-                      </label>
-                    </div>
+<div th:fragment="validarMascota(id)" class="modal" th:id="${'validar' + id}" tabindex="-1" aria-labelledby="labelModal"
+  aria-hidden="true">
+  <!-- dialog detalles mascota-->
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-md">
+    <div class="modal-content text-center">
+      <div class="modal-header text-white" style="background-color: #253e5c">
+        <h5 id="labelModal" class="modal-title">Validación de la mascota</h5>
+        <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Sólo para administradores-->
+        <h2 th:text="${mascota.nombre}"></h2>
+        <div th:if="${mascota.aprobadoRegistro == 'pendiente'}" sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')">
+          <hr class="mt-3 mb-4">
+          <form th:action="@{/mascota/validar}" method="post">
+            <input type="hidden" name="idMascota" th:value="${mascota.id}" />
+
+            <div class="row text-center justify-content-center">
+              <label class="h4 mb-3" style="color: #698FAE;">¿Aceptar registro?</label>
+              <div class="col-lg-5 mb-3">
+                <div class="input-group ">
+                  <div class="form-check col">
+                    <input class="form-check-input" name="verificado" value="aprobado" type="radio" id="aceptar"
+                      checked />
+                    <label class="form-check-label" for="aceptar">Si</label>
+                  </div>
+                  <div class="form-check col">
+                    <input class="form-check-input" name="verificado" value="rechazado" type="radio" id="rechazar" />
+                    <label class="form-check-label" for="rechazar">No
+                    </label>
                   </div>
                 </div>
-                <div class="col-lg-3">
-                  <button type="submit" class="btn btn-danger btn-rounded"
-                    style="background-color: #253E5C;">Enviar</button>
-                </div>
               </div>
-            </form>
-          </div>
+              <div class="col-lg-3">
+                <button type="submit" class="btn btn-danger btn-rounded"
+                  style="background-color: #253E5C;">Enviar</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

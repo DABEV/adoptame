@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Mis favoritos</title>
+    <title>Solicitudes pendientes de registro</title>
     <i-head th:replace="fragments/imports :: head" />
 </head>
 
@@ -13,22 +13,24 @@
             <navbar th:replace="fragments/navbar :: navbar"></navbar>
         </div>
         <!-- Contenido -->
-        <div class="mx-4 mt-4 mb-6">
+        <div class="mx-4 mt-4">
             <div class="row">
-                <div class="col-md-3 mb-5">
-                    <div th:replace="fragments/menus :: adoptador(4)" class="menu list-group shadow-3"></div>
+                <div class="col-lg-3 mb-5">
+                    <div th:replace="fragments/menus :: administrador(1)" class="menu list-group shadow-3"></div>
                 </div>
-                <div class="col-md-9 mb-3">
+
+                <div class="col-lg-9 mb-6">
                     <div class="d-grid gap-4">
                         <div class="row">
-                            <div class="col-lg-7">
-                                <h2 style="color: #253E5C;">Mis mascotas favoritas</h2>
-                                <p class="h4 fw-light" style="color: #698FAE">Consulta tus mascotas favoritas
+                            <div class="col-lg">
+                                <h2 style="color: #253E5C;">Registros pendientes</h2>
+                                <p class="h4 fw-light" style="color: #698FAE">
+                                    Acepta o rechaza las mascotas que serán añadidas
                                 </p>
                             </div>
                         </div>
                         <div class="mb-4">
-                            <div class="row justify-content-center">
+                            <div class="row  justify-content-center">
                                 <table class="table align-middle mb-0 bg-white">
                                     <caption hidden>Lista de favoritos</caption>
                                     <!--tabla de favoritos-->
@@ -44,7 +46,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="mascota,index: ${listaMascotas}">
+                                        <tr th:each="mascota,index: ${listaPendientes}">
                                             <td>
                                                 <img th:src="@{/imagenes/{i} (i= ${mascota.imagen})}"
                                                     class="rounded float-left" width="100" height="100" alt="..." />
@@ -82,18 +84,17 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
+                                                <a sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')"
                                                     class="btn btn-lg btn-outline-success btn-floating"
                                                     style="color: #74422B; border-color: white;" role="button"
                                                     data-mdb-toggle="modal"
-                                                    th:attr="data-mdb-target=${'#eliminarfav'+ index.count}">
-                                                    <em class="far fa-trash-alt fa-lg"></em>
+                                                    th:attr="data-mdb-target=${'#validar'+ index.count}">
+                                                    <em class="far fa-check-circle fa-lg"></em>
                                                 </a>
                                             </td>
-                                            <div th:replace="fragments/dialogs :: eliminarFavorito(${index.count})">
-                                            </div>
                                             <div th:replace="fragments/dialogs :: detallesMascota(${index.count})">
                                             </div>
+                                            <div th:replace="fragments/dialogs :: validarMascota(${index.count})"></div>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -104,7 +105,6 @@
             </div>
         </div>
     </div>
-
     <!-- Footer -->
     <div class="row mt-3">
         <footer th:replace="fragments/footer :: footer"></footer>

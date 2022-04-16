@@ -16,10 +16,10 @@
 
         <div class="mx-4 mt-4 mb-6">
             <div class="row">
-                <div class="col-md-3 mb-5">
+                <div class="col-lg-3 mb-5">
                     <div th:replace="fragments/menus :: voluntario(1)" class="menu list-group shadow-3"></div>
                 </div>
-                <div class="col-md-9 mb-3">
+                <div class="col-lg-9 mb-3">
                     <div class="d-grid gap-4">
                         <div>
                             <h2 style="color: #253E5C;">Registro de mascotas</h2>
@@ -67,6 +67,9 @@
                                                     <label class="form-check-label" for="flexRadioDefault1"> Macho
                                                     </label>
                                                 </div>
+                                                <div th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"
+                                                    class="badge badge-danger">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-sm-12 col-12 mb-3">
@@ -78,6 +81,9 @@
                                                 </span>
                                                 <input type="text" th:field="*{edad}" class="form-control"
                                                     placeholder="Ej. 6 meses" />
+                                                <div th:if="${#fields.hasErrors('edad')}" th:errors="*{edad}"
+                                                    class="badge badge-danger">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -139,6 +145,9 @@
                                             <input type="text" th:field="*{detalles}" id="detalles" class="form-control"
                                                 placeholder="Ej. Juega todo el día" aria-label="detalles"
                                                 aria-describedby="addon-wrapping" />
+                                            <div th:if="${#fields.hasErrors('detalles')}" th:errors="*{detalles}"
+                                                class="badge badge-danger">
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row justify-content-between d-flex align-items-end">
@@ -184,9 +193,7 @@
     <div class="row mt-3">
         <footer th:replace="fragments/footer :: footer"></footer>
     </div>
-    </div>
-    <!-- MDB -->
-    <script th:src="@{/js/md-bootstrap.min.js}"></script>
+    <scripts th:replace="fragments/imports :: scripts"></scripts>
 </body>
 
 </html>

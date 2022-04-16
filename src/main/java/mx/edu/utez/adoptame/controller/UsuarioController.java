@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,7 +50,6 @@ public class UsuarioController {
 
             if (usuarioDto != null)
                 return "usuario/miCuenta";
-                
             return REDIRECT_LOGOUT;
         } catch (Exception e) {
             logger.error("Error al intentar cargar la cuenta del usuario");
@@ -57,5 +57,5 @@ public class UsuarioController {
 
         return REDIRECT_LOGOUT;
     }
-    
+
 }

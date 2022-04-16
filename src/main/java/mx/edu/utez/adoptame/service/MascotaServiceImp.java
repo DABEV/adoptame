@@ -12,27 +12,35 @@ import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Tamano;
 import mx.edu.utez.adoptame.repository.MascotaRepository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class MascotaServiceImp implements MascotaService {
+
+    private Logger logger = LoggerFactory.getLogger(MascotaServiceImp.class);
+
+    private String aprobado = "aprobado";
 
     @Autowired
     MascotaRepository mascotaRepository;
 
     @Override
     public List<Mascota> listarMascotas(boolean tipoMascota) {
-        return mascotaRepository.findByActivoAndTipo(true, tipoMascota);
+        return mascotaRepository.findByActivoAndTipoAndAprobadoRegistroAndDisponibleAdopcion(true, tipoMascota,
+                aprobado, true);
     }
 
     @Override
     public List<Mascota> listarMascotas() {
         List<Mascota> mascotas = null;
-        try{
-            mascotas = mascotaRepository.findByActivo(true);
-        }catch (Exception e){
-            //log
+        try {
+            mascotas = mascotaRepository.findByActivoAndAprobadoRegistroAndDisponibleAdopcion(true, aprobado, true);
+        } catch (Exception e) {
+            logger.error("hubo un error al intentar listar una mascota");
         }
         return mascotas;
-        
+
     }
 
     @Override
@@ -41,7 +49,7 @@ public class MascotaServiceImp implements MascotaService {
         try {
             mascotaResultante = mascotaRepository.save(mascota);
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar guardar una mascota");
         }
         return mascotaResultante;
     }
@@ -49,12 +57,14 @@ public class MascotaServiceImp implements MascotaService {
     @Override
     public Mascota obtenerMascota(Long id) {
         Mascota mascotaResultante = null;
-        Optional<Mascota> mascotaOpcional = mascotaRepository.findById(id);
-
-        if (mascotaOpcional.isPresent()) {
-            mascotaResultante = mascotaOpcional.get();
+        try {
+            Optional<Mascota> mascotaOpcional = mascotaRepository.findById(id);
+            if (mascotaOpcional.isPresent()) {
+                mascotaResultante = mascotaOpcional.get();
+            }
+        } catch (Exception e) {
+            logger.error("Error al intentar obtener una mascota");
         }
-
         return mascotaResultante;
     }
 
@@ -68,7 +78,7 @@ public class MascotaServiceImp implements MascotaService {
                 return true;
             }
         } catch (Exception e) {
-            // Log
+            logger.error("Error al intentar eliminar una mascota");
         }
         return false;
     }
@@ -84,23 +94,49 @@ public class MascotaServiceImp implements MascotaService {
                 mascotaRepository.save(mascota);
             }
         } catch (Exception e) {
-            // Log
+            logger.error("Error al intentar validar una mascota");
         }
         return mascota;
     }
 
     @Override
-    public List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano) {
-        return mascotaRepository.findByColorOrSexoOrTamano(color, sexo, tamano);
+    public List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano, boolean tipoMascota) {
+        List<Mascota> mascotas = new ArrayList<>();
+        try {
+            List<Mascota> activos = mascotaRepository.findByActivoAndTipoAndAprobadoRegistroAndDisponibleAdopcion(true,
+                    tipoMascota, aprobado, true);
+            List<Mascota> parametros = mascotaRepository.findByColorOrSexoOrTamano(color, sexo, tamano);
+
+            for (Mascota m : parametros) {
+                if (activos.contains(m)) {
+                    mascotas.add(m);
+                }
+            }
+
+        } catch (Exception e) {
+            logger.error("Error al intentar filtrar una mascota");
+        }
+        return mascotas;
     }
 
     @Override
     public List<Mascota> obtenerRecientes() {
         List<Mascota> mascotas = new ArrayList<>();
-        try{
+        try {
             mascotas = mascotaRepository.obtenerRecientes();
-        }catch (Exception e) {
-            // Log
+        } catch (Exception e) {
+            logger.error("Error al intentar obtener las mascotas recientes");
+        }
+        return mascotas;
+    }
+
+    @Override
+    public List<Mascota> obtenerPendientes() {
+        List<Mascota> mascotas = new ArrayList<>();
+        try {
+            mascotas = mascotaRepository.findByAprobadoRegistro("pendiente");
+        } catch (Exception e) {
+            logger.error("Error al intentar obtener las mascotas pendientes de aprobación");
         }
         return mascotas;
     }

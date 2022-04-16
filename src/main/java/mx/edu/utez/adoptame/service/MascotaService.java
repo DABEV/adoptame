@@ -12,8 +12,8 @@ public interface MascotaService {
     Mascota guardarMascota(Mascota mascota);
     Mascota obtenerMascota(Long id);
     boolean eliminarMascota(Long id);
-    List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano);
+    List<Mascota> filtrarPorParametros(Color color, boolean sexo, Tamano tamano, boolean tipoMascota);
     List<Mascota> obtenerRecientes();
-    
+    List<Mascota> obtenerPendientes();
     Mascota validarRegistro(long id, String verificado);
 }

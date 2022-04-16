@@ -2,10 +2,10 @@ package mx.edu.utez.adoptame.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.edu.utez.adoptame.dto.MascotaDto;
 import mx.edu.utez.adoptame.model.Caracter;
 import mx.edu.utez.adoptame.model.Color;
 import mx.edu.utez.adoptame.model.Favorito;
@@ -34,6 +35,10 @@ import mx.edu.utez.adoptame.service.MascotaServiceImp;
 import mx.edu.utez.adoptame.service.TamanoServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 import mx.edu.utez.adoptame.util.ImagenUtileria;
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 @RequestMapping("/mascota")
@@ -50,22 +55,28 @@ public class MascotaController {
     private String formRegistro = "mascota/formularioRegistro";
 
     @Autowired
-    MascotaServiceImp mascotaServiceImp;
+    private MascotaServiceImp mascotaServiceImp;
 
     @Autowired
-    TamanoServiceImp tamanoServiceImp;
+    private TamanoServiceImp tamanoServiceImp;
 
     @Autowired
-    CaracterServiceImpl caracterServiceImp;
+    private CaracterServiceImpl caracterServiceImp;
 
     @Autowired
-    ColorServiceImp colorServiceImp;
+    private ColorServiceImp colorServiceImp;
 
     @Autowired
-    FavoritoServiceImp favoritoServiceImp;
+    private FavoritoServiceImp favoritoServiceImp;
 
     @Autowired
-    UsuarioServiceImp usuarioServiceImp;
+    private UsuarioServiceImp usuarioServiceImp;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    
+    private Logger logger = LoggerFactory.getLogger(MascotaController.class);
 
     @GetMapping(value = { "/consultarTodas", "/consultarTodas/{tipoMascota}" })
     public String consultarMascotas(@PathVariable(required = false) String tipoMascota, Model model) {
@@ -82,7 +93,7 @@ public class MascotaController {
             model.addAttribute(listaColores, colorServiceImp.listarColores());
 
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar listar a todas las mascotas");
         }
         return "mascota/lista";
 
@@ -108,14 +119,14 @@ public class MascotaController {
             }
             attributes.addFlashAttribute(msgE, "Registro no encontrado");
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar acceder a actualzar una mascota");
         }
         return redirectListar + "/" + tipoMascota;
     }
 
     @GetMapping("/registrar")
     @PreAuthorize("hasAuthority('ROL_VOLUNTARIO')")
-    public String registrar(Mascota mascota, Model model) {
+    public String registrar(@ModelAttribute("mascota") MascotaDto mascota, Model model) {
         try {
             List<Color> colores = colorServiceImp.listarColores();
             List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
@@ -125,16 +136,29 @@ public class MascotaController {
             model.addAttribute(listaTamanos, listaTamano);
             model.addAttribute(listaColores, colores);
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar acceder al registro de una mascota");
         }
         return formRegistro;
     }
 
     @PostMapping("/guardarMascota")
-    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
-    public String guardarMacota(@Valid @ModelAttribute("mascota") Mascota mascota, BindingResult result, Model model, RedirectAttributes attributes,
+    @PreAuthorize("hasAuthority('ROL_VOLUNTARIO')")
+    public String guardarMacota(@Valid @ModelAttribute("mascota") MascotaDto mascotaDto, BindingResult result,
+            Model model,
+            RedirectAttributes attributes,
             @RequestParam("imagenMascota") MultipartFile multipartFile) {
         try {
+
+            Mascota mascota = modelMapper.map(mascotaDto, Mascota.class);
+
+            List<Color> colores = colorServiceImp.listarColores();
+            List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
+            List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
+
+            model.addAttribute(listaCaracteres, listaCaracter);
+            model.addAttribute(listaTamanos, listaTamano);
+            model.addAttribute(listaColores, colores);
+
             if (result.hasErrors()) {
                 return formRegistro;
             } else {
@@ -172,7 +196,7 @@ public class MascotaController {
             }
 
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar guardar una mascota");
         }
         return redirectListar;
     }
@@ -188,7 +212,7 @@ public class MascotaController {
                 return redirectListar + "/" + mascota.getTipo();
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar borrar una mascota");
         }
         attributes.addFlashAttribute(msgE, "Ocurrió un error");
         return redirectListar;
@@ -215,15 +239,7 @@ public class MascotaController {
                 sexo = Boolean.parseBoolean(sexoMascota);
             }
 
-            List<Mascota> listaFiltrada = mascotaServiceImp.filtrarPorParametros(color, sexo, tamano);
-
-            // Filtro para mascotas activas en el sistema
-            listaFiltrada = listaFiltrada.stream().filter(Mascota::getActivo)
-                    .collect(Collectors.toList());
-
-            // filtro de tipo
-            listaFiltrada = listaFiltrada.stream().filter(mascota -> mascota.getTipo() == tipoMascota)
-                    .collect(Collectors.toList());
+            List<Mascota> listaFiltrada = mascotaServiceImp.filtrarPorParametros(color, sexo, tamano, tipoMascota);
 
             model.addAttribute("tipo", tipoMascota);
             model.addAttribute(listaMascotas, listaFiltrada);
@@ -232,8 +248,21 @@ public class MascotaController {
             return "mascota/lista";
 
         } catch (Exception e) {
-            return redirectListar + "/" + tipoMascota;
+            logger.error("Error al intentar filtrar una mascota");
         }
+        return redirectListar + "/" + tipoMascota;
+    }
+
+    @GetMapping("/solicitudesRegistro")
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
+    public String solicitudesRegistro(Model model) {
+        try {
+            List<Mascota> lista =  mascotaServiceImp.obtenerPendientes();
+            model.addAttribute("listaPendientes", lista);
+        } catch (Exception e) {
+            logger.error("Error al intentar solicitar el registro de una mascota");
+        }
+        return "mascota/solicitudesRegistro";
     }
 
     @PostMapping("/validar")
@@ -244,10 +273,10 @@ public class MascotaController {
             Mascota respuesta = mascotaServiceImp.validarRegistro(id, verificado);
             if (respuesta != null) {
                 attributes.addFlashAttribute(msgS, "Registro verificado con éxito");
-                return redirectListar + "/" + respuesta.getTipo();
+                return "redirect:/mascota/solicitudesRegistro";
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar verificar a una mascota");
         }
         return redirectListar;
     }
@@ -269,7 +298,7 @@ public class MascotaController {
 
             model.addAttribute(listaMascotas, mascotas);
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar listar favoritos");
         }
         return favoritos;
     }
@@ -295,7 +324,7 @@ public class MascotaController {
             }
 
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar guardar favoritos");
         }
         attributes.addFlashAttribute(msgE, "No se pudo agregar");
         return redirectListar;
@@ -326,7 +355,7 @@ public class MascotaController {
                 return favoritos;
             }
         } catch (Exception e) {
-            // log
+            logger.error("Error al intentar eliminar un favorito");
         }
         attributes.addFlashAttribute(msgE, "No se pudo elimar");
         return redirectListar;

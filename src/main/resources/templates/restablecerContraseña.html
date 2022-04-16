@@ -11,14 +11,6 @@
             height: 110vh;
         }
     </style>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
-    <!-- MDB -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet" />
-    <!-- Custom styles -->
-    <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
@@ -77,8 +69,8 @@
                             <div class="form-group col">
                                 <!-- input contraseña -->
                                 <div class="input-group mb-2 mr-sm-2">
-                                    <span class="input-group-text bg-span" id="basic-addon-correo"><i
-                                            class="fas fa-envelope"></i></span>
+                                    <span class="input-group-text bg-span" id="basic-addon-correo"><em
+                                            class="fas fa-envelope"></em></span>
                                     <input type="email" name="correo" class="form-control"
                                         placeholder="Correo electrónico" max="100" aria-label="Correo"
                                         aria-describedby="basic-addon-correo">
@@ -88,7 +80,7 @@
                             <div class="form-group col mt-4">
                                 <div class="col d-flex justify-content-center">
                                     <button id="registrar" type="submit" class="btn boton radius btn-primary btn-block">
-                                        <i class="fas fa-sign-in-alt"></i>&nbsp&nbspSolicitar nueva contraseña
+                                        <em class="fas fa-sign-in-alt"></em>&nbsp&nbspSolicitar nueva contraseña
                                     </button>
                                 </div>
 
@@ -114,11 +106,7 @@
         </div>
 
     </div>
-
-    <!-- MDB -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
-    <!-- Custom scripts -->
-    <script type="text/javascript" src="js/script.js"></script>
+    <scripts th:replace="fragments/imports :: scripts"></scripts>
 </body>
 
 </html>
