@@ -1,6 +1,5 @@
 package mx.edu.utez.adoptame.service;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -23,20 +22,9 @@ public interface MascotaService {
     List<Mascota> obtenerPendientes();
     Mascota validarRegistro(long id, String verificado);
 
-    List<Mascota> procedimientoRegistrarMascota(Long idUsuario, String aprobadoRegistro, String detalles, String edad,
-            Date fechaRegistro, String imagen, String nombre, Boolean sexo, Boolean tipo, Long caracterId,
-            Long colorId, Long tamanoId, Boolean activo, Boolean disponibleAdopcion);
+    List<Mascota> procedimientoRegistrarMascota(Long idUsuario,Mascota mascota);
 
-    List<Mascota> procedimientoActualizarMascota(String aprobadoRegistroAnterior,
-            String detallesAnterior, String edadAnterior,
-            Date fechaRegistroAnterior, String imagenAnterior, String nombreAnterior, Boolean sexoAnterior,
-            Boolean tipoAnterior, Long caracterIdAnterior,
-            Long colorIdAnterior, Long tamanoIdAnterior, Boolean activoAnterior, Boolean disponibleAdopcionAnterior,
-            String aprobadoRegistro, String detalles, String edad,
-            Date fechaRegistro, String imagen, String nombre, Boolean sexo, Boolean tipo, Long caracterId,
-            Long colorId, Long tamanoId, Boolean activo, Boolean disponibleAdopcion, HttpSession session);
+    List<Mascota> procedimientoActualizarMascota(Mascota mascota, Mascota anterior, HttpSession session);
 
-    List<Mascota> procedimientoEliminarMascota(Long idUsuario, String aprobadoRegistro, String detalles, String edad,
-            Date fechaRegistro, String imagen, String nombre, Boolean sexo, Boolean tipo, Long caracterId,
-            Long colorId, Long tamanoId, Boolean activo, Boolean disponibleAdopcion);
+    List<Mascota> procedimientoEliminarMascota(Long idUsuario, Mascota mascota);
 }

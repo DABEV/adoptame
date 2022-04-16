@@ -24,6 +24,7 @@ public class Tamano {
     private List<Mascota> mascotas;
 
     public Tamano() {
+        //constructor
     }
     
     public Long getId() {

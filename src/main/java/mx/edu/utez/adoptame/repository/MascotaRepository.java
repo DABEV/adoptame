@@ -1,6 +1,5 @@
 package mx.edu.utez.adoptame.repository;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,52 +11,27 @@ import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Tamano;
 
 public interface MascotaRepository extends JpaRepository<Mascota, Long> {
-    List<Mascota> findByActivoAndAprobadoRegistroAndDisponibleAdopcion(Boolean activo, String aprobado,
-            boolean disponible);
-    List<Mascota> findByActivoAndTipoAndAprobadoRegistroAndDisponibleAdopcion(Boolean activo, boolean tipo,
-            String aprobado, boolean disponible);
-    List<Mascota> findByColorOrSexoOrTamano(Color color, boolean sexo, Tamano tamano);
-    List<Mascota> findByAprobadoRegistro(String aprobadoRegistro);
+        List<Mascota> findByActivoAndAprobadoRegistroAndDisponibleAdopcion(Boolean activo, String aprobado,
+                        boolean disponible);
 
-    @Query(value = "select * from mascotas order by fecha_registro limit 3", nativeQuery = true)
-    List<Mascota> obtenerRecientes();
+        List<Mascota> findByActivoAndTipoAndAprobadoRegistroAndDisponibleAdopcion(Boolean activo, boolean tipo,
+                        String aprobado, boolean disponible);
 
-    @Query(value = "{call registroMascota(:usuario_id, :aprobadoRegistro, :detalles, :edad, :fechaRegistro, :imagen, :nombre, :sexo, :tipo, :caracterId, :colorId, :tamanoId, :activo, :disponibleAdopcion) }", nativeQuery = true)
-    List<Mascota> registroMascota(@Param("usuario_id") Long idUsuario,
-            @Param("aprobadoRegistro") String aprobadoRegistro, @Param("detalles") String detalles,
-            @Param("edad") String edad, @Param("fechaRegistro") Date fechaRegistro, @Param("imagen") String imagen,
-            @Param("nombre") String nombre, @Param("sexo") Boolean sexo, @Param("tipo") Boolean tipo,
-            @Param("caracterId") Long caracterId,
-            @Param("colorId") Long colorId, @Param("tamanoId") Long tamanoId, @Param("activo") Boolean activo,
-            @Param("disponibleAdopcion") Boolean disponibleAdopcion);
+        List<Mascota> findByColorOrSexoOrTamano(Color color, boolean sexo, Tamano tamano);
 
-    @Query(value = "{call actualizarMascota(:usuario_id, :aprobadoRegistroAnterior, :detallesAnterior, :edadAnterior, :fechaRegistroAnterior, :imagenAnterior, :nombreAnterior, :sexoAnterior, :tipoAnterior, :caracterIdAnterior, :colorIdAnterior, :tamanoIdAnterior, :activoAnterior, :disponibleAdopcionAnterior, :aprobadoRegistro, :detalles, :edad, :fechaRegistro, :imagen, :nombre, :sexo, :tipo, :caracterId, :colorId, :tamanoId, :activo, :disponibleAdopcion ) }", nativeQuery = true)
-    List<Mascota> actualizarMascota(@Param("usuario_id") Long idUsuario,
-            @Param("aprobadoRegistroAnterior") String aprobadoRegistroAnterior,
-            @Param("detallesAnterior") String detallesAnterior,
-            @Param("edadAnterior") String edadAnterior, @Param("fechaRegistroAnterior") Date fechaRegistroAnterior,
-            @Param("imagenAnterior") String imagenAnterior,
-            @Param("nombreAnterior") String nombreAnterior, @Param("sexoAnterior") Boolean sexoAnterior,
-            @Param("tipoAnterior") Boolean tipoAnteriorAnterior,
-            @Param("caracterIdAnterior") Long caracterIdAnterior,
-            @Param("colorIdAnterior") Long colorIdAnterior, @Param("tamanoIdAnterior") Long tamanoIdAnterior,
-            @Param("activoAnterior") Boolean activoAnterior,
-            @Param("disponibleAdopcionAnterior") Boolean disponibleAdopcionAnterior,
-            @Param("aprobadoRegistro") String aprobadoRegistro, @Param("detalles") String detalles,
-            @Param("edad") String edad, @Param("fechaRegistro") Date fechaRegistro, @Param("imagen") String imagen,
-            @Param("nombre") String nombre, @Param("sexo") Boolean sexo, @Param("tipo") Boolean tipo,
-            @Param("caracterId") Long caracterId,
-            @Param("colorId") Long colorId, @Param("tamanoId") Long tamanoId, @Param("activo") Boolean activo,
-            @Param("disponibleAdopcion") Boolean disponibleAdopcion);
+        List<Mascota> findByAprobadoRegistro(String aprobadoRegistro);
 
-            @Query(value = "{call eliminarMascota(:usuario_id, :aprobadoRegistro, :detalles, :edad, :fechaRegistro, :imagen, :nombre, :sexo, :tipo, :caracterId, :colorId, :tamanoId, :activo, :disponibleAdopcion) }", nativeQuery = true)
-            List<Mascota> eliminarMascota(@Param("usuario_id") Long idUsuario,
-                    @Param("aprobadoRegistro") String aprobadoRegistro, @Param("detalles") String detalles,
-                    @Param("edad") String edad, @Param("fechaRegistro") Date fechaRegistro, @Param("imagen") String imagen,
-                    @Param("nombre") String nombre, @Param("sexo") Boolean sexo, @Param("tipo") Boolean tipo,
-                    @Param("caracterId") Long caracterId,
-                    @Param("colorId") Long colorId, @Param("tamanoId") Long tamanoId, @Param("activo") Boolean activo,
-                    @Param("disponibleAdopcion") Boolean disponibleAdopcion);
-        
+        @Query(value = "select * from mascotas order by fecha_registro limit 3", nativeQuery = true)
+        List<Mascota> obtenerRecientes();
+
+        @Query(value = "{call registroMascota(:usuario_id, :#{#mascota.aprobadoRegistro}, :#{#mascota.detalles}, :#{#mascota.edad}, :#{#mascota.fechaRegistro}, :#{#mascota.imagen}, :#{#mascota.nombre}, :#{#mascota.sexo}, :#{#mascota.tipo}, :#{#mascota.caracter.id}, :#{#mascota.color.id}, :#{#mascota.tamano.id}, :#{#mascota.activo}, :#{#mascota.disponibleAdopcion})}", nativeQuery = true)
+        List<Mascota> registroMascota(@Param("usuario_id") Long idUsuario, @Param("mascota") Mascota mascota);
+
+        @Query(value = "{call actualizarMascota(:usuario_id, :#{#anterior.aprobadoRegistro}, :#{#anterior.detalles}, :#{#anterior.edad}, :#{#anterior.fechaRegistro}, :#{#anterior.imagen}, :#{#anterior.nombre}, :#{#anterior.sexo}, :#{#anterior.tipo}, :#{#anterior.caracter.id}, :#{#anterior.color.id}, :#{#anterior.tamano.id}, :#{#anterior.activo}, :#{#anterior.disponibleAdopcion}, :#{#mascota.aprobadoRegistro}, :#{#mascota.detalles}, :#{#mascota.edad}, :#{#mascota.fechaRegistro}, :#{#mascota.imagen}, :#{#mascota.nombre}, :#{#mascota.sexo}, :#{#mascota.tipo}, :#{#mascota.caracter.id}, :#{#mascota.color.id}, :#{#mascota.tamano.id}, :#{#mascota.activo}, :#{#mascota.disponibleAdopcion}) }", nativeQuery = true)
+        List<Mascota> actualizarMascota(@Param("usuario_id") Long idUsuario, @Param("mascota") Mascota mascota,
+                        @Param("anterior") Mascota anterior);
+
+        @Query(value = "{call eliminarMascota(:usuario_id, :#{#mascota.aprobadoRegistro}, :#{#mascota.detalles}, :#{#mascota.edad}, :#{#mascota.fechaRegistro}, :#{#mascota.imagen}, :#{#mascota.nombre}, :#{#mascota.sexo}, :#{#mascota.tipo}, :#{#mascota.caracter.id}, :#{#mascota.color.id}, :#{#mascota.tamano.id}, :#{#mascota.activo}, :#{#mascota.disponibleAdopcion})}", nativeQuery = true)
+        List<Mascota> eliminarMascota(@Param("usuario_id") Long idUsuario, @Param("mascota") Mascota mascota);
 
 }

@@ -38,7 +38,6 @@ import mx.edu.utez.adoptame.service.TamanoServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 import mx.edu.utez.adoptame.util.ImagenUtileria;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +76,6 @@ public class MascotaController {
     @Autowired
     private ModelMapper modelMapper;
 
-    
     private Logger logger = LoggerFactory.getLogger(MascotaController.class);
 
     @GetMapping(value = { "/consultarTodas", "/consultarTodas/{tipoMascota}" })
@@ -152,7 +150,6 @@ public class MascotaController {
         Mascota mascotaExistente = null;
         Mascota respuesta = null;
         try {
-
             Mascota mascota = modelMapper.map(mascotaDto, Mascota.class);
 
             List<Color> colores = colorServiceImp.listarColores();
@@ -163,23 +160,35 @@ public class MascotaController {
             model.addAttribute(listaTamanos, listaTamano);
             model.addAttribute(listaColores, colores);
 
+            boolean tipoMascota = mascota.getTipo();
+
             if (result.hasErrors()) {
                 return formRegistro;
             } else {
-                if (mascota.getId() == null) {
+                if (
+                // mascota nueva
+                mascota.getId() == null) {
                     mascota.setAprobadoRegistro("pendiente");
                     mascota.setDisponibleAdopcion(false);
                     mascota.setActivo(true);
 
+                    respuesta = mascotaServiceImp.guardarMascota(mascota);
+                    UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
+                    Long idUsuario = usuarioDto.getId();
+                    mascotaServiceImp.procedimientoRegistrarMascota(idUsuario, respuesta);
+
                 } else {
+
+                    // mascota existente
                     mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
                     mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
                     mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
                     mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
                     mascota.setActivo(mascotaExistente.getActivo());
-                }
 
-                boolean tipoMascota = mascota.getTipo();
+                    mascotaServiceImp.procedimientoActualizarMascota(mascota, mascotaExistente, session);
+                    respuesta = mascotaServiceImp.guardarMascota(mascota);
+                }
 
                 if (!multipartFile.isEmpty()) {
                     String ruta = "C:/mascotas/img-mascotas/";
@@ -189,37 +198,7 @@ public class MascotaController {
                     }
                 }
 
-                if (mascotaExistente != null) {
-                    mascotaServiceImp.procedimientoActualizarMascota(mascotaExistente.getAprobadoRegistro(),
-                            mascotaExistente.getDetalles(), mascotaExistente.getEdad(),
-                            mascotaExistente.getFechaRegistro(),
-                            mascotaExistente.getImagen(), mascotaExistente.getNombre(), mascotaExistente.getSexo(),
-                            mascotaExistente.getTipo(), mascotaExistente.getCaracter().getId(),
-                            mascotaExistente.getColor().getId(), mascotaExistente.getTamano().getId(),
-                            mascotaExistente.getActivo(), mascotaExistente.getDisponibleAdopcion(),
-                            mascota.getAprobadoRegistro(), mascota.getDetalles(), mascota.getEdad(),
-                            mascota.getFechaRegistro(), mascota.getImagen(), mascota.getNombre(),
-                            mascota.getSexo(),
-                            mascota.getTipo(), mascota.getCaracter().getId(), mascota.getColor().getId(),
-                            mascota.getTamano().getId(), mascota.getActivo(), mascota.getDisponibleAdopcion(),
-                            session);
-                    respuesta = mascotaServiceImp.guardarMascota(mascota);
-
-                } else {
-                    respuesta = mascotaServiceImp.guardarMascota(mascota);
-                    UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
-                    Long idUsuario = usuarioDto.getId();
-                    mascotaServiceImp.procedimientoRegistrarMascota(idUsuario, respuesta.getAprobadoRegistro(),
-                            respuesta.getDetalles(), respuesta.getEdad(), respuesta.getFechaRegistro(),
-                            respuesta.getImagen(),
-                            respuesta.getNombre(), respuesta.getSexo(), respuesta.getTipo(),
-                            respuesta.getCaracter().getId(),
-                            respuesta.getColor().getId(), respuesta.getTamano().getId(), respuesta.getActivo(),
-                            respuesta.getDisponibleAdopcion());
-                }
-
                 if (respuesta != null) {
-
                     attributes.addFlashAttribute(msgS, "Registro exitoso");
                     return redirectListar + "/" + tipoMascota;
                 } else {
@@ -290,7 +269,7 @@ public class MascotaController {
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
     public String solicitudesRegistro(Model model) {
         try {
-            List<Mascota> lista =  mascotaServiceImp.obtenerPendientes();
+            List<Mascota> lista = mascotaServiceImp.obtenerPendientes();
             model.addAttribute("listaPendientes", lista);
         } catch (Exception e) {
             logger.error("Error al intentar solicitar el registro de una mascota");

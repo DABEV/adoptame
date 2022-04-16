@@ -24,6 +24,7 @@ public class Caracter {
     private List<Mascota> mascotas;
 
     public Caracter() {
+        //constructor
     }
     
     public Long getId() {
