@@ -1,5 +1,7 @@
 package mx.edu.utez.adoptame.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -35,7 +37,7 @@ public class HomeController {
     private ModelMapper modelMapper;
 
     @Autowired
-	private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UsuarioServiceImp usuarioServiceImp;
@@ -50,53 +52,59 @@ public class HomeController {
     private BlogServiceImp blogServiceImp;
 
     @GetMapping("/")
-    public String inicio (Model model) {
+    public String inicio(Model model) {
         model.addAttribute("recientes", mascotaServiceImp.obtenerRecientes());
         model.addAttribute("noticias", blogServiceImp.listaPrincipales());
         return "inicio";
     }
 
     @GetMapping("/index")
-	public String mostrarIndex(Authentication authentication, HttpSession session) {
-		UsuarioDto usuario = modelMapper.map(usuarioServiceImp.buscarPorCorreo(authentication.getName()), UsuarioDto.class);
-		
-        // Añade los datos del usuario a la sesión 
-		session.setAttribute("usuario", usuario);
-		return "redirect:/";
-	}
+    public String mostrarIndex(Authentication authentication, HttpSession session) {
+        UsuarioDto usuario = modelMapper.map(usuarioServiceImp.buscarPorCorreo(authentication.getName()),
+                UsuarioDto.class);
+
+        // Añade los datos del usuario a la sesión
+        session.setAttribute("usuario", usuario);
+        usuarioServiceImp.procedimientoInicioSesion(usuario.getId());
+
+        return "redirect:/";
+    }
 
     @GetMapping("/login")
-    public String login () {
+    public String login() {
         return "login";
     }
 
     @GetMapping("/signup")
-    public String signup (Model model, @ModelAttribute("usuario") UsuarioDto usuarioDto) {
+    public String signup(Model model, @ModelAttribute("usuario") UsuarioDto usuarioDto) {
         return "signup";
     }
 
     @PostMapping("/signup")
-	public String guardarUsuario(@RequestParam("tipoUsuario") String tipoUsuario, @ModelAttribute("usuario") UsuarioDto usuarioDto, RedirectAttributes redirectAttributes) {
+    public String guardarUsuario(@RequestParam("tipoUsuario") String tipoUsuario,
+            @ModelAttribute("usuario") UsuarioDto usuarioDto, RedirectAttributes redirectAttributes,
+            HttpSession session) {
 
         try {
             // Encriptar la contraseña
             String contrasenaEncriptada = passwordEncoder.encode(usuarioDto.getContrasena());
-    
+
             // Asignar la contraseña encriptada
             usuarioDto.setContrasena(contrasenaEncriptada);
-    
+
             // Aplicar tratemiento al telefono para solo guardar los numeros
             String telefono = usuarioDto.getTelefono().replaceAll("[\\s\\(\\)\\-]+", "");
             usuarioDto.setTelefono(telefono);
-    
+
             // Habilitar la cuenta por defecto
             usuarioDto.setHabilitado(true);
- 
+
             Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
-            
+
             // Asignar un rol de usuarioDto de acuerdo al tipo seleccionado en el formulario
-            usuario.addRol(rolServiceImp.buscarPorNombre(tipoUsuario.equals("voluntario") ? "ROL_VOLUNTARIO": "ROL_ADOPTADOR"));
-    
+            usuario.addRol(rolServiceImp
+                    .buscarPorNombre(tipoUsuario.equals("voluntario") ? "ROL_VOLUNTARIO" : "ROL_ADOPTADOR"));
+
             boolean respuesta = usuarioServiceImp.guardarUsuario(usuario) != null;
 
             if (respuesta) {
@@ -111,18 +119,23 @@ public class HomeController {
         }
 
         return REDIRECT_LOGIN;
-	}
-    
+    }
+
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public String logout(HttpServletRequest request, RedirectAttributes redirectAttributes, HttpSession session) {
         try {
+            UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
+            Long idUsuario = usuarioDto.getId();
+            usuarioServiceImp.procedimientoCerrarSesion(idUsuario, new Date());
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, null, null);
+
             redirectAttributes.addFlashAttribute("msg_success", "¡Sesión cerrada! Hasta luego");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("msg_error", "Ocurrió un error al cerrar la sesión, intenta de nuevo.");
+            redirectAttributes.addFlashAttribute("msg_error",
+                    "Ocurrió un error al cerrar la sesión, intenta de nuevo.");
         }
-        
+
         return REDIRECT_LOGIN;
     }
 }

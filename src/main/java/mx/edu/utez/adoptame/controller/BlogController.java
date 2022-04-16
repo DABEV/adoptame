@@ -1,11 +1,17 @@
 package mx.edu.utez.adoptame.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +27,10 @@ import mx.edu.utez.adoptame.util.ImagenUtileria;
 @RequestMapping("/blog")
 public class BlogController {
 
+    Log log = LogFactory.getLog(getClass());
+
     private String msgSuccess = "msg_success";
-    private String registroExitoso = "Registro exitoso";
     private String msgError = "msg_error";
-    private String registroFallido = "Registro fallido";
-
-
-    private Long id;
 
     @Autowired
     BlogServiceImp blogServiceImp;
@@ -35,14 +38,15 @@ public class BlogController {
     private String redirectBlogLista = "redirect:/blog/consultarTodas";
 
     @GetMapping("/consultarTodas")
-    public String consultarBlogs(Blog blog, Model model) {
-
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
+    public String consultarBlogs(Blog blog, Model model, HttpSession session) {
 
         try {
             model.addAttribute("listaBlog", blogServiceImp.listarBlogs());
 
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
         return "blog/lista";
     }
@@ -54,11 +58,18 @@ public class BlogController {
     }
 
     @PostMapping("/guardarBlog")
-    public String guardarBlog(Blog blog, Model model, RedirectAttributes redirectAttributes,
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
+    public String guardarBlog(@Valid @ModelAttribute("blog") Blog blog, BindingResult result, Model model,
+            RedirectAttributes redirectAttributes,
             @RequestParam("imagenBlog") MultipartFile multipartFile, HttpSession session) {
 
         try {
-            if (!multipartFile.isEmpty()) {
+            if (result.hasErrors()) {
+                redirectAttributes.addFlashAttribute(msgError, "Registro fallido");
+
+                return redirectBlogLista;
+
+            } else if (!multipartFile.isEmpty()) {
                 String ruta = "C:/mascotas/img-mascotas/";
                 String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
                 if (nombreImagen != null) {
@@ -68,20 +79,23 @@ public class BlogController {
 
             Blog respuesta = blogServiceImp.guardarBlog(blog, session);
             if (respuesta != null) {
-                redirectAttributes.addFlashAttribute(msgSuccess, registroExitoso);
+                redirectAttributes.addFlashAttribute(msgSuccess, "Registro exitoso");
             } else {
-                redirectAttributes.addFlashAttribute("msg_error", "Registro fallido");
+                redirectAttributes.addFlashAttribute(msgError, "Registro fallido verifique los datos");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
+
         }
         return redirectBlogLista;
 
     }
 
     @PostMapping("/actualizarBlog")
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
     public String actualizarBlog(Blog blog, Model model, RedirectAttributes redirectAttributes,
-            @RequestParam("imagenBlog") MultipartFile multipartFile) {
+            @RequestParam("imagenBlog") MultipartFile multipartFile, HttpSession session) {
 
         try {
 
@@ -93,31 +107,37 @@ public class BlogController {
                 }
             }
 
-            Blog respuesta = blogServiceImp.actualizarBlog(blog);
+            Blog respuesta = blogServiceImp.actualizarBlog(blog, session);
             if (respuesta != null) {
-                redirectAttributes.addFlashAttribute(msgSuccess, registroExitoso);
+                redirectAttributes.addFlashAttribute(msgSuccess, "Actualizacion exitosa");
             } else {
-                redirectAttributes.addFlashAttribute(msgError, registroFallido);
+                redirectAttributes.addFlashAttribute(msgError, "Actualizacion fallida verifique los datos");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
+
         }
         return redirectBlogLista;
 
     }
 
     @PostMapping("/borrarBlog")
-    public String borrarBlog(@RequestParam("idBlog") long id, RedirectAttributes redirectAttributes) {
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
+    public String borrarBlog(@RequestParam("idBlog") long id, RedirectAttributes redirectAttributes,
+            HttpSession session) {
         try {
-            Boolean respuestaEliminacion = blogServiceImp.eliminarBlog(id);
+            Boolean respuestaEliminacion = blogServiceImp.eliminarBlog(id, session);
             if (Boolean.TRUE.equals(respuestaEliminacion)) {
-                redirectAttributes.addFlashAttribute(msgSuccess, registroExitoso);
+                redirectAttributes.addFlashAttribute(msgSuccess, "eliminacion exitosa");
             } else {
-                redirectAttributes.addFlashAttribute(msgError, registroFallido);
+                redirectAttributes.addFlashAttribute(msgError, "eliminacion fallida");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
+
         }
         return redirectBlogLista;
     }

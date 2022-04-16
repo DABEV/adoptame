@@ -2,6 +2,8 @@ package mx.edu.utez.adoptame.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Solicitud;
 import mx.edu.utez.adoptame.model.Usuario;
@@ -36,15 +39,15 @@ public class SolicitudController {
     @GetMapping("/adoptador/consultarTodas")
     @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
     public String solicitudesAdoptador(Authentication authentication, Model model) {
-        try{
+        try {
             String correo = authentication.getName();
             Usuario usuario = usuarioServiceImp.buscarPorCorreo(correo);
 
             List<Solicitud> solicitados = solicitudServiceImp.listarSolicitudAdoptador(usuario.getId());
 
             model.addAttribute("listaSolicitud", solicitados);
-        }catch(Exception e){
-            //log
+        } catch (Exception e) {
+            // log
         }
         return "solicitud/adoptador";
     }
@@ -66,9 +69,10 @@ public class SolicitudController {
 
     @GetMapping("/adoptador/eliminarSolicitud/{id}")
     @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
-    public String eliminarSolicitudAdoptador(@PathVariable long id, RedirectAttributes redirectAttributes) {
+    public String eliminarSolicitudAdoptador(@PathVariable long id, RedirectAttributes redirectAttributes,
+            HttpSession session) {
         try {
-            boolean respuesta = solicitudServiceImp.eliminarSolicitud(id);
+            boolean respuesta = solicitudServiceImp.eliminarSolicitud(id, session);
             if (respuesta) {
                 redirectAttributes.addFlashAttribute("msg_success", "Solicitud eliminada de manera exitosa");
                 return redirectAdoptador;
@@ -84,15 +88,28 @@ public class SolicitudController {
     @PostMapping("/adoptador/guardarSolicitud")
     @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
     public String guardarSolicitud(Solicitud solicitud, Mascota mascota, Usuario usuario, Model model,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes, HttpSession session) {
+        Solicitud respuesta = null;
         try {
             if (solicitud.getId() == null) {
                 solicitud.setAprobado("Pendiente");
                 solicitud.setAdoptador(usuario);
                 solicitud.setMascota(mascota);
+            } else {
+                Solicitud solicitudAnterior = solicitudServiceImp.obtenerSolicitud(solicitud.getId());
+                UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
+                Long idUsuario = usuarioDto.getId();
+
+                solicitudServiceImp.procedimientoActualizarSolicitud(idUsuario, solicitudAnterior.getAprobado(),
+                        solicitudAnterior.getFechaSolicitud(), solicitudAnterior.getAdoptador().getId(),
+                        solicitudAnterior.getMascota().getId(),
+                        solicitud.getAprobado(), solicitud.getFechaSolicitud(), solicitud.getAdoptador().getId(),
+                        solicitud.getMascota().getId());
+                respuesta = solicitudServiceImp.guardarSolicitud(solicitud);
+
             }
 
-            Solicitud respuesta = solicitudServiceImp.guardarSolicitud(solicitud);
+            respuesta = solicitudServiceImp.guardarSolicitud(solicitud);
             if (respuesta != null) {
                 redirectAttributes.addFlashAttribute("msg_success", "Registro de solicitud exitoso");
                 return redirectAdoptador;
@@ -159,7 +176,7 @@ public class SolicitudController {
                 redirectAttributes.addFlashAttribute("msg_error", "Aprobación de solicitud fallida");
             }
         } catch (Exception e) {
-            //log
+            // log
         }
         return redirectVoluntario;
     }

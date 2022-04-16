@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Caracter;
 import mx.edu.utez.adoptame.model.Color;
 import mx.edu.utez.adoptame.model.Favorito;
@@ -132,8 +134,11 @@ public class MascotaController {
 
     @PostMapping("/guardarMascota")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
-    public String guardarMacota(@Valid @ModelAttribute("mascota") Mascota mascota, BindingResult result, Model model, RedirectAttributes attributes,
-            @RequestParam("imagenMascota") MultipartFile multipartFile) {
+    public String guardarMacota(@Valid @ModelAttribute("mascota") Mascota mascota, BindingResult result, Model model,
+            RedirectAttributes attributes,
+            @RequestParam("imagenMascota") MultipartFile multipartFile, HttpSession session) {
+        Mascota mascotaExistente = null;
+        Mascota respuesta = null;
         try {
             if (result.hasErrors()) {
                 return formRegistro;
@@ -144,7 +149,7 @@ public class MascotaController {
                     mascota.setActivo(true);
 
                 } else {
-                    Mascota mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
+                    mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
                     mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
                     mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
                     mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
@@ -161,8 +166,37 @@ public class MascotaController {
                     }
                 }
 
-                Mascota respuesta = mascotaServiceImp.guardarMascota(mascota);
+                if (mascotaExistente != null) {
+                    mascotaServiceImp.procedimientoActualizarMascota(mascotaExistente.getAprobadoRegistro(),
+                            mascotaExistente.getDetalles(), mascotaExistente.getEdad(),
+                            mascotaExistente.getFechaRegistro(),
+                            mascotaExistente.getImagen(), mascotaExistente.getNombre(), mascotaExistente.getSexo(),
+                            mascotaExistente.getTipo(), mascotaExistente.getCaracter().getId(),
+                            mascotaExistente.getColor().getId(), mascotaExistente.getTamano().getId(),
+                            mascotaExistente.getActivo(), mascotaExistente.getDisponibleAdopcion(),
+                            mascota.getAprobadoRegistro(), mascota.getDetalles(), mascota.getEdad(),
+                            mascota.getFechaRegistro(), mascota.getImagen(), mascota.getNombre(),
+                            mascota.getSexo(),
+                            mascota.getTipo(), mascota.getCaracter().getId(), mascota.getColor().getId(),
+                            mascota.getTamano().getId(), mascota.getActivo(), mascota.getDisponibleAdopcion(),
+                            session);
+                    respuesta = mascotaServiceImp.guardarMascota(mascota);
+
+                } else {
+                    respuesta = mascotaServiceImp.guardarMascota(mascota);
+                    UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
+                    Long idUsuario = usuarioDto.getId();
+                    mascotaServiceImp.procedimientoRegistrarMascota(idUsuario, respuesta.getAprobadoRegistro(),
+                            respuesta.getDetalles(), respuesta.getEdad(), respuesta.getFechaRegistro(),
+                            respuesta.getImagen(),
+                            respuesta.getNombre(), respuesta.getSexo(), respuesta.getTipo(),
+                            respuesta.getCaracter().getId(),
+                            respuesta.getColor().getId(), respuesta.getTamano().getId(), respuesta.getActivo(),
+                            respuesta.getDisponibleAdopcion());
+                }
+
                 if (respuesta != null) {
+
                     attributes.addFlashAttribute(msgS, "Registro exitoso");
                     return redirectListar + "/" + tipoMascota;
                 } else {
@@ -179,11 +213,11 @@ public class MascotaController {
 
     @GetMapping("/borrarMascota/{id}")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO')")
-    public String borrarMascota(@PathVariable long id, RedirectAttributes attributes) {
+    public String borrarMascota(@PathVariable long id, RedirectAttributes attributes, HttpSession session) {
         try {
             Mascota mascota = mascotaServiceImp.obtenerMascota(id);
             if (mascota != null) {
-                mascotaServiceImp.eliminarMascota(id);
+                mascotaServiceImp.eliminarMascota(id, session);
                 attributes.addFlashAttribute(msgS, "Borrado con éxito");
                 return redirectListar + "/" + mascota.getTipo();
             }
