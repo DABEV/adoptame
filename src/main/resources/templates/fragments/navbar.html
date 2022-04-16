@@ -35,7 +35,7 @@
           <a class="nav-link text-white" th:href="@{/mascota/consultarTodas/false}"><strong>Gatos</strong></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" th:href="@{/blog/consultarTodas}"><strong>Noticias</strong></a>
+          <a sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR', 'ROL_ADOPTADOR', 'ROL_VOLUNTARIO')" class="nav-link text-white" th:href="@{/blog/consultarTodas}"><strong>Noticias</strong></a>
         </li>
       </ul>
       <!-- Left links -->

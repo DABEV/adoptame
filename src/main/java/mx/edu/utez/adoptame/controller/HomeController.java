@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import mx.edu.utez.adoptame.dto.RolDto;
 import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Usuario;
 import mx.edu.utez.adoptame.service.BlogServiceImp;
@@ -133,7 +132,7 @@ public class HomeController {
         try {
             UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
             Long idUsuario = usuarioDto.getId();
-            usuarioServiceImp.procedimientoCerrarSesion(idUsuario, new Date());
+           usuarioServiceImp.procedimientoCerrarSesion(idUsuario, new Date());
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, null, null);
 

@@ -1,77 +1,105 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/imports :: head">
-    <title>Lista de blogs</title>
+<head>
+    <title>Lista de Blogs</title>
+    <i-head th:replace="fragments/imports :: head" />
 </head>
 
 <body>
-    <div class="row mb-3">
-        <navbar th:replace="fragments/navbar :: navbar"></navbar>
-    </div>
-    <h2 class="text-center mt-5">Lista de blogs</h2>
-
-    <div class="row mx-4">
-        <div class="col-12 col-md-3 col-sm-12 mt-4">
+    <div class="container-fluid">
+        <!-- Navbar -->
+        <div class="row mb-3">
+            <navbar th:replace="fragments/navbar :: navbar"></navbar>
         </div>
-
-        <div class="col-12 col-md-9 col-sm-12">
-            <div class="container">
-                    <button type="button" class="btn btn-primary btn-rounded mt-4"  data-mdb-toggle="modal"
-                        data-mdb-target="#nuevoBlog">Registrar Blog</button>
-
-                <div th:replace="fragments/dialogs :: nuevoBlog"></div>
-                <div class="mt-4 row">
-                    <div class="col-12 col-md-4 col-sm-12 mb-4" th:each="blog, index: ${listaBlog}">
-
-                        <div class="card">
-                            <img th:src="@{/imagenes/{i} (i= ${blog.imagen})}" class="card-img-top"
-                                alt="No encontrada" />
-                            <div class="card-header">
-                                <h5 class="card-title" th:text="${blog.titulo}"></h5>
-                                <p class="card-text"
-                                    th:text="'Fecha de registro : ' + ${#dates.format(blog.fechaRegistro, 'dd-MM-yyyy')}">
-                                    Fecha
+        <!-- Contenido -->
+        <div class="mx-4 mt-4">
+            <div class="row">
+                <div class="col-lg-3 mb-5">
+                    <div sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')" th:replace="fragments/menus :: adoptador(0)">
+                    </div>
+                    <div sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')"
+                        th:replace="fragments/menus :: voluntario(0)">
+                    </div>
+                    <div sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')"
+                        th:replace="fragments/menus :: administrador(0)">
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-12 col-lg-9">
+                    <div class="d-grid gap-4">
+                        <div class="row">
+                            <div class="col-lg">
+                                <h2 style="color: #253E5C;">Lista de blogs</h2>
+                                <p class="h4 fw-light" style="color: #698FAE">
+                                    Las noticias más relevantes de AdoptaMe
                                 </p>
                             </div>
-                            <div class="card-body">
-                                <div th:text="${blog.contenido}"></div>
+                            <div class="col-lg-3">
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-primary btn-rounded  mt-4"
+                                        style="background-color: #253E5C;" data-mdb-toggle="modal"
+                                        data-mdb-target="#nuevoBlog">Registrar Blog</button>
+                                </div>
+                                <div th:replace="fragments/dialogs :: nuevoBlog"></div>
                             </div>
-
-                            <div class="card-footer text-muted">
-                                <div class="row justify-content-between">
-                                    <a href="" style="color: #253E5C;" role="button" class="col-1"
-                                        data-mdb-toggle="modal"
-                                        th:attr="data-mdb-target=${'#editar-blog'+ index.count}">
-                                        <em class="fas fa-pen"></em>
-                                    </a>
-                                    <a href="" style="color: #253E5C;" role="button" class="col-1"
-                                        data-mdb-toggle="modal"
-                                        th:attr="data-mdb-target=${'#detalles-blog'+ index.count}">
-                                        <em class="fas fa-eye"></em>
-                                    </a>
-                                    <a href="" style="color: #253E5C;" role="button" class="col-1"
-                                        data-mdb-toggle="modal"
-                                        th:attr="data-mdb-target=${'#eliminar-blog'+ index.count}">
-                                        <em class="fas fa-trash-alt"></em>
-                                    </a>
+                        </div>
+                        <div class="mb-4 mt-3">
+                            <div class="row  justify-content-center">
+                                <!--For each-->
+                                <div class="col-12 col-md-4 col-sm-12 mb-4" th:each="blog, index: ${listaBlog}">
+                                    <div class="card" style="border: solid; color: #253E5C; border-width: thin;">
+                                        <img th:src="@{/imagenes/{i} (i= ${blog.imagen})}" height="200"
+                                            class="card-img-top" alt="No encontrada" />
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="${blog.titulo}"></h5>
+                                            <p class="card-text"
+                                                th:text="'Fecha de registro : ' + ${#dates.format(blog.fechaRegistro, 'dd-MM-yyyy')}">
+                                                Fecha
+                                            </p>
+                                        </div>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item" style="border-color: #253E5C;"
+                                                th:text="${blog.contenido}">
+                                            </li>
+                                            <li class="list-group-item" style="border-color: #253E5C;">
+                                                <div class="row justify-content-between">
+                                                    <a sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')"
+                                                        style="color: #74422B;" role="button" class="col-2"
+                                                        data-mdb-toggle="modal"
+                                                        th:attr="data-mdb-target=${'#editar-blog'+ index.count}">
+                                                        <em class="fas fa-pen"></em>
+                                                    </a>
+                                                    <a style="color: #74422B;" role="button" class="col-2"
+                                                        data-mdb-toggle="modal"
+                                                        th:attr="data-mdb-target=${'#detalles-blog'+ index.count}">
+                                                        <em class="fas fa-eye"></em>
+                                                    </a>
+                                                    <a sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')"
+                                                        style="color: #74422B;" role="button" class="col-2"
+                                                        data-mdb-toggle="modal"
+                                                        th:attr="data-mdb-target=${'#eliminar-blog'+ index.count}">
+                                                        <em class="fas fa-trash-alt"></em>
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div th:replace="fragments/dialogs :: detallesBlog(${index.count})"></div>
+                                    <div th:replace="fragments/dialogs :: editarBlog(${index.count})"></div>
+                                    <div th:replace="fragments/dialogs :: eliminarBlog(${index.count})"></div>
                                 </div>
                             </div>
                         </div>
-                        <div th:replace="fragments/dialogs :: detallesBlog(${index.count})"></div>
-                        <div th:replace="fragments/dialogs :: editarBlog(${index.count})"></div>
-                        <div th:replace="fragments/dialogs :: eliminarBlog(${index.count})"></div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
+
     <div class="row mt-3">
         <footer th:replace="fragments/footer :: footer"></footer>
     </div>
-    <script type="text/javascript" th:src="@{/js/md-bootstrap.min.js}"></script>
-    <script th:replace="fragments/imports :: scripts" ></script>
+    <script th:replace="fragments/imports :: scripts"></script>
 </body>
 
 </html>

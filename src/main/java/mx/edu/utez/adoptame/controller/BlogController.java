@@ -38,7 +38,7 @@ public class BlogController {
     private String redirectBlogLista = "redirect:/blog/consultarTodas";
 
     @GetMapping("/consultarTodas")
-    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
+    @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO') or hasAuthority('ROL_ADOPTADOR')")
     public String consultarBlogs(Blog blog, Model model, HttpSession session) {
 
         try {
