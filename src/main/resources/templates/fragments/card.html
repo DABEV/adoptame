@@ -1,87 +1,111 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <body>
-    <div th:fragment="mascota" class="col-md-12 card mb-3">
-      <div class="row g-0">
-        <div class="container col-md-4">
-          <img
-            th:src="@{/imagenes/{i} (i= ${solicitud.mascota.imagen})}"
-            style="height: 100%; width: 100%"
-            alt="No encontrada"
-          />
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <h6>
-              Mascota: <strong th:text="${solicitud.mascota.nombre}"></strong>
-            </h6>
-            <hr />
-            <h6>
-              <div class="row">
-                <div class="col-9" th:switch="${solicitud.aprobado}">
-                  <div th:case="'Aprobado'">
-                    Estado:
-                    <span class="badge badge-pill badge-success">Aprobado</span>
-                  </div>
-                  <div th:case="'Pendiente'">
-                    Estado:
-                    <span class="badge badge-pill badge-warning"
-                      >Pendiente</span
-                    >
-                  </div>
-                  <div th:case="'Rechazado'">
-                    Estado:
-                    <span class="badge badge-pill badge-danger">Rechazado</span>
-                  </div>
-                </div>
+<div
+  th:fragment="mascota"
+  class="col-md-12 card mb-3"
+  style="border: solid; color: #253e5c; border-width: thin"
+>
+  <div class="row g-0">
+    <div class="container col-md-4">
+      <img
+        th:src="@{/imagenes/{i} (i= ${solicitud.mascota.imagen})}"
+        style="height: 100%; width: 100%"
+        alt="No encontrada"
+      />
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h6>
+          Mascota: <strong th:text="${solicitud.mascota.nombre}"></strong>
+        </h6>
+        <hr />
+        <h6>
+          <div class="row">
+            <div class="col-9" th:switch="${solicitud.aprobado}">
+              <div th:case="'Aprobado'">
+                Estado:
+                <span class="badge badge-pill badge-success">Aprobado</span>
               </div>
-            </h6>
-            <hr />
-            <h6>
-              Fecha de solicitud:
-              <strong
-                th:text="${#dates.format(solicitud.fechaSolicitud, 'dd-MM-yyyy')}"
-              ></strong>
-            </h6>
-            <hr />
-            <div style="text-align: right">
-              <a
-                class="mx-1 tooltop"
-                th:href="@{/solicitud/voluntario/rechazarSolicitud/{id} (id = ${solicitud.id})}"
-                style="color: #74422b"
-                role="button"
-                sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')"
-              >
-                <em class="fas fa-times fa-lg"
-                  ><h6 class="tooltiptext">Rechazar</h6></em
-                >
-              </a>
-              <a
-                class="mx-1 tooltop"
-                style="color: #74422b"
-                th:href="@{/solicitud/voluntario/aprobarSolicitud/{id} (id = ${solicitud.id})}"
-                role="button"
-                sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')"
-              >
-                <em class="fas fa-check fa-lg"
-                  ><h6 class="tooltiptext">Aprobar</h6></em
-                >
-              </a>
-              <a
-                class="mx-1 tooltop"
-                style="color: #74422b"
-                th:href="@{/solicitud/adoptador/eliminarSolicitud/{id} (id = ${solicitud.id})}"
-                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
-                role="button"
-              >
-                <em class="fas fa-times fa-lg"
-                  ><h6 class="tooltiptext">Cancelar</h6></em
-                >
-              </a>
+              <div th:case="'Pendiente'">
+                Estado:
+                <span class="badge badge-pill badge-warning">Pendiente</span>
+              </div>
+              <div th:case="'Rechazado'">
+                Estado:
+                <span class="badge badge-pill badge-danger">Rechazado</span>
+              </div>
             </div>
+          </div>
+        </h6>
+        <hr />
+        <h6>
+          Fecha de solicitud:
+          <strong
+            th:text="${#dates.format(solicitud.fechaSolicitud, 'dd-MM-yyyy')}"
+          ></strong>
+        </h6>
+        <hr />
+        <div class="row">
+          <div class="col" style="text-align: left;">
+            <a
+              class="mx-1 tooltop"
+              style="color: #74422b"
+              data-mdb-toggle="modal"
+              data-mdb-target="#rechazarModal"
+              role="button"
+              th:attr="data-mdb-target=${'#detalles'+ index.count}"
+            >
+              <em class="fas fa-eye fa-lg"
+                ><h6 class="tooltiptext">Detalles</h6></em
+              >
+            </a>
+          </div>
+          <div class="col" style="text-align: right">
+            <a
+              class="mx-1 tooltop"
+              style="color: #74422b"
+              data-mdb-toggle="modal"
+              data-mdb-target="#rechazarModal"
+              role="button"
+              sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')"
+              th:attr="data-mdb-target=${'#rechazar-solicitud'+ index.count}"
+            >
+              <em class="fas fa-times fa-lg"
+                ><h6 class="tooltiptext">Rechazar</h6></em
+              >
+            </a>
+            <a
+              class="mx-1 tooltop"
+              style="color: #74422b"
+              data-mdb-toggle="modal"
+              data-mdb-target="#aprobarModal"
+              role="button"
+              sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')"
+              th:attr="data-mdb-target=${'#aprobar-solicitud'+ index.count}"
+            >
+              <em class="fas fa-check fa-lg"
+                ><h6 class="tooltiptext">Aprobar</h6></em
+              >
+            </a>
+            <a
+              class="mx-1 tooltop"
+              style="color: #74422b"
+              data-mdb-toggle="modal"
+              data-mdb-target="#exampleModal"
+              sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
+              th:attr="data-mdb-target=${'#eliminar-solicitud'+ index.count}"
+              role="button"
+            >
+              <em class="fas fa-times fa-lg"
+                ><h6 class="tooltiptext">Cancelar</h6></em
+              >
+            </a>
+            <!-- Modal -->
+            <div th:replace="fragments/dialogs :: detallesSolicitud(${index.count})"></div>
+            <div th:replace="fragments/dialogs :: eliminarSolicitud(${index.count})"></div>
+            <div th:replace="fragments/dialogs :: rechazarSolicitud(${index.count})"></div>
+            <div th:replace="fragments/dialogs :: aprobarSolicitud(${index.count})"></div>
           </div>
         </div>
       </div>
     </div>
-  </body>
-</html>
+  </div>
+</div>
