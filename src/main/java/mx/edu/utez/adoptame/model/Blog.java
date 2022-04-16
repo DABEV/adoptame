@@ -8,8 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+import javax.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+
 
 @Entity
 @Table(name = "blogs")
@@ -18,10 +21,14 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
+    @Size(max = 50, message = "Máximo 50 caracteres")
     private String titulo;
 
+    @NotBlank
+    @NotNull
     @Column(columnDefinition = "longtext not null")
+    @Size(max = 50, message = "Máximo 50 caracteres")
     private String contenido;
 
     @Column(name = "es_principal", columnDefinition = "tinyint not null default 0")

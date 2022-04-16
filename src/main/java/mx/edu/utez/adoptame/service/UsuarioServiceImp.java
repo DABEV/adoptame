@@ -1,6 +1,7 @@
 package mx.edu.utez.adoptame.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +91,29 @@ public class UsuarioServiceImp implements UsuarioService {
             exception.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Usuario procedimientoInicioSesion(Long usuarioId) {
+        try {
+
+            repository.registroSesion(usuarioId);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Usuario procedimientoCerrarSesion(Long usuarioId, Date fechaFin) {
+        try {
+
+            repository.registroCerrarSesion(usuarioId, fechaFin);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

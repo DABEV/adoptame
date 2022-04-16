@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/imports :: head('Lista de blogs')">
+<head th:replace="fragments/imports :: head">
     <title>Lista de blogs</title>
 </head>
 
@@ -13,7 +13,6 @@
 
     <div class="row mx-4">
         <div class="col-12 col-md-3 col-sm-12 mt-4">
-            <div th:replace="fragments/menus :: administrador(1)"></div>
         </div>
 
         <div class="col-12 col-md-9 col-sm-12">
@@ -72,6 +71,7 @@
         <footer th:replace="fragments/footer :: footer"></footer>
     </div>
     <script type="text/javascript" th:src="@{/js/md-bootstrap.min.js}"></script>
+    <script th:replace="fragments/imports :: scripts" ></script>
 </body>
 
 </html>

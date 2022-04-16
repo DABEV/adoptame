@@ -1,5 +1,7 @@
 package mx.edu.utez.adoptame.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +23,6 @@ public class DonativoController {
 
     @Autowired
     private DonacionServiceImp donacionServiceImp;
-    
 
     @GetMapping("/consultarTodos")
     public String consultarTodos(Model model,
@@ -50,9 +51,10 @@ public class DonativoController {
     }
 
     @PostMapping("/guardarDonativo")
-    public String guardarDonativo(Donacion donacion, Model model, RedirectAttributes redirectAttributes) {
+    public String guardarDonativo(Donacion donacion, Model model, RedirectAttributes redirectAttributes,
+            HttpSession session) {
         donacion.setEstado(false);
-        boolean respuesta = donacionServiceImp.guardarDonacion(donacion);
+        boolean respuesta = donacionServiceImp.guardarDonacion(donacion, session);
         if (respuesta) {
             redirectAttributes.addFlashAttribute("msg_success", "Registro exitoso");
             return "redirect:/donativo/consultarTodos";
@@ -64,8 +66,9 @@ public class DonativoController {
     }
 
     @PostMapping("/borrarDonativo/{id}")
-    public String borrarDonativo(@PathVariable("id") long id, RedirectAttributes redirectAttributes) {
-        boolean respuesta = donacionServiceImp.eliminarDonacion(id);
+    public String borrarDonativo(@PathVariable("id") long id, RedirectAttributes redirectAttributes,
+            HttpSession session) {
+        boolean respuesta = donacionServiceImp.eliminarDonacion(id, session);
         if (respuesta) {
             redirectAttributes.addFlashAttribute("msg_success", "Eliminación exitosa");
         } else {

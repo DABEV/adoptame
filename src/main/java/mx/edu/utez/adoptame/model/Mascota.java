@@ -55,7 +55,7 @@ public class Mascota {
     @Size(max = 20, message = "Máximo 20 caracteres")
     private String aprobadoRegistro;
 
-    @Column(columnDefinition = "tinyint not null default 0")
+    @Column(columnDefinition = "tinyint not null default 1")
     private Boolean  disponibleAdopcion;
 
     @Column(columnDefinition = "tinyint not null default 1")

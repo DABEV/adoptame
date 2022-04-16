@@ -338,12 +338,16 @@
               <span class="input-group-text" style="background-color: #253E5C; color: white;"><em
                   class="fas fa-file-signature"></em></span>
               <input type="text" class="form-control" th:field="*{titulo}" />
+              <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="badge badge-danger">
+              </div>
             </div>
           </div>
           <div class="col-md-12 mt-2">
             <label style="color: #698FAE;">Contenido</label>
             <div class="form-outline">
               <textarea class="form-control" th:field="*{contenido}" rows="4"></textarea>
+              <div th:if="${#fields.hasErrors('contenido')}" th:errors="*{contenido}" class="badge badge-danger">
+              </div>
             </div>
           </div>
           <div class="col-md-12 mt-2">
@@ -359,7 +363,7 @@
               <!-- Default checked radio -->
               <div class="form-check col">
                 <input class="form-check-input" th:field="*{esPrincipal}" value="false" type="radio"
-                  name="flexRadioDefault" id="flexRadioDefault2" checked />
+                  name="flexRadioDefault" id="flexRadioDefault2" th:checked="true" />
                 <label class="form-check-label" for="flexRadioDefault2">No
                 </label>
               </div>
@@ -369,7 +373,7 @@
           <div class="col-md-12 mt-2">
             <label style="color: #698FAE;">Imagen</label>
             <div class="">
-              <input type="file" name="imagen" class="form-control" id="customFile" />
+              <input type="file" name="imagenBlog" class="form-control" id="customFile" />
             </div>
           </div>
       </div>
@@ -396,13 +400,15 @@
         <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form th:action="@{/blog/actualizarBlog}" method="POST" th:object="${blog}">
+        <form th:action="@{/blog/actualizarBlog}" method="POST" th:object="${blog}" enctype="multipart/form-data">
           <div class="col-md-12">
             <label style="color: #698FAE;">Titulo</label>
             <div class="input-group">
               <span class="input-group-text" style="background-color: #253E5C; color: white;"><em
                   class="fas fa-file-signature"></em></span>
               <input type="text" class="form-control" th:value="${blog.titulo}" th:name="titulo" />
+              <div th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="badge badge-danger">
+              </div>
             </div>
           </div>
 
@@ -411,6 +417,8 @@
             <div class="form-outline">
               <textarea class="form-control" id="textAreaExample" rows="4" th:name="contenido"
                 th:text="${blog.contenido}"></textarea>
+              <div th:if="${#fields.hasErrors('contenido')}" th:errors="*{contenido}" class="badge badge-danger">
+              </div>
             </div>
           </div>
           <div class="col-md-12 mt-2">
@@ -432,10 +440,8 @@
             </div>
           </div>
           <div class="col-md-12 mt-2">
-            <label style="color: #698FAE;">Imagen</label>
-            <div>
-              <input type="file" name="imagen" class="form-control" id="customFile" />
-            </div>
+            <label style="color: #698FAE;" for="customFile">Imagen</label>
+            <input type="file" name="imagenBlog" class="form-control" id="customFile" />
           </div>
 
           <input type="number" hidden th:name="id" th:value="${blog.id}" />
