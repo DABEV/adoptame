@@ -5,16 +5,19 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Blog;
-import mx.edu.utez.adoptame.model.Usuario;
 import mx.edu.utez.adoptame.repository.BlogRepository;
 
 @Service
 public class BlogServiceImp implements BlogService {
+
+    Log log = LogFactory.getLog(getClass());
 
     @Autowired
     BlogRepository blogRepository;
@@ -22,32 +25,34 @@ public class BlogServiceImp implements BlogService {
     @Autowired
     UsuarioServiceImp usuarioServiceImp;
 
-
-
+    private Long idUsuario;
+    private String usuarioSession = "usuario";
 
     @Override
+
     public List<Blog> listarBlogs() {
 
         return blogRepository.findAll();
     }
 
-
     @Override
     public Blog guardarBlog(Blog blog, HttpSession session) {
         try {
 
-            Long id = (Long) session.getAttribute("id");
-            System.out.println(id);
+            UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute(usuarioSession);
+            idUsuario = usuarioDto.getId();
 
             Blog respuesta = blogRepository.save(blog);
             if (respuesta.getTitulo() != null) {
-                procedimientoRegistrarBlog(id, respuesta.getTitulo(), respuesta.getContenido(),
+                procedimientoRegistrarBlog(idUsuario, respuesta.getTitulo(), respuesta.getContenido(),
                         respuesta.getEsPrincipal(), respuesta.getFechaRegistro(), respuesta.getImagen());
                 return respuesta;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
+
         }
         return null;
     }
@@ -61,13 +66,16 @@ public class BlogServiceImp implements BlogService {
     }
 
     @Override
-    public Blog actualizarBlog(Blog blog) {
+    public Blog actualizarBlog(Blog blog, HttpSession session) {
 
         try {
+
+            UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute(usuarioSession);
+            idUsuario = usuarioDto.getId();
             Blog blogActualizar = blogRepository.getById(blog.getId());
 
             if (blog.getImagen() == null) {
-                procedimientoActualizarBlog((long) 2, blogActualizar.getTitulo(),
+                procedimientoActualizarBlog(idUsuario, blogActualizar.getTitulo(),
                         blogActualizar.getContenido(), blogActualizar.getEsPrincipal(),
                         blogActualizar.getFechaRegistro(),
                         blogActualizar.getImagen(), blog.getTitulo(), blog.getContenido(),
@@ -79,7 +87,7 @@ public class BlogServiceImp implements BlogService {
                 blogRepository.save(blogActualizar);
 
             } else {
-                procedimientoActualizarBlog((long) 2, blogActualizar.getTitulo(),
+                procedimientoActualizarBlog(idUsuario, blogActualizar.getTitulo(),
                         blogActualizar.getContenido(), blogActualizar.getEsPrincipal(),
                         blogActualizar.getFechaRegistro(),
                         blogActualizar.getImagen(), blog.getTitulo(), blog.getContenido(),
@@ -95,6 +103,8 @@ public class BlogServiceImp implements BlogService {
             return blogActualizar;
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
+
         }
         return null;
 
@@ -122,19 +132,30 @@ public class BlogServiceImp implements BlogService {
 
         } catch (Exception e) {
             e.printStackTrace();
+            log.error(e.getMessage());
+
         }
         return null;
     }
 
     @Override
-    public boolean eliminarBlog(Long id) {
-        Blog blog = blogRepository.getById(id);
+    public boolean eliminarBlog(Long id, HttpSession session) {
+        try {
 
-        if (blog.getId() != null) {
-            procedimientoEliminarBlog((long) 2, blog.getTitulo(), blog.getContenido(), blog.getEsPrincipal(),
-                    blog.getFechaRegistro(), blog.getImagen());
-            blogRepository.deleteById(id);
-            return true;
+            UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute(usuarioSession);
+            idUsuario = usuarioDto.getId();
+            Blog blog = blogRepository.getById(id);
+
+            if (blog.getId() != null) {
+                procedimientoEliminarBlog(idUsuario, blog.getTitulo(), blog.getContenido(), blog.getEsPrincipal(),
+                        blog.getFechaRegistro(), blog.getImagen());
+                blogRepository.deleteById(id);
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+
         }
         return false;
     }
@@ -144,6 +165,18 @@ public class BlogServiceImp implements BlogService {
             Date fechaRegistro, String imagen) {
         return blogRepository.eliminarBlog(idUsuario, titulo, contenido, esPrincipal, fechaRegistro, imagen);
 
+    }
+
+    public List<Blog> listaPrincipales() {
+        List<Blog> lista = null;
+        try {
+            lista = blogRepository.findByEsPrincipal(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+
+        }
+        return lista;
     }
 
 }

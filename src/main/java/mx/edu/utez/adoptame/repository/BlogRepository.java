@@ -29,4 +29,5 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
     List<Blog> eliminarBlog(@Param("usuario_id") long usuarioId, @Param("titulo") String titulo,
             @Param("contenido") String contenido, @Param("esPrincipal") Boolean esPrincipal,
             @Param("fechaRegistro") Date fechaRegistro, @Param("imagen") String imagen);
+    List<Blog> findByEsPrincipal(Boolean esPrincipal);
 }

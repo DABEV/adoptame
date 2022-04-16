@@ -1,0 +1,11 @@
+<div class="carousel-item" th:fragment="item" th:each="blog: ${noticias}">
+    <img src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp" class="d-block w-100" alt="Wild Landscape" />
+    <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="text-white text-center">
+                <h1 class="mb-3" th:text="${blog.titulo}"></h1>
+                <p th:text="${blog.contenido}"></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -135,7 +135,7 @@
             </div>
           </div>
           <!-- Sólo para administradores-->
-          <div th:if="${mascota.aprobadoRegistro == 'pendiente'}">
+          <div th:if="${mascota.aprobadoRegistro == 'pendiente'}" sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')">
             <hr class="mt-3 mb-4">
             <form th:action="@{/mascota/validar}" method="post">
               <input type="hidden" name="idMascota" th:value="${mascota.id}" />

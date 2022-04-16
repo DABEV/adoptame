@@ -1,66 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
-    <!-- MDB -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.css" rel="stylesheet" />
-
-    <title>Inicio</title>
+    <title>Lista de Mascotas</title>
+    <i-head th:replace="fragments/imports :: head" />
 </head>
 
 <body>
-
-    <!--Main Navigation-->
-    <div>
-        <style>
-            /* Carousel styling */
-            #introCarousel,
-            .carousel-inner,
-            .carousel-item,
-            .carousel-item.active {
-                height: 80vh;
-            }
-
-            .carousel-item {
-                background-image: url('https://mdbootstrap.com/img/Photos/Others/images/76.jpg');
-                background-size: cover;
-                background-position: center center;
-            }
-
-
-
-            /* Height for devices larger than 576px */
-            @media (min-width: 992px) {
-
-                #introCarousel,
-                .carousel-inner,
-                .carousel-item,
-                .carousel-item.active {
-                    height: 80vh;
-                }
-            }
-
-            .navbar .nav-link {
-                color: #fff !important;
-            }
-        </style>
-
+    <div class="container-fluid">
         <!-- Navbar -->
-
-
-        <!-- Carousel wrapper -->
-        <div id="introCarousel" class="carousel slide carousel-fade shadow-2-strong" data-mdb-ride="carousel">
-            <!-- Inner -->
+        <div class="row mb-3">
+            <navbar th:replace="fragments/navbar :: navbar"></navbar>
+        </div>
+        <!-- Contenido -->
+        <div id="carouselExampleTouch" class="carousel slide" data-mdb-touch="false">
             <div class="carousel-inner">
-                <!-- Single item  fijo-->
                 <div class="carousel-item active">
+                    <img src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp" class="d-block w-100"
+                        alt="Wild Landscape" />
                     <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
                         <div class="d-flex justify-content-center align-items-center h-100">
                             <div class="text-white text-center">
@@ -71,142 +28,77 @@
                         </div>
                     </div>
                 </div>
+                <div class="carousel-item" th:replace="fragments/carousel :: item" th:each="blog: ${noticias}"></div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-mdb-target="#carouselExampleTouch"
+                data-mdb-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-mdb-target="#carouselExampleTouch"
+                data-mdb-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <hr class="my-5" />
+        <div>
+            <div class="row">
+                <div class="col-md-6 gx-5 mb-4">
+                    <div class="bg-image hover-overlay ripple shadow-2-strong rounded-5" data-mdb-ripple-color="light">
+                        <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=986&q=80"
+                            class="img-fluid" alt="mascotas" />
+                        <a href="#!">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                        </a>
+                    </div>
+                </div>
 
-                <!--items for each-->
-                <div class="carousel-item">
-                    <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
-                        <div class="d-flex justify-content-center align-items-center h-100">
-                            <div class="text-white text-center">
-                                <h1 class="mb-3">Titúlo noticia 1</h1>
-                                <a class="btn btn-outline-light btn-lg m-2 btn-rounded" href="" role="button"
-                                    rel="nofollow" target="_blank">Ver noticia</a>
+                <div class="col-md-6 gx-5 mb-1">
+                    <h1 style="color: #253E5C;"><strong>¿Quieres donar?</strong></h1>
+                    <p class="text-muted">
+                        Con tu apoyo seguiremos aportando sonrisas a más hogares y continuando con nuestra labor de
+                        darle un lugar a cada animalito
+                    </p>
+                    <p><strong>¡Contribuye ahora!</strong></p>
+                    <form>
+                        <div class="row mb-4">
+                            <div class="col-12 col-sm-12 col-md-7 mb-3">
+                                <div class="form-outline">
+                                    <input type="number" id="cantidad" placeholder="Ej. 5.99" class="form-control" />
+                                    <label class="form-label" for="form3Example1">Cantidad a donar</label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md">
+                                <button type="submit" style="background-color: #253E5C;"
+                                    class="btn btn-primary btn-block mb-4 btn-rounded">
+                                    Donar
+                                </button>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
-                        <div class="d-flex justify-content-center align-items-center h-100">
-                            <div class="text-white text-center">
-                                <h1 class="mb-3">Titúlo noticia 2</h1>
-                                <a class="btn btn-outline-light btn-lg m-2 btn-rounded" href="" role="button"
-                                    rel="nofollow" target="_blank">Ver noticia</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
-                        <div class="d-flex justify-content-center align-items-center h-100">
-                            <div class="text-white text-center">
-                                <h1 class="mb-3">Titúlo noticia 3</h1>
-                                <a class="btn btn-outline-light btn-lg m-2 btn-rounded" href="" role="button"
-                                    rel="nofollow" target="_blank">Ver noticia</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
-                        <div class="d-flex justify-content-center align-items-center h-100">
-                            <div class="text-white text-center">
-                                <h1 class="mb-3">Titúlo noticia 4</h1>
-                                <a class="btn btn-outline-light btn-lg m-2 btn-rounded" href="" role="button"
-                                    rel="nofollow" target="_blank">Ver noticia</a>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
-            <!-- Inner -->
-
-            <!-- Controls -->
-            <a class="carousel-control-prev" href="#introCarousel" role="button" data-mdb-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#introCarousel" role="button" data-mdb-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
         </div>
-        <!-- Carousel wrapper -->
-    </div>
-    <!--Main Navigation-->
-
-    <!--Main layout-->
-    <main class="mt-5">
-        <div class="container">
-            <!--Section: Content-->
-            <section>
-                <div class="row">
-                    <div class="col-md-6 gx-5 mb-4">
-                        <div class="bg-image hover-overlay ripple shadow-2-strong rounded-5"
-                            data-mdb-ripple-color="light">
-                            <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=986&q=80"
-                                class="img-fluid" />
-                            <a href="#!">
-                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 gx-5 mb-1">
-                        <h1 style="color: #253E5C;"><strong>¿Quieres donar?</strong></h1>
-                        <p class="text-muted">
-                            Con tu apoyo seguiremos aportando sonrisas a más hogares y continuando con nuestra labor de
-                            darle un lugar a cada animalito
-                        </p>
-                        <p><strong>¡Contribuye ahora!</strong></p>
-                        <form>
-                            <div class="row mb-4">
-                                <div class="col-12 col-sm-12 col-md-7 mb-3">
-                                    <div class="form-outline">
-                                        <input type="number" id="cantidad" placeholder="Ej. 5.99"
-                                            class="form-control" />
-                                        <label class="form-label" for="form3Example1">Cantidad a donar</label>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md">
-                                    <button type="submit" style="background-color: #253E5C;"
-                                        class="btn btn-primary btn-block mb-4 btn-rounded">
-                                        Donar
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </section>
-            <!--Section: Content-->
-
-            <hr class="my-5" />
-
-            <!--Section: Content-->
-            <section>
-                <h4 class="mb-5 text-center" style="color: #253E5C;"><strong>Agregados recientemente</strong></h4>
-                
+        <hr class="my-5" />
+        <div class="mb-6">
+            <h4 class="mb-5 text-center" style="color: #253E5C;"><strong>Agregados recientemente</strong></h4>
+            <div class="row  justify-content-center">
                 <!-- for each de cards limitar a 3-->
-                <div class="row">
-                    <div class="col-lg-4 col-md-12 gx-5 mb-4">
-                        <div th:replace="fragments/cards-mascota :: card-mascota"></div>
-                    </div>
+                <div class="col-lg-3 mb-4" th:each="mascota,index: ${recientes}">
+                    <div th:replace="fragments/cardsMascota :: card-recientes"></div>
                 </div>
-            </section>
-            <!--Section: Content-->
-
-            <hr class="my-5" />
-
-            <!--Section: Content-->
+            </div>
         </div>
-    </main>
-    <!--Main layout-->
+    </div>
 
-
-
+    <!-- Footer -->
+    <div class="row mt-3">
+        <footer th:replace="fragments/footer :: footer"></footer>
+    </div>
+    </div>
     <!-- MDB -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.11.0/mdb.min.js"></script>
-    
+    <script th:src="@{/js/md-bootstrap.min.js}"></script>
 </body>
 
 </html>

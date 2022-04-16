@@ -3,11 +3,11 @@
   <body>
     <div th:fragment="mascota" class="col-md-12 card mb-3">
       <div class="row g-0">
-        <div class="fixed-container col-md-4">
-          <!--<amp-img th:src="${urlImg}" layout="fill"></amp-img>-->
+        <div class="container col-md-4">
           <img
-            src="https://nupec.com/wp-content/uploads/2021/05/shutterstock_572500255.jpg"
+            th:src="@{/imagenes/{i} (i= ${solicitud.mascota.imagen})}"
             style="height: 100%; width: 100%"
+            alt="No encontrada"
           />
         </div>
         <div class="col-md-8">
@@ -44,30 +44,39 @@
               ></strong>
             </h6>
             <hr />
-            <div align="right">
+            <div style="text-align: right">
               <a
-                class="mx-1"
+                class="mx-1 tooltop"
                 th:href="@{/solicitud/voluntario/rechazarSolicitud/{id} (id = ${solicitud.id})}"
                 style="color: #74422b"
                 role="button"
+                sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')"
               >
-                <em class="fas fa-times fa-lg"></em>
+                <em class="fas fa-times fa-lg"
+                  ><h6 class="tooltiptext">Rechazar</h6></em
+                >
               </a>
               <a
-                class="mx-1"
+                class="mx-1 tooltop"
                 style="color: #74422b"
                 th:href="@{/solicitud/voluntario/aprobarSolicitud/{id} (id = ${solicitud.id})}"
                 role="button"
+                sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO')"
               >
-                <em class="fas fa-check fa-lg"></em>
+                <em class="fas fa-check fa-lg"
+                  ><h6 class="tooltiptext">Aprobar</h6></em
+                >
               </a>
               <a
-                class="mx-1"
+                class="mx-1 tooltop"
                 style="color: #74422b"
                 th:href="@{/solicitud/adoptador/eliminarSolicitud/{id} (id = ${solicitud.id})}"
+                sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')"
                 role="button"
               >
-                <em class="fas fa-times fa-lg"></em>
+                <em class="fas fa-times fa-lg"
+                  ><h6 class="tooltiptext">Cancelar</h6></em
+                >
               </a>
             </div>
           </div>
