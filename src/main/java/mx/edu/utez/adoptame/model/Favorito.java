@@ -1,6 +1,5 @@
 package mx.edu.utez.adoptame.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -16,7 +15,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "favoritos")
-public class Favorito implements Serializable{
+public class Favorito {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,6 +33,7 @@ public class Favorito implements Serializable{
     private Date fechaRegistro;
 
     public Favorito() {
+        //constructor vació
     }
 
     public Long getId() {
