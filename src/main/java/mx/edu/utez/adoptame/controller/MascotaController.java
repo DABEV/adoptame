@@ -30,7 +30,7 @@ import mx.edu.utez.adoptame.model.Favorito;
 import mx.edu.utez.adoptame.model.Mascota;
 import mx.edu.utez.adoptame.model.Tamano;
 import mx.edu.utez.adoptame.model.Usuario;
-import mx.edu.utez.adoptame.service.CaracterServiceImpl;
+import mx.edu.utez.adoptame.service.CaracterServiceImp;
 import mx.edu.utez.adoptame.service.ColorServiceImp;
 import mx.edu.utez.adoptame.service.FavoritoServiceImp;
 import mx.edu.utez.adoptame.service.MascotaServiceImp;
@@ -63,7 +63,7 @@ public class MascotaController {
     private TamanoServiceImp tamanoServiceImp;
 
     @Autowired
-    private CaracterServiceImpl caracterServiceImp;
+    private CaracterServiceImp caracterServiceImp;
 
     @Autowired
     private ColorServiceImp colorServiceImp;

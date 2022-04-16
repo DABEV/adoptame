@@ -1,12 +1,3 @@
-use mascotasintegradora;
-select * from usuarios;
-select * from usuario_rol;
-select * from roles;
-select * from bitacora;
-select * from blogs;
-select * from sesiones;
-
-
 drop table bitacora;
 drop table sesiones;
 
@@ -54,7 +45,7 @@ DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS registroDonacion $$
-CREATE PROCEDURE registroDonacion(IN usuario_id BIGINT, autorizacion VARCHAR(20), estado TINYINT,
+CREATE PROCEDURE registroDonacion(IN usuario_id BIGINT, autorizacion VARCHAR(50), estado TINYINT,
 fechaDonacion DATETIME, monto DOUBLE, donadorId BIGINT)
 BEGIN
     INSERT INTO bitacora(usuario_id, dato_antiguo, dato_nuevo, entidad, movimiento )
@@ -66,8 +57,8 @@ DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS actualizarDonacion $$
-CREATE PROCEDURE actualizarDonacion(IN usuario_id BIGINT, autorizacionAnterior VARCHAR(20), estadoAnterior TINYINT,
-fechaDonacionAnterior DATETIME, montoAnterior DOUBLE, donadorIdAnterior BIGINT,  autorizacion VARCHAR(20), estado TINYINT,
+CREATE PROCEDURE actualizarDonacion(IN usuario_id BIGINT, autorizacionAnterior VARCHAR(50), estadoAnterior TINYINT,
+fechaDonacionAnterior DATETIME, montoAnterior DOUBLE, donadorIdAnterior BIGINT,  autorizacion VARCHAR(50), estado TINYINT,
 fechaDonacion DATETIME, monto DOUBLE, donadorId BIGINT)
 BEGIN
     INSERT INTO bitacora(usuario_id, dato_antiguo, dato_nuevo, entidad, movimiento )
@@ -82,7 +73,7 @@ DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS eliminarDonacion $$
-CREATE PROCEDURE eliminarDonacion(IN usuario_id BIGINT, autorizacion VARCHAR(20), estado TINYINT,
+CREATE PROCEDURE eliminarDonacion(IN usuario_id BIGINT, autorizacion VARCHAR(50), estado TINYINT,
 fechaDonacion DATETIME, monto DOUBLE, donadorId BIGINT)
 BEGIN
     INSERT INTO bitacora(usuario_id, dato_antiguo, dato_nuevo, entidad, movimiento )

@@ -47,6 +47,11 @@ logging.level.mx.edu.utez.adoptame=TRACE
 logging.file.path=./log
 logging.file.name=./log/ejemplo.log
 
-#Cuenta de sendgrid
+# Cuenta de sendgrid
 #sendgrid.api.key=<apikey>
 #sendgrid.api.email=<correo>
+
+# Paypal
+paypal.mode=sandbox
+paypal.client.app=<YOUR_CLIENT_ID>
+paypal.client.secret=<YOUR_CLIENT_SECRET>

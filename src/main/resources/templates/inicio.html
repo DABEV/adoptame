@@ -61,17 +61,20 @@
                         darle un lugar a cada animalito
                     </p>
                     <p><strong>¡Contribuye ahora!</strong></p>
-                    <form>
+                    <form th:action="@{/donativo/guardarDonativo}" method="post" th:object="${donacion}">
                         <div class="row mb-4">
                             <div class="col-12 col-sm-12 col-md-7 mb-3">
                                 <div class="form-outline">
-                                    <input type="number" id="cantidad" placeholder="Ej. 5.99" class="form-control" />
+                                    <input type="number" th:field="*{monto}" id="monto" placeholder="Ej. 5.99" class="form-control" />
                                     <label class="form-label" for="form3Example1">Cantidad a donar</label>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-12 col-md">
-                                <button type="submit" style="background-color: #253E5C;"
-                                    class="btn btn-primary btn-block mb-4 btn-rounded">
+                                <button 
+                                    type="submit" 
+                                    style="background-color: #253E5C;"
+                                    class="btn btn-primary btn-block mb-4 btn-rounded"
+                                >
                                     Donar
                                 </button>
                             </div>
@@ -83,7 +86,7 @@
         <div class="mb-6">
             <hr class="my-5" />
             <h4 class="mb-5 text-center" style="color: #253E5C;"><strong>Agregados recientemente</strong></h4>
-            <div class="row  justify-content-center">
+            <div class="row justify-content-center">
                 <!-- for each de cards limitar a 3-->
                 <div class="col-lg-3 mb-4" th:each="mascota,index: ${recientes}">
                     <div th:replace="fragments/cardsMascota :: card-recientes"></div>

@@ -28,7 +28,7 @@ public class Donacion implements Serializable{
     @CreationTimestamp
     private Date fechaDonacion;
     
-    @Column(nullable = true, length = 20)
+    @Column(nullable = true, length = 50)
     private String autorizacion;
     
     @Column(columnDefinition = "tinyint not null default 0")

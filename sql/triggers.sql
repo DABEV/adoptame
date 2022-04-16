@@ -108,7 +108,7 @@ CREATE TRIGGER insertarDatosSolicitud
 AFTER INSERT ON solicitudes FOR EACH ROW
 BEGIN
 INSERT INTO bitacora_mascota(dato_antiguo, dato_nuevo, entidad, movimiento )
-VALUES ('{}',JSON_OBJECT("id", NEW.id, "aprobado", NEW.aprobado, "fechaSolicitud", NEW.fechaSolicitud, "adoptadorId", NEW.adoptador_id,
+VALUES ('{}',JSON_OBJECT("id", NEW.id, "aprobado", NEW.aprobado, "fechaSolicitud", NEW.fecha_solicitud, "adoptadorId", NEW.adoptador_id,
  "mascotaId", NEW.mascota_id), 'solicitud', 'registro');
 END$$
 DELIMITER ;
@@ -119,8 +119,8 @@ CREATE TRIGGER actualizarDatosSolicitud
 BEFORE UPDATE ON solicitudes FOR EACH ROW
 BEGIN
 INSERT INTO bitacora_mascota(dato_antiguo, dato_nuevo, entidad, movimiento )
-VALUES (JSON_OBJECT("id", OLD.id,"aprobado", OLD.aprobado, "fechaSolicitud", OLD.fechaSolicitud, "adoptadorId", OLD.adoptador_id,
- "mascotaId", OLD.mascota_id), JSON_OBJECT("id", OLD.id, "aprobado", NEW.aprobado, "fechaSolicitud", NEW.fechaSolicitud, "adoptadorId", NEW.adoptador_id,
+VALUES (JSON_OBJECT("id", OLD.id,"aprobado", OLD.aprobado, "fechaSolicitud", OLD.fecha_solicitud, "adoptadorId", OLD.adoptador_id,
+ "mascotaId", OLD.mascota_id), JSON_OBJECT("id", OLD.id, "aprobado", NEW.aprobado, "fechaSolicitud", NEW.fecha_solicitud, "adoptadorId", NEW.adoptador_id,
  "mascotaId", NEW.mascota_id), 'solicitud', 'actualizacion');
 END$$
 DELIMITER ;
@@ -132,7 +132,7 @@ CREATE TRIGGER eliminarDatosSolicitud
 BEFORE DELETE ON solicitudes FOR EACH ROW
 BEGIN
 INSERT INTO bitacora_mascota(dato_antiguo, dato_nuevo, entidad, movimiento )
-VALUES ('{}',JSON_OBJECT("id", OLD.id, "aprobado", OLD.aprobado, "fechaSolicitud", OLD.fechaSolicitud, "adoptadorId", OLD.adoptador_id,
+VALUES ('{}',JSON_OBJECT("id", OLD.id, "aprobado", OLD.aprobado, "fechaSolicitud", OLD.fecha_solicitud, "adoptadorId", OLD.adoptador_id,
  "mascotaId", OLD.mascota_id), 'solicitud', 'actualizacion');
 END$$
 DELIMITER ;

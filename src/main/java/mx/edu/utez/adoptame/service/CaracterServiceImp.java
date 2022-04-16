@@ -9,7 +9,7 @@ import mx.edu.utez.adoptame.model.Caracter;
 import mx.edu.utez.adoptame.repository.CaracterRepository;
 
 @Service
-public class CaracterServiceImpl implements CaracterService {
+public class CaracterServiceImp implements CaracterService {
 
     @Autowired
     private CaracterRepository caracterRepository;

@@ -1,28 +1,138 @@
 package mx.edu.utez.adoptame.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
+import com.paypal.api.payments.Links;
+import com.paypal.api.payments.Payment;
+import com.paypal.base.rest.PayPalRESTException;
+
+import org.springframework.security.core.Authentication;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import mx.edu.utez.adoptame.config.PaypalPaymentIntent;
+import mx.edu.utez.adoptame.config.PaypalPaymentMethod;
+import mx.edu.utez.adoptame.dto.DonacionDto;
+import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Donacion;
 import mx.edu.utez.adoptame.service.DonacionServiceImp;
+import mx.edu.utez.adoptame.service.PaypalServiceImp;
+import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 
 @Controller
 @RequestMapping("/donativo")
 public class DonativoController {
 
+    private static final String URL_CONSULTAR_TODOS = "/donativo/consultarTodos";
+    private static final String URL_INDEX = "/";
+    
+    private static final String REDIRECT_CT = "redirect:" + URL_CONSULTAR_TODOS;
+    private static final String REDIRECT_INDEX = "redirect:" + URL_INDEX;
+
+    private static final String MSG_ERROR = "msg_error";
+    private static final String MSG_SUCESS = "msg_sucess";
+
+    Log log = LogFactory.getLog(getClass());
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private PaypalServiceImp paypalServiceImp;
+
     @Autowired
     private DonacionServiceImp donacionServiceImp;
+
+    @Autowired
+    private UsuarioServiceImp usuarioServiceImp;
+
+    @PostMapping("/guardarDonativo")
+    @Transactional
+    public String guardarDonativo(@ModelAttribute("donacion") DonacionDto donacionDto, Model model, RedirectAttributes redirectAttributes, HttpSession session, Authentication authentication) {
+        try {
+            String correo = authentication.getName();
+
+            UsuarioDto donador = modelMapper.map(usuarioServiceImp.buscarPorCorreo(correo), UsuarioDto.class); 
+            donacionDto.setDonador(donador);
+
+            boolean estado = false;
+
+            String currency = "MXN";
+            String description = "Donación ($" + donacionDto.getMonto().toString() + ") de " + donacionDto.getDonador().getCorreo();
+
+            // Guarda el pago en PayPal
+            Payment pago = paypalServiceImp.creaPago(
+                donacionDto.getMonto(), 
+                currency, 
+                PaypalPaymentMethod.PAYPAL, 
+                PaypalPaymentIntent.SALE,
+                description, 
+                URL_INDEX, 
+                URL_CONSULTAR_TODOS
+            );
+
+            for (Links links : pago.getLinks()) {
+                if (links.getRel().equals("approval_url")) {
+                    estado = true;
+                    donacionDto.setEstado(estado);
+                }
+            }
+
+            if (estado) {
+                donacionDto.setAutorizacion(pago.getId());
+
+                log.info("Id del pago: " + pago.getId());
+                log.info("Info de la donación: " + donacionDto.toString());
+
+                Donacion donacion = modelMapper.map(donacionDto, Donacion.class);
+                
+                boolean respuesta = donacionServiceImp.guardarDonacion(donacion, session);
+                
+                if (respuesta) {
+                    redirectAttributes.addFlashAttribute(MSG_SUCESS, "Registro exitoso");
+                    return REDIRECT_CT;
+                } else {
+                    redirectAttributes.addFlashAttribute(MSG_ERROR, "Registro fallido");
+                    return REDIRECT_INDEX;
+                }
+            } else {
+                redirectAttributes.addFlashAttribute(MSG_ERROR, "Registro fallido: No se genero el pago de PayPal");
+                return REDIRECT_INDEX;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute(MSG_ERROR, "Registro fallido: Error en el servidor");
+            return REDIRECT_INDEX;
+        }
+    }
+    
+    @GetMapping("/exito")
+	public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) throws PayPalRESTException{
+		
+        Payment payment = paypalServiceImp.ejecutaPago(paymentId, payerId);
+
+        if(payment.getState().equals("approved")){
+        	return REDIRECT_CT;
+        }
+
+		return REDIRECT_INDEX;
+	}
 
     @GetMapping("/consultarTodos")
     public String consultarTodos(Model model,
@@ -47,34 +157,6 @@ public class DonativoController {
 
         }
         redirectAttributes.addFlashAttribute("msg_error", "Donacion no econtrada");
-        return "redirect:/donativo/consultarTodos";
+        return REDIRECT_CT;
     }
-
-    @PostMapping("/guardarDonativo")
-    public String guardarDonativo(Donacion donacion, Model model, RedirectAttributes redirectAttributes,
-            HttpSession session) {
-        donacion.setEstado(false);
-        boolean respuesta = donacionServiceImp.guardarDonacion(donacion, session);
-        if (respuesta) {
-            redirectAttributes.addFlashAttribute("msg_success", "Registro exitoso");
-            return "redirect:/donativo/consultarTodos";
-        } else {
-            redirectAttributes.addFlashAttribute("msg_error", "Registro fallido");
-            return "redirect:/donativo/donar";
-        }
-
-    }
-
-    @PostMapping("/borrarDonativo/{id}")
-    public String borrarDonativo(@PathVariable("id") long id, RedirectAttributes redirectAttributes,
-            HttpSession session) {
-        boolean respuesta = donacionServiceImp.eliminarDonacion(id, session);
-        if (respuesta) {
-            redirectAttributes.addFlashAttribute("msg_success", "Eliminación exitosa");
-        } else {
-            redirectAttributes.addFlashAttribute("msg_error", "Eliminacion fallida");
-        }
-        return "redirect:/donativo/consultarTodos";
-    }
-
 }

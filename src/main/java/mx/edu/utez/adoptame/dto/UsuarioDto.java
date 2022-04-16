@@ -22,6 +22,7 @@ public class UsuarioDto implements Serializable {
     private List<SolicitudDto> solicitudes;
     
     public UsuarioDto() {
+        // constructor vacío
     }
 
     public Long getId() {

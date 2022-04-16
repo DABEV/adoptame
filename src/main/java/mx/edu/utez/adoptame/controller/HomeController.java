@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.edu.utez.adoptame.dto.DonacionDto;
 import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Usuario;
 import mx.edu.utez.adoptame.service.BlogServiceImp;
@@ -57,7 +58,7 @@ public class HomeController {
     private BlogServiceImp blogServiceImp;
 
     @GetMapping("/")
-    public String inicio(Model model) {
+    public String inicio(Model model, @ModelAttribute("donacion") DonacionDto donacionDto) {
         model.addAttribute("recientes", mascotaServiceImp.obtenerRecientes());
         model.addAttribute("noticias", blogServiceImp.listaPrincipales());
         return "inicio";

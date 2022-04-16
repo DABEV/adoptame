@@ -23,10 +23,10 @@ public class DonacionServiceImp implements DonacionService {
 
     @Autowired
     private DonacionRepository donacionRepository;
-
+    
     @Override
     public List<Donacion> listarDonaciones() {
-        return (List<Donacion>) donacionRepository.findAll(Sort.by("fechaDonacion"));
+        return donacionRepository.findAll(Sort.by("fechaDonacion"));
     }
 
     @Override
@@ -44,7 +44,6 @@ public class DonacionServiceImp implements DonacionService {
             e.printStackTrace();
             return false;
         }
-
     }
 
     @Override

@@ -18,7 +18,6 @@ public interface DonacionService {
     public boolean eliminarDonacion(Long id, HttpSession session);
 
     public Donacion obtenerDonacion(Long id);
-
     public Page<Donacion> listarPaginacion(Pageable page);
 
     List<Donacion> procedimientoRegistrarDonacion(Long idUsuario, String autorizacion, Boolean estado,
