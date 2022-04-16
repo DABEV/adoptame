@@ -97,9 +97,6 @@ public class DonativoController {
             if (estado) {
                 donacionDto.setAutorizacion(pago.getId());
 
-                log.info("Id del pago: " + pago.getId());
-                log.info("Info de la donación: " + donacionDto.toString());
-
                 Donacion donacion = modelMapper.map(donacionDto, Donacion.class);
                 
                 boolean respuesta = donacionServiceImp.guardarDonacion(donacion, session);
@@ -122,7 +119,7 @@ public class DonativoController {
         }
     }
     
-    @GetMapping("/exito")
+    @GetMapping("/webhook")
 	public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) throws PayPalRESTException{
 		
         Payment payment = paypalServiceImp.ejecutaPago(paymentId, payerId);
