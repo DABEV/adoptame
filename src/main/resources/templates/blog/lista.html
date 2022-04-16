@@ -34,7 +34,7 @@
                                     Las noticias más relevantes de AdoptaMe
                                 </p>
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-lg-3" sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')">
                                 <div class="text-center">
                                     <button type="button" class="btn btn-primary btn-rounded  mt-4"
                                         style="background-color: #253E5C;" data-mdb-toggle="modal"
@@ -59,7 +59,7 @@
                                         </div>
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item" style="border-color: #253E5C;"
-                                                th:text="${blog.contenido}">
+                                                th:text="${blog.esPrincipal == true}? 'Noticia principal': 'Noticia'">
                                             </li>
                                             <li class="list-group-item" style="border-color: #253E5C;">
                                                 <div class="row justify-content-between">

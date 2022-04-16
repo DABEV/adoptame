@@ -1,6 +1,5 @@
 package mx.edu.utez.adoptame.service;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -44,60 +43,44 @@ public class BlogServiceImp implements BlogService {
 
             Blog respuesta = blogRepository.save(blog);
             if (respuesta.getTitulo() != null) {
-                procedimientoRegistrarBlog(idUsuario, respuesta.getTitulo(), respuesta.getContenido(),
-                        respuesta.getEsPrincipal(), respuesta.getFechaRegistro(), respuesta.getImagen());
+                procedimientoRegistrarBlog(idUsuario, respuesta);
                 return respuesta;
             }
-
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
-
         }
         return null;
     }
 
     @Override
-    public List<Blog> procedimientoRegistrarBlog(Long id, String titulo, String contenido,
-            Boolean esPrincipal, Date fechaRegistro, String imagen) {
+    public List<Blog> procedimientoRegistrarBlog(Long id, Blog blog) {
 
-        return blogRepository.registroBlog(id, titulo, contenido, esPrincipal, fechaRegistro, imagen);
+        return blogRepository.registroBlog(id, blog);
 
     }
 
     @Override
     public Blog actualizarBlog(Blog blog, HttpSession session) {
-
         try {
-
             UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute(usuarioSession);
             idUsuario = usuarioDto.getId();
             Blog blogActualizar = blogRepository.getById(blog.getId());
 
+            blogActualizar.setContenido(blog.getContenido());
+            blogActualizar.setTitulo(blog.getTitulo());
+            blogActualizar.setEsPrincipal(blog.getEsPrincipal());
+
             if (blog.getImagen() == null) {
-                procedimientoActualizarBlog(idUsuario, blogActualizar.getTitulo(),
-                        blogActualizar.getContenido(), blogActualizar.getEsPrincipal(),
-                        blogActualizar.getFechaRegistro(),
-                        blogActualizar.getImagen(), blog.getTitulo(), blog.getContenido(),
-                        blog.getEsPrincipal(), blogActualizar.getFechaRegistro(), blogActualizar.getImagen());
-                blogActualizar.setImagen(blogActualizar.getImagen());
-                blogActualizar.setContenido(blog.getContenido());
-                blogActualizar.setTitulo(blog.getTitulo());
-                blogActualizar.setEsPrincipal(blog.getEsPrincipal());
+                blog.setImagen(blogActualizar.getImagen());
+
+                procedimientoActualizarBlog(idUsuario, blog, blogActualizar);
                 blogRepository.save(blogActualizar);
 
             } else {
-                procedimientoActualizarBlog(idUsuario, blogActualizar.getTitulo(),
-                        blogActualizar.getContenido(), blogActualizar.getEsPrincipal(),
-                        blogActualizar.getFechaRegistro(),
-                        blogActualizar.getImagen(), blog.getTitulo(), blog.getContenido(),
-                        blog.getEsPrincipal(), blogActualizar.getFechaRegistro(), blog.getImagen());
                 blogActualizar.setImagen(blog.getImagen());
-                blogActualizar.setContenido(blog.getContenido());
-                blogActualizar.setTitulo(blog.getTitulo());
-                blogActualizar.setEsPrincipal(blog.getEsPrincipal());
-                blogRepository.save(blogActualizar);
 
+                procedimientoActualizarBlog(idUsuario, blog, blogActualizar);
+                blogRepository.save(blogActualizar);
             }
 
             return blogActualizar;
@@ -111,12 +94,9 @@ public class BlogServiceImp implements BlogService {
     }
 
     @Override
-    public List<Blog> procedimientoActualizarBlog(Long idUsuario, String tituloAnterior, String contenidoAnterior,
-            Boolean esPrincipalAnterior, Date fechaRegistroAnterior, String imagenAnterior, String titulo,
-            String contenido, Boolean esPrincipal, Date fechaRegistro, String imagen) {
+    public List<Blog> procedimientoActualizarBlog(Long idUsuario, Blog blog, Blog anterior) {
 
-        return blogRepository.actualizarBlog(idUsuario, tituloAnterior, contenidoAnterior, esPrincipalAnterior,
-                fechaRegistroAnterior, imagenAnterior, titulo, contenido, esPrincipal, fechaRegistro, imagen);
+        return blogRepository.actualizarBlog(idUsuario, blog, anterior);
     }
 
     @Override
@@ -147,8 +127,7 @@ public class BlogServiceImp implements BlogService {
             Blog blog = blogRepository.getById(id);
 
             if (blog.getId() != null) {
-                procedimientoEliminarBlog(idUsuario, blog.getTitulo(), blog.getContenido(), blog.getEsPrincipal(),
-                        blog.getFechaRegistro(), blog.getImagen());
+                procedimientoEliminarBlog(idUsuario, blog);
                 blogRepository.deleteById(id);
                 return true;
             }
@@ -161,9 +140,8 @@ public class BlogServiceImp implements BlogService {
     }
 
     @Override
-    public List<Blog> procedimientoEliminarBlog(Long idUsuario, String titulo, String contenido, Boolean esPrincipal,
-            Date fechaRegistro, String imagen) {
-        return blogRepository.eliminarBlog(idUsuario, titulo, contenido, esPrincipal, fechaRegistro, imagen);
+    public List<Blog> procedimientoEliminarBlog(Long idUsuario, Blog blog) {
+        return blogRepository.eliminarBlog(idUsuario, blog);
 
     }
 

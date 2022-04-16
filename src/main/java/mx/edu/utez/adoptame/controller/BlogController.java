@@ -5,6 +5,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.edu.utez.adoptame.dto.BlogDto;
 import mx.edu.utez.adoptame.model.Blog;
 import mx.edu.utez.adoptame.service.BlogServiceImp;
 import mx.edu.utez.adoptame.util.ImagenUtileria;
@@ -27,19 +29,22 @@ import mx.edu.utez.adoptame.util.ImagenUtileria;
 @RequestMapping("/blog")
 public class BlogController {
 
-    Log log = LogFactory.getLog(getClass());
+    private Log log = LogFactory.getLog(getClass());
 
     private String msgSuccess = "msg_success";
     private String msgError = "msg_error";
 
     @Autowired
-    BlogServiceImp blogServiceImp;
+    private BlogServiceImp blogServiceImp;
+    
+    @Autowired
+    private ModelMapper modelMapper;
 
     private String redirectBlogLista = "redirect:/blog/consultarTodas";
 
     @GetMapping("/consultarTodas")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO') or hasAuthority('ROL_ADOPTADOR')")
-    public String consultarBlogs(Blog blog, Model model, HttpSession session) {
+    public String consultarBlogs(@ModelAttribute("blog") BlogDto blog, Model model, HttpSession session) {
 
         try {
             model.addAttribute("listaBlog", blogServiceImp.listarBlogs());
@@ -59,14 +64,14 @@ public class BlogController {
 
     @PostMapping("/guardarBlog")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
-    public String guardarBlog(@Valid @ModelAttribute("blog") Blog blog, BindingResult result, Model model,
+    public String guardarBlog(@Valid @ModelAttribute("blog") BlogDto blogDto, BindingResult result, Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("imagenBlog") MultipartFile multipartFile, HttpSession session) {
 
         try {
+            Blog blog = modelMapper.map(blogDto, Blog.class);
             if (result.hasErrors()) {
                 redirectAttributes.addFlashAttribute(msgError, "Registro fallido");
-
                 return redirectBlogLista;
 
             } else if (!multipartFile.isEmpty()) {
@@ -84,7 +89,6 @@ public class BlogController {
                 redirectAttributes.addFlashAttribute(msgError, "Registro fallido verifique los datos");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
 
         }
@@ -94,11 +98,11 @@ public class BlogController {
 
     @PostMapping("/actualizarBlog")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
-    public String actualizarBlog(Blog blog, Model model, RedirectAttributes redirectAttributes,
+    public String actualizarBlog(@ModelAttribute("blog") BlogDto blogDto, Model model, RedirectAttributes redirectAttributes,
             @RequestParam("imagenBlog") MultipartFile multipartFile, HttpSession session) {
 
         try {
-
+            Blog blog = modelMapper.map(blogDto, Blog.class);
             if (!multipartFile.isEmpty()) {
                 String ruta = "C:/mascotas/img-mascotas/";
                 String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);

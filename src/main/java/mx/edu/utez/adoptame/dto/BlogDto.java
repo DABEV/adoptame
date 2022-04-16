@@ -1,47 +1,33 @@
-package mx.edu.utez.adoptame.model;
+package mx.edu.utez.adoptame.dto;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import org.hibernate.annotations.CreationTimestamp;
+import javax.validation.constraints.Size;
 
+import mx.edu.utez.adoptame.validator.DescriptionFormat;
+import mx.edu.utez.adoptame.validator.ParagraphFormat;
 
-@Entity
-@Table(name = "blogs")
-public class Blog {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class BlogDto {
+
     private Long id;
 
-    @Column(nullable = false)
     @Size(max = 50, message = "Máximo 50 caracteres")
+    @DescriptionFormat(message = "Sólo se permiten números y letras")
     private String titulo;
 
     @NotBlank
     @NotNull
-    @Column(columnDefinition = "longtext not null")
+    @ParagraphFormat(message = "Caracteres no válidos")
     @Size(max = 200, message = "Máximo 200 caracteres")
     private String contenido;
 
-    @Column(name = "es_principal", columnDefinition = "tinyint not null default 0")
     private Boolean esPrincipal;
-
-    @Column(nullable = true)
     private String imagen; 
-
-    @Column(name = "fecha_registro", nullable = false)
-    @CreationTimestamp
     private Date fechaRegistro;
 
-    public Blog() {
+    public BlogDto() {
         //controlador
     }
 

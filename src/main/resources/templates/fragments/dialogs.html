@@ -17,8 +17,8 @@
                 <span class="input-group-text" style="background-color: #253e5c; color: white" id="addon-wrapping">
                   <em class="fas fa-donate"></em>
                 </span>
-                <input type="number" th:field="*{monto}" id="monto" class="form-control" step="0.01" placeholder="500.00"
-                  aria-label="monto" aria-describedby="addon-wrapping" />
+                <input type="number" th:field="*{monto}" id="monto" class="form-control" step="0.01"
+                  placeholder="500.00" aria-label="monto" aria-describedby="addon-wrapping" />
               </div>
             </div>
           </div>
@@ -263,65 +263,51 @@
 <!-- Modal detalles de blog -->
 <div th:fragment="detallesBlog(id)" class="modal fade" th:id="${'detalles-blog' + id}" tabindex="-1"
   aria-labelledby="labelModal" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="modal-header text-white" style="background-color: #253E5C;">
-        <h5 class="modal-title" id="labelModal" th:text="'Detalles de : ' + ${blog.titulo}"></h5>
+        <h5 class="modal-title" id="labelModal">Detalles de la noticia</h5>
         <button type="button" class="btn-close btn-close-white" data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div class="col-md-12">
-          <label style="color: #698FAE;">Titulo</label>
-          <div class="input-group">
-            <span class="input-group-text" style="background-color: #253E5C; color: white;"><em
-                class="fas fa-file-signature"></em></span>
-            <input type="text" class="form-control" disabled th:value="${blog.titulo}" />
-          </div>
-        </div>
-
-        <div class="col-md-12 mt-2">
-          <label style="color: #698FAE;">Contenido</label>
-          <div class="form-outline">
-            <textarea class="form-control" id="textAreaExample" rows="4" disabled
-              th:text="${blog.contenido}"></textarea>
-          </div>
-        </div>
-        <div class="col-md-12 mt-2">
-          <label style="color: #698FAE;">Principal</label>
-          <div class="input-group ">
-
-            <div class="form-check col">
-              <input class="form-check-input" th:checked="${blog.esPrincipal}" type="radio" disabled />
-              <label class="form-check-label" for="flexRadioDefault1">Si</label>
+        <div class="mb-3">
+          <div class="row">
+            <div class="col-lg-4 text-center">
+              <img th:if="${blog.esPrincipal == true}" th:src="@{/imagenes/{i} (i= ${blog.imagen})}"
+                class="img-fluid rounded mb-3" alt="No encontrada" />
+              <img th:if="${blog.esPrincipal == false}"
+                src="https://images.unsplash.com/photo-1535930749574-1399327ce78f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1336&q=80"
+                class="img-fluid rounded mb-3" alt="No encontrada" />
             </div>
-
-            <!-- Default checked radio -->
-            <div class="form-check col">
-              <input class="form-check-input" type="radio" th:checked="${!blog.esPrincipal}" disabled />
-              <label class="form-check-label" for="flexRadioDefault2">No
-              </label>
+            <div class="col-lg-8">
+              <div>
+                <div class="row">
+                  <div class="col-lg">
+                    <h2 th:text="${blog.titulo}"></h2>
+                  </div>
+                  <div class="col-12 col-lg text-center">
+                    <p>
+                      Fecha de registro:
+                      <small class="text-muted" th:text="${#dates.format(blog.fechaRegistro, 'dd-MM-yyyy')}"></small>
+                    </p>
+                  </div>
+                </div>
+                <p class="note note-light">
+                  <strong>Detalles: </strong> [[${blog.contenido}]]
+                </p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-rounded" style="background-color: #253E5C;"
+                  data-mdb-dismiss="modal">Cerrar</button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-12 mt-2">
-          <label style="color: #698FAE;">Fecha de registro</label>
-          <div class="input-group col">
-            <span class="input-group-text" style="background-color: #253E5C; color: white;"><em
-                class="far fa-calendar"></em></span>
-            <input type="text" class="form-control" th:value="${#dates.format(blog.fechaRegistro, 'dd-MM-yyyy')}"
-              disabled />
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" style="background-color: #253E5C;"
-          data-mdb-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
-
 
 <!-- Modal registro de blog -->
 <div th:fragment="nuevoBlog" class="modal fade" id="nuevoBlog" tabindex="-1" aria-hidden="true">
@@ -378,10 +364,10 @@
             </div>
           </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal"
-          style="background-color: #253E5C;">Cerrar</button>
-        <button type="submit" class="btn btn-primary" style="background-color: #253E5C;">Guardar</button>
+      <div class="modal-footer text-center">
+        <button type="button" class="btn btn-outline-primary btn-rounded" data-mdb-dismiss="modal"
+          style="border-color: #253E5C; color: #253E5C;">Cerrar</button>
+        <button type="submit" class="btn btn-primary btn-rounded" style="background-color: #253E5C;">Guardar</button>
       </div>
       </form>
 
