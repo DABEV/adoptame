@@ -24,7 +24,7 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
     @Query(value = "{call registroSolicitud(:usuario_id, :aprobado, :fechaSolicitud, :adoptadorId, :mascotaId) }", nativeQuery = true)
     List<Solicitud> registroSolicitud(@Param("usuario_id") long usuarioId, @Param("aprobado") String aprobado,
             @Param("fechaSolicitud") Date fechaSolicitud, @Param("adoptadorId") Long adoptadorId,
-            @Param("mascotaId") Long mascotaId);
+            @Param("mascotaId") Long mascotaId); 
  
     @Query(value = "{call actualizarSolicitud(:usuario_id, :#{#anterior.aprobadoAnterior}, :#{#anterior.fechaSolicitudAnterior}, :#{#anterior.adoptadorIdAnterior}, :#{#anterior.mascotaIdAnterior}, :#{#solicitud.aprobado}, :#{#solicitud.fechaSolicitud}, :#{#solicitud.adoptadorId}, :#{#solicitud.mascotaId}) }", nativeQuery = true)
     List<Solicitud> actualizarSolicitud(@Param("usuario_id") long usuarioId,

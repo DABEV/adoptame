@@ -136,7 +136,7 @@ DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS registroSolicitud $$
-CREATE PROCEDURE registroSolicitud(IN usuario_id BIGINT, aprobado TINYINT, fechaSolicitud DATETIME,
+CREATE PROCEDURE registroSolicitud(IN usuario_id BIGINT, aprobado autorizacion VARCHAR(50), fechaSolicitud DATETIME,
 adoptadorId BIGINT, mascotaId BIGINT)
 BEGIN
     INSERT INTO bitacora(usuario_id, dato_antiguo, dato_nuevo, entidad, movimiento )
@@ -148,8 +148,8 @@ DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS actualizarSolicitud $$
-CREATE PROCEDURE actualizarSolicitud(IN usuario_id BIGINT, aprobadoAnterior TINYINT, fechaSolicitudAnterior DATETIME,
-adoptadorIdAnterior BIGINT, mascotaIdAnterior BIGINT, aprobado TINYINT, fechaSolicitud DATETIME,
+CREATE PROCEDURE actualizarSolicitud(IN usuario_id BIGINT, aprobadoAnterior autorizacion VARCHAR(50), fechaSolicitudAnterior DATETIME,
+adoptadorIdAnterior BIGINT, mascotaIdAnterior BIGINT, aprobado autorizacion VARCHAR(50), fechaSolicitud DATETIME,
 adoptadorId BIGINT, mascotaId BIGINT)
 BEGIN
     INSERT INTO bitacora(usuario_id, dato_antiguo, dato_nuevo, entidad, movimiento )
@@ -162,7 +162,7 @@ DELIMITER ;
 
 DELIMITER $$
 DROP PROCEDURE IF EXISTS eliminarSolicitud $$
-CREATE PROCEDURE eliminarSolicitud(IN usuario_id BIGINT, aprobado TINYINT, fechaSolicitud DATETIME,
+CREATE PROCEDURE eliminarSolicitud(IN usuario_id BIGINT, aprobado autorizacion VARCHAR(50), fechaSolicitud DATETIME,
 adoptadorId BIGINT, mascotaId BIGINT)
 BEGIN
     INSERT INTO bitacora(usuario_id, dato_antiguo, dato_nuevo, entidad, movimiento )
