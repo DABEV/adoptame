@@ -24,12 +24,7 @@ public interface SolicitudService {
             Long adoptadorId,
             Long mascotaId);
 
-    List<Solicitud> procedimientoActualizarSolicitud(Long idUsuario, String aprobadoAnterior,
-            Date fechaSolicitudAnterior,
-            Long adoptadorIdAnterior,
-            Long mascotaIdAnterior, String aprobado, Date fechaSolicitud,
-            Long adoptadorId,
-            Long mascotaId);
+    List<Solicitud> procedimientoActualizarSolicitud(Long idUsuario, Solicitud anterior, Solicitud solicitud);
 
     List<Solicitud> procedimientoEliminarSolicitud(Long idUsuario, String aprobado, Date fechaSolicitud,
             Long adoptadorId,

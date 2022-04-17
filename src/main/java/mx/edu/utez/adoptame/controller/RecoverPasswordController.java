@@ -20,6 +20,8 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class RecoverPasswordController {
 
+	private String div = "</div>";
+
 	@Autowired
 	private ModelMapper modelMapper;
 
@@ -117,7 +119,7 @@ public class RecoverPasswordController {
 			contenidoCorreo.append("<div class=\"\">");
 			contenidoCorreo.append(
 					"<h2 style=\"color: #253E5C; font-size: calc(1.325rem + .9vw); text-align: center!important;\" class=\"text-center\">¿Problemas para acceder?</h2>");
-			contenidoCorreo.append("</div>");
+			contenidoCorreo.append(div);
 			contenidoCorreo.append("<div class=\"card-body\">");
 			contenidoCorreo.append("<h5 class=\"card-title\" style=\"color: #253E5C;\">Estimad@ ").append(nombreUsuario)
 					.append(" recibimos una solicitud para restablecer tu contraseña de AdoptaMe, asociada con ")
@@ -133,7 +135,7 @@ public class RecoverPasswordController {
 			contenidoCorreo.append("<p>Contraseña:</p>").append(contrasena);
 			contenidoCorreo.append("</li>");
 			contenidoCorreo.append("</ul>");
-			contenidoCorreo.append("</div>");
+			contenidoCorreo.append(div);
 			contenidoCorreo.append("<blockquote class=\"blockquote mb-0\">");
 			contenidoCorreo.append(
 					"<h5 class=\"mt-3\" style=\"color: #253E5C;\">Ingresa con los datos proporcionados y no olvides cambiar la contraseña por una de tu preferencia</h5>");
@@ -141,9 +143,9 @@ public class RecoverPasswordController {
 					"<h5 style=\"color: #253E5C;\">Si no realizó esta solicitud, contáctenos...</h5>");
 			contenidoCorreo.append(" </blockquote>");
 			contenidoCorreo.append(" <center>© 2022 Copyright: <br> AdoptaMe.com</center>");
-			contenidoCorreo.append(" </div>");
-			contenidoCorreo.append(" </div>");
-			contenidoCorreo.append(" </div>");
+			contenidoCorreo.append(div);
+			contenidoCorreo.append(div);
+			contenidoCorreo.append(div);
 			contenidoCorreo.append("</body>");
 			contenidoCorreo.append("</html>");
 

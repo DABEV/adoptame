@@ -98,9 +98,9 @@ public class SolicitudController {
 
     @PostMapping("/adoptador/guardarSolicitud")
     @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
-    public String guardarSolicitud(@RequestParam("idMascota") long id, Authentication authentication,
-            Solicitud solicitud, Model model, RedirectAttributes redirectAttributes, HttpSession session) {
+    public String guardarSolicitud(@RequestParam("idMascota") long id, Authentication authentication, Model model, RedirectAttributes redirectAttributes, HttpSession session) {
         Solicitud respuesta = null;
+        Solicitud soli = new Solicitud();
 
         try {
             String correo = authentication.getName();
@@ -109,9 +109,9 @@ public class SolicitudController {
             List<Solicitud> solicitados = solicitudServiceImp.listarUsuarioSolicitud(id, usuario.getId());
             if (solicitados.isEmpty() && mascota.getAprobadoRegistro().equals("aprobado")
                     && Boolean.TRUE.equals(mascota.getDisponibleAdopcion())) {
-                solicitud.setAprobado("Pendiente");
-                solicitud.setAdoptador(usuario);
-                solicitud.setMascota(mascota);
+                soli.setAprobado("Pendiente");
+                soli.setAdoptador(usuario);
+                soli.setMascota(mascota);
             } else if (Boolean.FALSE.equals(mascota.getDisponibleAdopcion())) {
                 redirectAttributes.addFlashAttribute(msgW, "Esta mascota ya no se encuentra disponible para adopción");
                 if (Boolean.FALSE.equals(mascota.getSexo())) {
@@ -128,7 +128,7 @@ public class SolicitudController {
                 }
             }
 
-            respuesta = solicitudServiceImp.guardarSolicitud(solicitud);
+            respuesta = solicitudServiceImp.guardarSolicitud(soli);
 
             if (respuesta != null) {
                 solicitudServiceImp.procedimientoRegistrarSolicitud(usuario.getId(), respuesta.getAprobado(),

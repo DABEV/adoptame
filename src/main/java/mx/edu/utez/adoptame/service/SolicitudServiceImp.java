@@ -112,18 +112,15 @@ public class SolicitudServiceImp implements SolicitudService {
             e.printStackTrace();
         }
         return list;
-    }
+    } 
 
     @Override
-    public List<Solicitud> procedimientoActualizarSolicitud(Long idUsuario, String aprobadoAnterior,
-            Date fechaSolicitudAnterior, Long adoptadorIdAnterior, Long mascotaIdAnterior, String aprobado,
-            Date fechaSolicitud, Long adoptadorId, Long mascotaId) {
+    public List<Solicitud> procedimientoActualizarSolicitud(Long idUsuario, Solicitud anterior, Solicitud solicitud) {
         List<Solicitud> list = new ArrayList<>();
 
         try {
 
-            list = repository.actualizarSolicitud(idUsuario, aprobadoAnterior, fechaSolicitudAnterior,
-                    adoptadorIdAnterior, mascotaIdAnterior, aprobado, fechaSolicitud, adoptadorId, mascotaId);
+            list = repository.actualizarSolicitud(idUsuario, anterior, solicitud);
 
         } catch (Exception e) {
             e.printStackTrace();

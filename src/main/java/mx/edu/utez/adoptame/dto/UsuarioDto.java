@@ -89,10 +89,6 @@ public class UsuarioDto implements Serializable {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public Boolean getHabilitado() {
-        return habilitado;
-    }
-
     public Boolean isHabilitado() {
         return habilitado;
     }

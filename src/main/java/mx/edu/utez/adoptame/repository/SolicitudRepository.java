@@ -25,15 +25,11 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
     List<Solicitud> registroSolicitud(@Param("usuario_id") long usuarioId, @Param("aprobado") String aprobado,
             @Param("fechaSolicitud") Date fechaSolicitud, @Param("adoptadorId") Long adoptadorId,
             @Param("mascotaId") Long mascotaId);
-
-    @Query(value = "{call actualizarSolicitud(:usuario_id, :aprobadoAnterior, :fechaSolicitudAnterior, :adoptadorIdAnterior, :mascotaIdAnterior, :aprobado, :fechaSolicitud, :adoptadorId, :mascotaId) }", nativeQuery = true)
+ 
+    @Query(value = "{call actualizarSolicitud(:usuario_id, :#{#anterior.aprobadoAnterior}, :#{#anterior.fechaSolicitudAnterior}, :#{#anterior.adoptadorIdAnterior}, :#{#anterior.mascotaIdAnterior}, :#{#solicitud.aprobado}, :#{#solicitud.fechaSolicitud}, :#{#solicitud.adoptadorId}, :#{#solicitud.mascotaId}) }", nativeQuery = true)
     List<Solicitud> actualizarSolicitud(@Param("usuario_id") long usuarioId,
-            @Param("aprobadoAnterior") String aprobadoAnterior,
-            @Param("fechaSolicitudAnterior") Date fechaSolicitudAnterior,
-            @Param("adoptadorIdAnterior") Long adoptadorIdAnterior,
-            @Param("mascotaIdAnterior") Long mascotaIdAnterior, @Param("aprobado") String aprobado,
-            @Param("fechaSolicitud") Date fechaSolicitud, @Param("adoptadorId") Long adoptadorId,
-            @Param("mascotaId") Long mascotaId);
+            @Param("anterior") Solicitud anterior,
+            @Param("solicitud") Solicitud solicitud);
 
     @Query(value = "{call eliminarSolicitud(:usuario_id, :aprobado, :fechaSolicitud, :adoptadorId, :mascotaId) }", nativeQuery = true)
     List<Solicitud> eliminarSolicitud(@Param("usuario_id") long usuarioId, @Param("aprobado") String aprobado,
