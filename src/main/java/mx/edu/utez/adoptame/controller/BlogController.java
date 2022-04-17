@@ -36,7 +36,7 @@ public class BlogController {
 
     @Autowired
     private BlogServiceImp blogServiceImp;
-    
+
     @Autowired
     private ModelMapper modelMapper;
 
