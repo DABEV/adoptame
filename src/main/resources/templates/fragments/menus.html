@@ -7,12 +7,12 @@
         <em class="fas fa-plus-circle"></em>
         Mi cuenta
     </a>
-    <a th:href="@{/donativo/consultarTodos}" class="list-group-item list-group-item-action" th:classappend="${activo} == 2 ? 'active' : ''"
+    <a th:href="@{/donativo/consultarTodas}" class="list-group-item list-group-item-action" th:classappend="${activo} == 2 ? 'active' : ''"
         aria-current="true">
         <em class="fas fa-wallet"></em>
         Mis donaciones
     </a>
-    <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 3 ? 'active' : ''"
+    <a th:href="@{/solicitud/adoptador/consultarTodos}" class="list-group-item list-group-item-action" th:classappend="${activo} == 3 ? 'active' : ''"
         aria-current="true">
         <em class="fas fa-envelope"></em>
         Mis solicitudes de adopción
@@ -33,7 +33,7 @@
         <em class="fas fa-plus-circle"></em>
         Registro mascota
     </a>
-    <a href="#" class="list-group-item list-group-item-action" th:classappend="${activo} == 2 ? 'active' : ''"
+    <a th:href="@{/solicitud/voluntario/consultarTodas}" class="list-group-item list-group-item-action" th:classappend="${activo} == 2 ? 'active' : ''"
         aria-current="true">
         <em class="fas fa-envelope"></em>
         Ver solicitudes de adopción

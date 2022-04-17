@@ -99,9 +99,9 @@
                                                         <span class="input-group-text" id="addon-wrapping-telefono">
                                                             <em class="fas fa-phone"></em>
                                                         </span>
-                                                        <input type="text" th:field="*{telefono}"
+                                                        <input type="tel" th:field="*{telefono}"
                                                             class="form-control phone-mask"
-                                                            placeholder="Ej .(777) - 000 - 00 - 00"
+                                                            onkeydown="javascript:backspacerDOWN(this,event);" onkeyup="javascript:backspacerUP(this,event);"
                                                             aria-label="telefono"
                                                             aria-describedby="addon-wrapping-telefono" />
                                                     </div>
