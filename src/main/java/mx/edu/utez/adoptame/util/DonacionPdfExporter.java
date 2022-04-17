@@ -17,9 +17,14 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mx.edu.utez.adoptame.model.Donacion;
 
 public class DonacionPdfExporter {
+
+    private Logger logger = LoggerFactory.getLogger(DonacionPdfExporter.class);
 
     private List<Donacion> listDonaciones;
 
@@ -61,29 +66,33 @@ public class DonacionPdfExporter {
 
     public void export(HttpServletResponse response) throws DocumentException, IOException {
         Document document = new Document(PageSize.LETTER.rotate());
+        try {
+            PdfWriter.getInstance(document, response.getOutputStream());
+            document.open();
 
-        PdfWriter.getInstance(document, response.getOutputStream());
-        document.open();
+            Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            font.setColor(new Color(37, 62, 92));
+            font.setSize(18);
 
-        Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-        font.setColor(new Color(37, 62, 92));
-        font.setSize(18);
+            Paragraph title = new Paragraph("Lista de todas las donaciones", font);
+            document.add(title);
 
-        Paragraph title = new Paragraph("Lista de todas las donaciones", font);
-        document.add(title);
+            PdfPTable table = new PdfPTable(4);
 
-        PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(15);
 
-        table.setWidthPercentage(100);
-        table.setSpacingBefore(15);
+            table.setWidths(new float[] { 3.5f, 3.0f, 3.0f, 1.5f });
 
-        table.setWidths(new float[] { 3.5f, 3.0f, 3.0f, 1.5f });
+            writeTableHeader(table);
+            writeTableData(table);
 
-        writeTableHeader(table);
-        writeTableData(table);
+            document.add(table);
 
-        document.add(table);
+        } catch (DocumentException | IOException de) {
+            logger.error("Error al descargar el pdf");
+
+        }
         document.close();
-
     }
 }
