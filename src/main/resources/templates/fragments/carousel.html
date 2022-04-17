@@ -1,5 +1,5 @@
 <div class="carousel-item" th:fragment="item" th:each="blog: ${noticias}">
-    <img src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp" class="d-block w-100" alt="Wild Landscape" />
+    <img th:src="@{/imagenes/{i} (i= ${blog.imagen})}"  style="max-height: 570px;" class="d-block w-100" alt="No encontrada" />
     <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
         <div class="d-flex justify-content-center align-items-center h-100">
             <div class="text-white text-center">
