@@ -1,8 +1,16 @@
 package mx.edu.utez.adoptame.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
+import com.lowagie.text.DocumentException;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
@@ -34,6 +42,7 @@ import mx.edu.utez.adoptame.model.Donacion;
 import mx.edu.utez.adoptame.service.DonacionServiceImp;
 import mx.edu.utez.adoptame.service.PaypalServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
+import mx.edu.utez.adoptame.util.DonacionPdfExporter;
 
 @Controller
 @RequestMapping("/donativo")
@@ -41,7 +50,7 @@ public class DonativoController {
 
     private static final String URL_CONSULTAR_TODOS = "/donativo/consultarTodos";
     private static final String URL_INDEX = "/";
-    
+
     private static final String REDIRECT_CT = "redirect:" + URL_CONSULTAR_TODOS;
     private static final String REDIRECT_INDEX = "redirect:" + URL_INDEX;
 
@@ -64,28 +73,29 @@ public class DonativoController {
 
     @PostMapping("/guardarDonativo")
     @Transactional
-    public String guardarDonativo(@ModelAttribute("donacion") DonacionDto donacionDto, Model model, RedirectAttributes redirectAttributes, HttpSession session, Authentication authentication) {
+    public String guardarDonativo(@ModelAttribute("donacion") DonacionDto donacionDto, Model model,
+            RedirectAttributes redirectAttributes, HttpSession session, Authentication authentication) {
         try {
             String correo = authentication.getName();
 
-            UsuarioDto donador = modelMapper.map(usuarioServiceImp.buscarPorCorreo(correo), UsuarioDto.class); 
+            UsuarioDto donador = modelMapper.map(usuarioServiceImp.buscarPorCorreo(correo), UsuarioDto.class);
             donacionDto.setDonador(donador);
 
             boolean estado = false;
 
             String currency = "MXN";
-            String description = "Donación ($" + donacionDto.getMonto().toString() + ") de " + donacionDto.getDonador().getCorreo();
+            String description = "Donación ($" + donacionDto.getMonto().toString() + ") de "
+                    + donacionDto.getDonador().getCorreo();
 
             // Guarda el pago en PayPal
             Payment pago = paypalServiceImp.creaPago(
-                donacionDto.getMonto(), 
-                currency, 
-                PaypalPaymentMethod.PAYPAL, 
-                PaypalPaymentIntent.SALE,
-                description, 
-                URL_INDEX, 
-                URL_CONSULTAR_TODOS
-            );
+                    donacionDto.getMonto(),
+                    currency,
+                    PaypalPaymentMethod.PAYPAL,
+                    PaypalPaymentIntent.SALE,
+                    description,
+                    URL_INDEX,
+                    URL_CONSULTAR_TODOS);
 
             for (Links links : pago.getLinks()) {
                 if (links.getRel().equals("approval_url")) {
@@ -98,9 +108,9 @@ public class DonativoController {
                 donacionDto.setAutorizacion(pago.getId());
 
                 Donacion donacion = modelMapper.map(donacionDto, Donacion.class);
-                
+
                 boolean respuesta = donacionServiceImp.guardarDonacion(donacion, session);
-                
+
                 if (respuesta) {
                     redirectAttributes.addFlashAttribute(MSG_SUCESS, "Registro exitoso");
                     return REDIRECT_CT;
@@ -118,18 +128,19 @@ public class DonativoController {
             return REDIRECT_INDEX;
         }
     }
-    
+
     @GetMapping("/webhook")
-	public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) throws PayPalRESTException{
-		
+    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId)
+            throws PayPalRESTException {
+
         Payment payment = paypalServiceImp.ejecutaPago(paymentId, payerId);
 
-        if(payment.getState().equals("approved")){
-        	return REDIRECT_CT;
+        if (payment.getState().equals("approved")) {
+            return REDIRECT_CT;
         }
 
-		return REDIRECT_INDEX;
-	}
+        return REDIRECT_INDEX;
+    }
 
     @GetMapping("/consultarTodos")
     public String consultarTodos(Model model,
@@ -151,9 +162,27 @@ public class DonativoController {
         if (!donacion.equals(null)) {
             modelo.addAttribute("donacion", donacion);
             return "usuario/listarDonacion";
+            // return "donacion/listaDonaciones";
 
         }
         redirectAttributes.addFlashAttribute("msg_error", "Donacion no econtrada");
         return REDIRECT_CT;
+    }
+
+    @GetMapping("/donaciones/export")
+    public void exportToPDF(HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=donaciones_" + currentDateTime + ".pdf";
+
+        response.setHeader(headerKey, headerValue);
+
+        List<Donacion> listDonaciones = donacionServiceImp.listarDonaciones();
+
+        DonacionPdfExporter exporter = new DonacionPdfExporter(listDonaciones);
+        exporter.export(response);
     }
 }
