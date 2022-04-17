@@ -50,7 +50,6 @@ public class BlogController {
             model.addAttribute("listaBlog", blogServiceImp.listarBlogs());
 
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
         }
         return "blog/lista";
@@ -98,7 +97,8 @@ public class BlogController {
 
     @PostMapping("/actualizarBlog")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
-    public String actualizarBlog(@ModelAttribute("blog") BlogDto blogDto, Model model, RedirectAttributes redirectAttributes,
+    public String actualizarBlog(@ModelAttribute("blog") BlogDto blogDto, Model model,
+            RedirectAttributes redirectAttributes,
             @RequestParam("imagenBlog") MultipartFile multipartFile, HttpSession session) {
 
         try {
@@ -119,7 +119,6 @@ public class BlogController {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
 
         }
@@ -139,7 +138,6 @@ public class BlogController {
                 redirectAttributes.addFlashAttribute(msgError, "eliminacion fallida");
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
 
         }

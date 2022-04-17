@@ -10,6 +10,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import mx.edu.utez.adoptame.repository.DonacionRepository;
 import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Donacion;
@@ -21,9 +24,11 @@ import org.springframework.data.domain.Sort;
 @Service
 public class DonacionServiceImp implements DonacionService {
 
+    Log log = LogFactory.getLog(getClass());
+
     @Autowired
     private DonacionRepository donacionRepository;
-    
+
     @Override
     public List<Donacion> listarDonaciones() {
         return donacionRepository.findAll(Sort.by("fechaDonacion"));
@@ -41,7 +46,7 @@ public class DonacionServiceImp implements DonacionService {
 
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             return false;
         }
     }
@@ -87,7 +92,7 @@ public class DonacionServiceImp implements DonacionService {
             list = donacionRepository.registroDonacion(idUsuario, autorizacion, estado, fechaDonacion, monto,
                     donadorId);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return list;
     }
@@ -101,7 +106,7 @@ public class DonacionServiceImp implements DonacionService {
             list = donacionRepository.eliminarDonacion(idUsuario, autorizacion, estado, fechaDonacion, monto,
                     donadorId);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return list;
     }

@@ -15,8 +15,7 @@ import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 
 import org.springframework.security.core.Authentication;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +32,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mx.edu.utez.adoptame.config.PaypalPaymentIntent;
 import mx.edu.utez.adoptame.config.PaypalPaymentMethod;
 import mx.edu.utez.adoptame.dto.DonacionDto;
@@ -47,6 +49,8 @@ import mx.edu.utez.adoptame.util.DonacionPdfExporter;
 @RequestMapping("/donativo")
 public class DonativoController {
 
+    private Logger logger = LoggerFactory.getLogger(DonativoController.class);
+
     private static final String URL_CONSULTAR_TODOS = "/donativo/consultarTodos";
     private static final String URL_INDEX = "/";
 
@@ -55,8 +59,6 @@ public class DonativoController {
 
     private static final String MSG_ERROR = "msg_error";
     private static final String MSG_SUCESS = "msg_sucess";
-
-    Log log = LogFactory.getLog(getClass());
 
     @Autowired
     private ModelMapper modelMapper;
@@ -122,28 +124,27 @@ public class DonativoController {
                 return REDIRECT_INDEX;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             redirectAttributes.addFlashAttribute(MSG_ERROR, "Registro fallido: Error en el servidor");
             return REDIRECT_INDEX;
         }
     }
 
     @GetMapping("/webhook")
-	public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+    public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
         try {
             Payment payment = paypalServiceImp.ejecutaPago(paymentId, payerId);
 
-            if(payment.getState().equals("approved")){
+            if (payment.getState().equals("approved")) {
                 return REDIRECT_CT;
             }
 
             return REDIRECT_INDEX;
         } catch (Exception e) {
-
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return REDIRECT_INDEX;
         }
-	}
+    }
 
     @GetMapping("/consultarTodos")
     public String consultarTodos(Model model,
@@ -163,7 +164,7 @@ public class DonativoController {
     public String consultaUnica(@PathVariable long id, Model modelo, RedirectAttributes redirectAttributes) {
         try {
             Donacion donacion = donacionServiceImp.obtenerDonacion(id);
-            
+
             if (donacion != null) {
                 modelo.addAttribute("donacion", donacion);
                 return "usuario/listarDonacion";
@@ -172,7 +173,7 @@ public class DonativoController {
             redirectAttributes.addFlashAttribute(MSG_ERROR, "Donacion no econtrada");
             return REDIRECT_CT;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return REDIRECT_CT;
         }
     }

@@ -11,9 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 import mx.edu.utez.adoptame.model.Usuario;
 import mx.edu.utez.adoptame.repository.UsuarioRepository;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 @Service
 @Transactional
 public class UsuarioServiceImp implements UsuarioService {
+
+    Log log = LogFactory.getLog(getClass());
 
     private Usuario usuario;
 
@@ -27,7 +32,7 @@ public class UsuarioServiceImp implements UsuarioService {
         try {
             usuarios = repository.findAll();
         } catch (Exception e) {
-            // log
+            log.error(e.getMessage());
         }
 
         return usuarios;
@@ -40,7 +45,7 @@ public class UsuarioServiceImp implements UsuarioService {
         try {
             this.usuario = repository.save(usuario);
         } catch (Exception e) {
-            // log
+            log.error(e.getMessage());
         }
 
         return this.usuario;
@@ -53,7 +58,7 @@ public class UsuarioServiceImp implements UsuarioService {
         try {
             this.usuario = repository.getById(id);
         } catch (Exception e) {
-            // log
+            log.error(e.getMessage());
         }
 
         return this.usuario;
@@ -66,7 +71,7 @@ public class UsuarioServiceImp implements UsuarioService {
             repository.deleteById(id);
             respuesta = !repository.existsById(id);
         } catch (Exception e) {
-            // log
+            log.error(e.getMessage());
         }
         return respuesta;
     }
@@ -77,7 +82,7 @@ public class UsuarioServiceImp implements UsuarioService {
         try {
             this.usuario = repository.findByCorreo(correo);
         } catch (Exception e) {
-            // log
+            log.error(e.getMessage());
         }
         return this.usuario;
     }
@@ -100,7 +105,7 @@ public class UsuarioServiceImp implements UsuarioService {
             repository.registroSesion(usuarioId);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return null;
     }
@@ -112,7 +117,7 @@ public class UsuarioServiceImp implements UsuarioService {
             repository.registroCerrarSesion(usuarioId, fechaFin);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return null;
     }
