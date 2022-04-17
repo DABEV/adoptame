@@ -131,8 +131,6 @@ public class SolicitudController {
             respuesta = solicitudServiceImp.guardarSolicitud(soli);
 
             if (respuesta != null) { 
-                System.out.println(usuario.getId() + " " + respuesta.getAprobado() + " "+
-                respuesta.getFechaSolicitud() + " " + respuesta.getAdoptador().getId() + " " + respuesta.getMascota().getId());
                 solicitudServiceImp.procedimientoRegistrarSolicitud(usuario.getId(), respuesta.getAprobado(),
                         respuesta.getFechaSolicitud(), respuesta.getAdoptador().getId(), respuesta.getMascota().getId());
                 redirectAttributes.addFlashAttribute(msgS, "Registro de solicitud exitoso");
