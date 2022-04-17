@@ -20,25 +20,11 @@
             <div class="col-md-12 col-sm-12 col-12 col-lg-9">
                 <div class="d-grid gap-4">
                     <div class="row">
-                        <div class="col-lg-7">
+                        <div class="col-lg-10">
                             <h2 style="color: #253E5C;">Mis donaciones</h2>
                         </div>
-                        <div class="col-lg-5">
-                            <form>
-                                <div class="row mb-4 d-flex justify-content-center">
-                                    <div class="col-12 col-sm-12 col-md-10 mb-3">
-                                        <div class="form-outline">
-                                            <input type="text" id="busqueda" placeholder="Palabra clave ..."
-                                                class="form-control" readonly />
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-12 col-md-1">
-                                        <button type="button" class="btn btn-primary btn-floating"
-                                            style="background-color: #253E5C;">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-                            </form>
+                        <div class="col-lg-2">
+                            <a th:href="@{/donativo/donaciones/export}">Exportar</a>
                         </div>
                     </div>
                     <div class="mb-4 mt-3">
@@ -61,7 +47,7 @@
                                         <!-- # -->
                                         <td th:text="${count.count}"></td>
                                         <!-- Monto -->
-                                        <td>[[${tmpDonacion.monto}]]</td>
+                                        <td>$ [[${tmpDonacion.monto}]]</td>
                                         <!-- Fecha donacion -->
                                         <td th:text="${#dates.format(tmpDonacion.fechaDonacion, 'dd-MM-yyyy')}"></td>
                                         <!-- Autorización -->
@@ -82,11 +68,14 @@
                                             </div>
                                         </td>
 
-                                        <!-- Acciones -->
+                                        <!-- Acciones  -->
                                         <td>
+
                                             <a class="btn btn-lg btn-outline-success btn-floating"
-                                                style="color: #74422B; border-color: white;" role="button" href="">
-                                                <i class="fas fa-download"></i>
+                                                style="color: #74422B; border-color: white;" role="button"
+                                                th:href="@{/donativo/donaciones/export}">
+
+                                                <em class="fas fa-download fa-lg"></em>
                                             </a>
                                         </td>
                         </div>
