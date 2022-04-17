@@ -159,13 +159,12 @@ public class DonativoController {
     @GetMapping("/consultaUnica/{id}")
     public String consultaUnica(@PathVariable long id, Model modelo, RedirectAttributes redirectAttributes) {
         Donacion donacion = donacionServiceImp.obtenerDonacion(id);
-        if (!donacion.equals(null)) {
+        if (donacion != null ) {
             modelo.addAttribute("donacion", donacion);
-            return "usuario/listarDonacion";
-            // return "donacion/listaDonaciones";
+            return "usuario/listarDonaciones";
 
         }
-        redirectAttributes.addFlashAttribute("msg_error", "Donacion no econtrada");
+        redirectAttributes.addFlashAttribute(MSG_ERROR, "Donacion no econtrada");
         return REDIRECT_CT;
     }
 
