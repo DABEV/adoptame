@@ -6,16 +6,44 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import mx.edu.utez.adoptame.validator.EmailFormat;
+import mx.edu.utez.adoptame.validator.NameFormat;
+import mx.edu.utez.adoptame.validator.ParagraphFormat;
+import mx.edu.utez.adoptame.validator.PhoneNumberFormat;
+
 public class UsuarioDto implements Serializable {
-    private Long id;    
+    private Long id;
+    
+    @NotBlank(message = "Campo requerido")
+    @NameFormat(message = "Sólo se permiten letras")
+    @Size(max = 50, message = "Máximo 50 caracteres")
     private String nombre;    
+
+    @NotBlank(message = "Campo requerido")
+    @NameFormat(message = "Sólo se permiten letras")
+    @Size(max = 50, message = "Máximo 50 caracteres")
     private String apellidos;    
+
+    @NotBlank(message = "Campo requerido")
+    @ParagraphFormat
+    @Size(max = 250, message = "Máximo 250 caracteres")
     private String direccion;    
+
+    @NotBlank(message = "Campo requerido")
+    @EmailFormat
     private String correo;    
-    private String telefono;    
+
+    @NotBlank(message = "Campo requerido")
+    @PhoneNumberFormat
+    private String telefono;
+
     private String contrasena;    
     private Date fechaRegistro;
     private Boolean habilitado;
+    
     private Set<RolDto> roles;
     private List<DonacionDto> donativos;
     private List<FavoritoDto> favoritos;
@@ -90,6 +118,10 @@ public class UsuarioDto implements Serializable {
     }
 
     public Boolean isHabilitado() {
+        return this.habilitado;
+    }
+
+    public Boolean getHabilitado() {
         return habilitado;
     }
 

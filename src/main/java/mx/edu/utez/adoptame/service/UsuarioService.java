@@ -3,8 +3,6 @@ package mx.edu.utez.adoptame.service;
 import java.util.Date;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import mx.edu.utez.adoptame.model.Usuario;
 
 public interface UsuarioService {

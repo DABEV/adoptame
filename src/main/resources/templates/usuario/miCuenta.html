@@ -30,7 +30,7 @@
                 <div class="col-md-9 mb-3">
                     <div class="d-grid gap-4">
                         <div>
-                            <h2>Mi cuenta [[${usuario.nombre}]]</h2>
+                            <h2>Mi cuenta</h2>
                         </div>
                         <form th:action="@{/usuario/actualizar}" method="POST" th:object="${usuario}">
                             <div class="card">
@@ -41,7 +41,7 @@
                                             <div class="row">
                                                 <!-- Nombre -->
                                                 <div class="col-md-6 col-sm-12 mb-3">
-                                                    <label>Nombre(s): </label>
+                                                    <label>Nombre(s): <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}" class="badge badge-danger"></span> </label>
                                                     <div class="input-group flex-nowrap">
                                                         <span class="input-group-text" id="addon-wrapping-nombre">
                                                             <em class="fas fa-tag"></em>
@@ -53,13 +53,13 @@
                                                 </div>
                                                 <!-- Apellido -->
                                                 <div class="col-md-6 col-sm-12 mb-3">
-                                                    <label>Apellido(s): </label>
+                                                    <label>Apellido(s): <span th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}" class="badge badge-danger"> </span> </label>
                                                     <div class="input-group flex-nowrap">
                                                         <span class="input-group-text" id="addon-wrapping-apellido">
                                                             <em class="fas fa-tag"></em>
                                                         </span>
                                                         <input type="text" th:field="*{apellidos}" class="form-control"
-                                                            placeholder="Ej. Millán Villareal" aria-label="apellido"
+                                                            placeholder="Ej. Millán" aria-label="apellido"
                                                             aria-describedby="addon-wrapping-apellido" />
                                                     </div>
                                                 </div>
@@ -67,7 +67,7 @@
                                             <div class="row">
                                                 <!-- Dirección -->
                                                 <div class="col-md-12 col-sm-12 mb-3">
-                                                    <label>Dirección(s): </label>
+                                                    <label>Dirección(s): <span th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" class="badge badge-danger"></span></label>
                                                     <div class="input-group flex-nowrap">
                                                         <span class="input-group-text" id="addon-wrapping-direccion">
                                                             <em class="fas fa-building"></em>
@@ -87,14 +87,14 @@
                                                         <span class="input-group-text" id="addon-wrapping-correo">
                                                             <em class="fas fa-tag"></em>
                                                         </span>
-                                                        <input type="text" th:field="*{correo}" class="form-control"
+                                                        <input type="text" readonly th:field="*{correo}" class="form-control"
                                                             placeholder="Ej. usuario@dominio.com" aria-label="correo"
                                                             aria-describedby="addon-wrapping-correo" />
                                                     </div>
                                                 </div>
                                                 <!-- Teléfono -->
                                                 <div class="col-md-6 col-sm-12 mb-3">
-                                                    <label>Teléfono: </label>
+                                                    <label>Teléfono: <span th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}" class="badge badge-danger"></span></label>
                                                     <div class="input-group flex-nowrap">
                                                         <span class="input-group-text" id="addon-wrapping-telefono">
                                                             <em class="fas fa-phone"></em>
@@ -123,7 +123,7 @@
                                                         <span class="input-group-text" id="addon-wrapping-contrasenia">
                                                             <em class="fas fa-lock"></em>
                                                         </span>
-                                                        <input type="text" name="contrasenaOriginal"
+                                                        <input type="password" name="contrasena"
                                                             class="form-control" aria-label="contrasenia"
                                                             aria-describedby="addon-wrapping-contrasenia" />
                                                     </div>
@@ -136,7 +136,7 @@
                                                             id="addon-wrapping-nuevaContrasena">
                                                             <em class="fas fa-lock"></em>
                                                         </span>
-                                                        <input type="text" name="nuevaContrasena" class="form-control"
+                                                        <input type="password" name="nuevaContrasena" class="form-control"
                                                             aria-label="nuevaContrasena"
                                                             aria-describedby="addon-wrapping-nuevaContrasena" />
                                                     </div>
@@ -151,7 +151,7 @@
                                                             id="addon-wrapping-repetirContrasena">
                                                             <em class="fas fa-lock"></em>
                                                         </span>
-                                                        <input type="text" name="repetirContrasena" class="form-control"
+                                                        <input type="password" name="repetirContrasena" class="form-control"
                                                             aria-label="repetirContrasena"
                                                             aria-describedby="addon-wrapping-repetirContrasena" />
                                                     </div>
@@ -160,7 +160,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-sm-12 col-md-12 mt-3 text-center">
-                                        <button type="button" class="btn btn-outline-primary btn-rounded"
+                                        <button type="submit" class="btn btn-outline-primary btn-rounded"
                                             data-mdb-ripple-color="dark">
                                             <em class="fas fa-circle-plus me-2"></em>
                                             Guardar información

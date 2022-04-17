@@ -115,27 +115,30 @@
 
 <scripts th:fragment="scripts">
 
+  <!-- JQuery 3.2.1 -->
+  <script th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+
   <!-- SweetAlert2 -->
   <script th:src="@{/js/sweetalert2.all.min.js}"></script>
 
-  <script th:if="${msg_success != null}">
-    Swal.fire("Éxito!", "[[${msg_success}]]", "success");
-  </script>
-  <script th:if="${msg_warning != null}">
-    Swal.fire("Lo sentimos!", "[[${msg_warning}]]", "warning");
-  </script>
-  <script th:if="${msg_error != null}">
-    Swal.fire("Oh no!", "[[${msg_error}]]", "error");
-  </script>
   <!-- MDB -->
   <script th:src="@{/js/md-bootstrap.min.js}"></script>
 
-  <!--Mascara-->
+  <!--Mascara para los campos de teléfono-->
   <script th:src="@{/js/jquery.mask.min.js}"></script>
-  <script th:src="@{/js/formatter.js}"></script>
   <script>
 		$(document).ready(function () {
-			$('.phone-mask').mask('(000)000-00-00');
+			$('.phone-mask').mask('(000) 000 0000');
 		});
 	</script>
+
+<script th:if="${msg_success != null}">
+  Swal.fire("¡Éxito!", "[[${msg_success}]]", "success");
+</script>
+<script th:if="${msg_warning != null}">
+  Swal.fire("¡Lo sentimos!", "[[${msg_warning}]]", "warning");
+</script>
+<script th:if="${msg_error != null}">
+  Swal.fire("¡Oh no!", "[[${msg_error}]]", "error");
+</script>
 </scripts>

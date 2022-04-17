@@ -1,6 +1,5 @@
 package mx.edu.utez.adoptame.model;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -12,7 +11,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "roles")
-public class Rol implements Serializable{
+public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,7 +20,7 @@ public class Rol implements Serializable{
     private String nombre;
 
     public Rol() {
-        //
+        // Constructor vacío
     }
 
     public Long getId() {

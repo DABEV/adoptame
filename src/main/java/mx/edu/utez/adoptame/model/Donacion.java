@@ -1,6 +1,5 @@
 package mx.edu.utez.adoptame.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -16,7 +15,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "donaciones")
-public class Donacion implements Serializable{
+public class Donacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,6 +38,7 @@ public class Donacion implements Serializable{
     private Usuario donador;
 
     public Donacion() {
+        // Constructor vacío
     }
 
     public Long getId() {

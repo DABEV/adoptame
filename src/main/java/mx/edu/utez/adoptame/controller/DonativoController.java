@@ -5,7 +5,6 @@ import javax.transaction.Transactional;
 
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
-import com.paypal.base.rest.PayPalRESTException;
 
 import org.springframework.security.core.Authentication;
 import org.apache.commons.logging.Log;
@@ -120,15 +119,20 @@ public class DonativoController {
     }
     
     @GetMapping("/webhook")
-	public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) throws PayPalRESTException{
-		
-        Payment payment = paypalServiceImp.ejecutaPago(paymentId, payerId);
+	public String successPay(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
+        try {
+            Payment payment = paypalServiceImp.ejecutaPago(paymentId, payerId);
 
-        if(payment.getState().equals("approved")){
-        	return REDIRECT_CT;
+            if(payment.getState().equals("approved")){
+                return REDIRECT_CT;
+            }
+
+            return REDIRECT_INDEX;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            return REDIRECT_INDEX;
         }
-
-		return REDIRECT_INDEX;
 	}
 
     @GetMapping("/consultarTodos")
@@ -141,19 +145,25 @@ public class DonativoController {
     }
 
     @GetMapping("/donar")
-    public String crearDonacion(Donacion donacion, Model modelo) {
+    public String crearDonacion(@ModelAttribute("donacion") DonacionDto donacionDto, Model modelo) {
         return "usuario/formDonacion";
     }
 
     @GetMapping("/consultaUnica/{id}")
     public String consultaUnica(@PathVariable long id, Model modelo, RedirectAttributes redirectAttributes) {
-        Donacion donacion = donacionServiceImp.obtenerDonacion(id);
-        if (!donacion.equals(null)) {
-            modelo.addAttribute("donacion", donacion);
-            return "usuario/listarDonacion";
+        try {
+            Donacion donacion = donacionServiceImp.obtenerDonacion(id);
+            
+            if (donacion != null) {
+                modelo.addAttribute("donacion", donacion);
+                return "usuario/listarDonacion";
+            }
 
+            redirectAttributes.addFlashAttribute(MSG_ERROR, "Donacion no econtrada");
+            return REDIRECT_CT;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return REDIRECT_CT;
         }
-        redirectAttributes.addFlashAttribute("msg_error", "Donacion no econtrada");
-        return REDIRECT_CT;
     }
 }
