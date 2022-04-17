@@ -121,6 +121,16 @@
   <!-- SweetAlert2 -->
   <script th:src="@{/js/sweetalert2.all.min.js}"></script>
 
+  <script th:if="${msg_success != null}">
+    Swal.fire("¡Éxito!", "[[${msg_success}]]", "success");
+  </script>
+  <script th:if="${msg_warning != null}">
+    Swal.fire("¡Lo sentimos!", "[[${msg_warning}]]", "warning");
+  </script>
+  <script th:if="${msg_error != null}">
+    Swal.fire("¡Oh no!", "[[${msg_error}]]", "error");
+  </script>
+
   <!-- MDB -->
   <script th:src="@{/js/md-bootstrap.min.js}"></script>
 
@@ -132,13 +142,4 @@
 		});
 	</script>
 
-<script th:if="${msg_success != null}">
-  Swal.fire("¡Éxito!", "[[${msg_success}]]", "success");
-</script>
-<script th:if="${msg_warning != null}">
-  Swal.fire("¡Lo sentimos!", "[[${msg_warning}]]", "warning");
-</script>
-<script th:if="${msg_error != null}">
-  Swal.fire("¡Oh no!", "[[${msg_error}]]", "error");
-</script>
 </scripts>
