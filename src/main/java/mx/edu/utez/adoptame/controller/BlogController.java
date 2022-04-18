@@ -112,17 +112,18 @@ public class BlogController {
         contentType = multipartFile.getContentType();
 
         try {
-            if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
-                redirectAttributes.addFlashAttribute(msgError, "Registro fallido solo se admiten imagenes");
-                return redirectBlogLista;
 
-            }
             if (result.hasErrors()) {
                 redirectAttributes.addFlashAttribute(msgError, "Actualizacion fallida verifique los datos");
                 return redirectBlogLista;
             } else {
                 Blog blog = modelMapper.map(blogDto, Blog.class);
                 if (!multipartFile.isEmpty()) {
+                    if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+                        redirectAttributes.addFlashAttribute(msgError, "Registro fallido solo se admiten imagenes");
+                        return redirectBlogLista;
+
+                    }
                     String ruta = "C:/mascotas/img-mascotas/";
                     String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
                     if (nombreImagen != null) {

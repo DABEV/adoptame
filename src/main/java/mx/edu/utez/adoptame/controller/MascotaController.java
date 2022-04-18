@@ -183,7 +183,7 @@ public class MascotaController {
             // mascota nueva
             if (mascota.getId() == null) {
                 mascota.setAprobadoRegistro("pendiente");
-                mascota.setDisponibleAdopcion(true);
+                mascota.setDisponibleAdopcion(false);
                 mascota.setActivo(true);
 
                 respuesta = mascotaServiceImp.guardarMascota(mascota);

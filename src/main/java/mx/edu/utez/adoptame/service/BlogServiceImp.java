@@ -71,8 +71,6 @@ public class BlogServiceImp implements BlogService {
             blogActualizar.setEsPrincipal(blog.getEsPrincipal());
 
             if (blog.getImagen() == null) {
-                blog.setImagen(blogActualizar.getImagen());
-
                 procedimientoActualizarBlog(idUsuario, blog, blogActualizar);
                 blogRepository.save(blogActualizar);
 
