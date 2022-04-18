@@ -33,6 +33,7 @@ public class BlogController {
 
     private String msgSuccess = "msg_success";
     private String msgError = "msg_error";
+    private String contentType = "";
 
     @Autowired
     private BlogServiceImp blogServiceImp;
@@ -66,9 +67,17 @@ public class BlogController {
     public String guardarBlog(@Valid @ModelAttribute("blog") BlogDto blogDto, BindingResult result, Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("imagenBlog") MultipartFile multipartFile, HttpSession session) {
+        contentType = multipartFile.getContentType();
 
         try {
             Blog blog = modelMapper.map(blogDto, Blog.class);
+
+            if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+                redirectAttributes.addFlashAttribute(msgError, "Registro fallido solo se admiten imagenes");
+                return redirectBlogLista;
+
+            }
+
             if (result.hasErrors()) {
                 redirectAttributes.addFlashAttribute(msgError, "Registro fallido");
                 return redirectBlogLista;
@@ -100,8 +109,14 @@ public class BlogController {
     public String actualizarBlog(@Valid @ModelAttribute("blog") BlogDto blogDto, BindingResult result, Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("imagenBlog") MultipartFile multipartFile, HttpSession session) {
+        contentType = multipartFile.getContentType();
 
         try {
+            if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+                redirectAttributes.addFlashAttribute(msgError, "Registro fallido solo se admiten imagenes");
+                return redirectBlogLista;
+
+            }
             if (result.hasErrors()) {
                 redirectAttributes.addFlashAttribute(msgError, "Actualizacion fallida verifique los datos");
                 return redirectBlogLista;
