@@ -5,9 +5,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-
 public class WebConfig implements WebMvcConfigurer {
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry handlerRegistry) {
         handlerRegistry.addResourceHandler("/imagenes/**").addResourceLocations("file:C:/mascotas/img-mascotas/");

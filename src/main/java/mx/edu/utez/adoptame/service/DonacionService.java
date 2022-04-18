@@ -9,21 +9,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import mx.edu.utez.adoptame.model.Donacion;
+import mx.edu.utez.adoptame.model.Usuario;
 
 public interface DonacionService {
-    public boolean guardarDonacion(Donacion donacion, HttpSession session);
-
-    public List<Donacion> listarDonaciones();
-
-    public boolean eliminarDonacion(Long id, HttpSession session);
-
-    public Donacion obtenerDonacion(Long id);
-    public Page<Donacion> listarPaginacion(Pageable page);
-
+    boolean guardarDonacion(Donacion donacion, HttpSession session);
+    List<Donacion> listarDonaciones();
+    Page<Donacion> listarDonacionesDelUsuario(Usuario usuario, Pageable pageable);
+    List<Donacion> listarDonacionesDelUsuario(Usuario usuario);
+    boolean eliminarDonacion(Long id, HttpSession session);
+    Donacion obtenerDonacion(Long id);
+    Page<Donacion> listarPaginacion(Pageable page);
     List<Donacion> procedimientoRegistrarDonacion(Long idUsuario, String autorizacion, Boolean estado,
             Date fechaDonacion, Double monto, Long donadorId);
-
-
     List<Donacion> procedimientoEliminarDonacion(Long idUsuario, String autorizacion, Boolean estado,
             Date fechaDonacion, Double monto, Long donadorId);
 }
