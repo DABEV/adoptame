@@ -148,6 +148,8 @@ public class MascotaController {
             HttpSession session) {
         Mascota mascotaExistente = null;
         Mascota respuesta = null;
+        String contentType = multipartFile.getContentType();
+
         try {
             List<Color> colores = colorServiceImp.listarColores();
             List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
@@ -156,6 +158,12 @@ public class MascotaController {
             model.addAttribute(listaCaracteres, listaCaracter);
             model.addAttribute(listaTamanos, listaTamano);
             model.addAttribute(listaColores, colores);
+
+            if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+                attributes.addFlashAttribute(msgE, "Registro fallido solo se admiten imagenes");
+                return formRegistro;
+
+            }
 
             if (result.hasErrors()) {
                 return formRegistro;
