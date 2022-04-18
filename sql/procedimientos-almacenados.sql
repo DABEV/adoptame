@@ -1,5 +1,6 @@
-drop table bitacora;
-drop table sesiones;
+-- 1.- Ejecutar la creacion de las tablas bitacora y sesiones
+-- 2.- Ejecutar la creacion de todos los procedimientos almacenados
+
 
 create table if not exists bitacora (
     fecha_movimiento DATETIME DEFAULT NOW(),
