@@ -93,7 +93,7 @@ public class UsuarioServiceImp implements UsuarioService {
             repository.updatePassword(contrasena, correo);
             return true;
         } catch (Exception exception) {
-            exception.printStackTrace();
+            log.error(exception.getMessage());
             return false;
         }
     }

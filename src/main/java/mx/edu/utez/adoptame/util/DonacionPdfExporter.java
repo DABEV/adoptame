@@ -128,7 +128,7 @@ public class DonacionPdfExporter {
             document.add(table);
 
         } catch (DocumentException | IOException de) {
-            de.printStackTrace();
+            logger.error(de.getMessage());
             logger.error("Error al descargar el pdf");
         }
         document.close();
