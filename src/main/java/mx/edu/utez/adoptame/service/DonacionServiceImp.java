@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import mx.edu.utez.adoptame.repository.DonacionRepository;
 import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Donacion;
+import mx.edu.utez.adoptame.model.Usuario;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -111,4 +112,27 @@ public class DonacionServiceImp implements DonacionService {
         return list;
     }
 
+    @Override
+    public Page<Donacion> listarDonacionesDelUsuario(Usuario usuario, Pageable pageable) {
+        try {
+            return donacionRepository.findByDonador(usuario, pageable);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Donacion> listarDonacionesDelUsuario(Usuario usuario) {
+        List<Donacion> list = new ArrayList<>();
+
+        try {
+            list = donacionRepository.findByDonador(usuario);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+
+        return list;
+    }
 }

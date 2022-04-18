@@ -2,10 +2,10 @@ package mx.edu.utez.adoptame.util;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.lowagie.text.BadElementException;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -14,8 +14,6 @@ import com.lowagie.text.FontFactory;
 import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
@@ -29,107 +27,88 @@ public class DonacionPdfExporter {
 
     private Logger logger = LoggerFactory.getLogger(DonacionPdfExporter.class);
 
-    private List<Donacion> listDonaciones;
+    private Donacion donacion;
 
-    public DonacionPdfExporter(List<Donacion> listDonaciones) {
-
-        this.listDonaciones = listDonaciones;
+    public DonacionPdfExporter(Donacion donacion) {
+        this.donacion = donacion;
     }
 
-    private void writeTableHeader(PdfPTable table) {
-        PdfPCell cell = new PdfPCell();
-        cell.setBackgroundColor(new Color(37, 62, 92));
-        cell.setPadding(5);
+    private void setHeader (Document document) throws BadElementException, IOException {
+        // Títulos
+        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        titleFont.setColor(new Color(37, 62, 92));
 
-        Font font = FontFactory.getFont(FontFactory.HELVETICA);
-        font.setColor(Color.white);
+        // Tabla para la imagen de Adoptame
+        PdfPTable tableImage = new PdfPTable(2);
 
-        cell.setPhrase(new Phrase("Monto", font));
-        table.addCell(cell);
+        tableImage.setWidthPercentage(100);
+        tableImage.setSpacingAfter(15);
 
-        cell.setPhrase(new Phrase("Fecha de donación", font));
-        table.addCell(cell);
+        // No apliques bordes en esta tabla
+        tableImage.getDefaultCell().setBorder(0);
+        tableImage.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-        cell.setPhrase(new Phrase("Numero de autorización", font));
-        table.addCell(cell);
+        tableImage.setWidths(new float[] { 0.25f, 4f });
 
-        cell.setPhrase(new Phrase("Estado", font));
-        table.addCell(cell);
+        titleFont.setSize(24);
+        Paragraph nameCompany = new Paragraph("AdoptaME", titleFont);
+        Image logo = Image.getInstance("src/main/resources/static/images/logo.png");
+        logo.scaleAbsoluteWidth(0.1f);
+        
+        tableImage.addCell(logo);
+        tableImage.addCell(nameCompany);
 
+        document.add(tableImage);
+        
+        // Titulo para el PDF
+        titleFont.setSize(20);
+        Paragraph title = new Paragraph("Recibo de donación", titleFont);
+        title.setSpacingAfter(15);
+        document.add(title);
     }
 
-    private void writeTableData(PdfPTable table) {
-        for (Donacion donacion : listDonaciones) {
-            table.addCell("$ " + String.valueOf(donacion.getMonto()));
-            table.addCell(String.valueOf(donacion.getFechaDonacion()));
-            table.addCell(String.valueOf(donacion.getAutorizacion()));
-            table.addCell(Boolean.TRUE.equals(donacion.getEstado()) ? "Aprobado" : "Pendiente");
-        }
+    private void setData (Paragraph infoField, Paragraph infoData, Document document) {
+        infoField.setAlignment(Element.ALIGN_CENTER);
+        infoData.setAlignment(Element.ALIGN_CENTER);
+
+        infoData.setSpacingAfter(15);
+
+        document.add(infoField);
+        document.add(infoData);
+    }
+
+    private void setBody (Document document) {
+        Usuario donador = donacion.getDonador();
+
+        // Subtítulos
+        Font subtitleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        subtitleFont.setColor(new Color(37, 62, 92));
+        subtitleFont.setSize(18);
+        
+        // info
+        Font infoFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+        infoFont.setSize(14);
+        
+        // Información del donador
+        setData(new Paragraph("Nombre Completo:", subtitleFont), new Paragraph(donador.getNombre() + " " + donador.getApellidos(), infoFont), document);
+        setData(new Paragraph("Correo Electrónico:", subtitleFont), new Paragraph(donador.getCorreo(), infoFont), document);
+        setData(new Paragraph("Teléfono:", subtitleFont), new Paragraph(donador.getTelefono(), infoFont), document);
+        setData(new Paragraph("Monto:", subtitleFont), new Paragraph("$ " + (donacion.getMonto() != null ? donacion.getMonto() : "0.0"), infoFont), document);
+        setData(new Paragraph("Fecha:", subtitleFont), new Paragraph(String.valueOf(donacion.getFechaDonacion()), infoFont), document);
+        setData(new Paragraph("¡Muchas gracias por su donación!", subtitleFont), new Paragraph("", infoFont), document);
     }
 
     public void export(HttpServletResponse response) throws DocumentException, IOException {
-        Document document = new Document(PageSize.LETTER.rotate());
+        Document document = new Document(PageSize.LETTER);
         try {
-            Usuario donador = listDonaciones.get(0).getDonador();
             PdfWriter.getInstance(document, response.getOutputStream());
             document.open();
 
-            Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-            font.setColor(new Color(37, 62, 92));
-
-            // Tabla para la imagen de Adoptame
-            PdfPTable tableImage = new PdfPTable(2);
-
-            tableImage.setWidthPercentage(100);
-            tableImage.setSpacingAfter(15);
-
-            // No apliques bordes en esta tabla
-            tableImage.getDefaultCell().setBorder(0);
-            tableImage.getDefaultCell().setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-            tableImage.setWidths(new float[] { 0.25f, 4f });
-
-            font.setSize(20);
-            Paragraph nameCompany = new Paragraph("AdoptaME", font);
-            Image logo = Image.getInstance("src/main/resources/static/images/logo.png");
-            logo.scaleAbsoluteWidth(0.1f);
-            
-            tableImage.addCell(logo);
-            tableImage.addCell(nameCompany);
-
-            document.add(tableImage);
-            
-            // Titulo para el PDF
-            font.setSize(18);
-            Paragraph title = new Paragraph("Lista de todas las donaciones", font);
-            document.add(title);
-
-            // Usuario que solicita el PDF
-            font.setSize(14);
-            Paragraph nameAndLastName = new Paragraph("Usuario: " + donador.getNombre() + " " +  donador.getApellidos(), font);
-            document.add(nameAndLastName);
-
-            // Correo
-            font.setSize(14);
-            Paragraph correo = new Paragraph("Email: " + donador.getCorreo(), font);
-            document.add(correo);
-
-            // Información de las donaciones 
-            PdfPTable table = new PdfPTable(4);
-
-            table.setWidthPercentage(100);
-            table.setSpacingBefore(20);
-
-            table.setWidths(new float[] { 3.5f, 3.0f, 3.0f, 1.5f });
-
-            writeTableHeader(table);
-            writeTableData(table);
-
-            document.add(table);
+            setHeader(document);
+            setBody(document);
 
         } catch (DocumentException | IOException de) {
             logger.error(de.getMessage());
-            logger.error("Error al descargar el pdf");
         }
         document.close();
     }

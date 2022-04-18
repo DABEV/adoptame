@@ -3,8 +3,15 @@ package mx.edu.utez.adoptame.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
+
 public class DonacionDto implements Serializable {
     private Long id;
+    @DecimalMax(value = "999999.99", message = "El monto no debe de ser mayor a $9,999,99.99.")
+    @DecimalMin(value = "0.5", message = "El monto no debe de ser mayor a $0.5.")
+    @Digits(integer = 8, fraction = 2, message = "El monto solo debe de tener dos dígitos decimales.")
     private Double monto;
     private Date fechaDonacion;
     private String autorizacion;

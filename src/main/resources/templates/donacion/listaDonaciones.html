@@ -24,7 +24,9 @@
                             <h2 style="color: #253E5C;">Mis donaciones</h2>
                         </div>
                         <div class="col-lg-2">
-                            <a th:href="@{/donativo/donaciones/export}">Exportar</a>
+                            <a th:href="@{/donativo/donaciones/exportMany}">
+                                <em class="fas fa-download fa-lg"></em> Exportar todas las donaciones
+                            </a>
                         </div>
                     </div>
                     <div class="mb-4 mt-3">
@@ -73,7 +75,7 @@
 
                                             <a class="btn btn-lg btn-outline-success btn-floating"
                                                 style="color: #74422B; border-color: white;" role="button"
-                                                th:href="@{/donativo/donaciones/export}">
+                                                th:href="@{/donativo/donaciones/export/{id} (id=${tmpDonacion.id})}">
 
                                                 <em class="fas fa-download fa-lg"></em>
                                             </a>

@@ -9,17 +9,20 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 import com.lowagie.text.DocumentException;
 import com.paypal.api.payments.Links;
 import com.paypal.api.payments.Payment;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,10 +43,12 @@ import mx.edu.utez.adoptame.config.PaypalPaymentMethod;
 import mx.edu.utez.adoptame.dto.DonacionDto;
 import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Donacion;
+import mx.edu.utez.adoptame.model.Usuario;
 import mx.edu.utez.adoptame.service.DonacionServiceImp;
 import mx.edu.utez.adoptame.service.PaypalServiceImp;
 import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 import mx.edu.utez.adoptame.util.DonacionPdfExporter;
+import mx.edu.utez.adoptame.util.DonacionesPdfExporter;
 
 @Controller
 @RequestMapping("/donativo")
@@ -53,12 +58,13 @@ public class DonativoController {
 
     private static final String URL_CONSULTAR_TODOS = "/donativo/consultarTodos";
     private static final String URL_INDEX = "/";
+    private static final String URL_ERROR = "/error";
 
     private static final String REDIRECT_CT = "redirect:" + URL_CONSULTAR_TODOS;
     private static final String REDIRECT_INDEX = "redirect:" + URL_INDEX;
 
-    private static final String MSG_ERROR = "msg_error";
-    private static final String MSG_SUCESS = "msg_sucess";
+    static final String MSG_ERROR = "msg_error";
+    static final String MSG_SUCESS = "msg_sucess";
 
     @Autowired
     private ModelMapper modelMapper;
@@ -74,9 +80,14 @@ public class DonativoController {
 
     @PostMapping("/guardarDonativo")
     @Transactional
-    public String guardarDonativo(@ModelAttribute("donacion") DonacionDto donacionDto, Model model,
+    @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
+    public String guardarDonativo(@Valid @ModelAttribute("donacion") DonacionDto donacionDto, BindingResult result, Model model,
             RedirectAttributes redirectAttributes, HttpSession session, Authentication authentication) {
         try {
+            if (result.hasErrors()) {
+                return REDIRECT_INDEX;
+            }
+
             String correo = authentication.getName();
 
             UsuarioDto donador = modelMapper.map(usuarioServiceImp.buscarPorCorreo(correo), UsuarioDto.class);
@@ -147,29 +158,48 @@ public class DonativoController {
     }
 
     @GetMapping("/consultarTodos")
-    public String consultarTodos(Model model,
+    @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
+    public String consultarTodos(Authentication authentication, Model model,
             RedirectAttributes redirectAttributes, Pageable pageable) {
-        Page<Donacion> listaDonaciones = donacionServiceImp
-                .listarPaginacion(PageRequest.of(pageable.getPageNumber(), 5, Sort.by("fechaDonacion").descending()));
-        model.addAttribute("listaDonaciones", listaDonaciones);
+        try {
+            String correo = authentication.getName();
+            Usuario donador = usuarioServiceImp.buscarPorCorreo(correo);
+
+            Page<Donacion> listaDonaciones = donacionServiceImp
+                .listarDonacionesDelUsuario(donador, PageRequest.of(pageable.getPageNumber(), 5, Sort.by("fechaDonacion").descending()));
+            
+            model.addAttribute("listaDonaciones", listaDonaciones);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+
         return "donacion/listaDonaciones";
     }
 
     @GetMapping("/donar")
+    @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
     public String crearDonacion(@ModelAttribute("donacion") DonacionDto donacionDto, Model modelo) {
         return "usuario/formDonacion";
     }
 
     @GetMapping("/consultaUnica/{id}")
-    public String consultaUnica(@PathVariable long id, Model modelo, RedirectAttributes redirectAttributes) {
+    @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
+    public String consultaUnica(@PathVariable Long id, Model modelo, RedirectAttributes redirectAttributes, Authentication authentication) {
         try {
+            String correo = authentication.getName();
+            Usuario donador = usuarioServiceImp.buscarPorCorreo(correo);
             Donacion donacion = donacionServiceImp.obtenerDonacion(id);
 
             if (donacion != null) {
-                modelo.addAttribute("donacion", donacion);
-                return "usuario/listarDonacion";
+                // Verifica que la donación pertenezca al usuario
+                if (donacion.getDonador().getId().equals(donador.getId())) {
+                    modelo.addAttribute("donacion", donacion);
+                    return "usuario/listarDonacion";
+                } else {
+                    redirectAttributes.addFlashAttribute(MSG_ERROR, "Oops, ha ocurrido un error.");        
+                    return REDIRECT_INDEX;
+                }
             }
-
             redirectAttributes.addFlashAttribute(MSG_ERROR, "Donacion no econtrada");
             return REDIRECT_CT;
         } catch (Exception e) {
@@ -178,20 +208,60 @@ public class DonativoController {
         }
     }
 
-    @GetMapping("/donaciones/export")
-    public void exportToPDF(HttpServletResponse response) throws DocumentException, IOException {
-        response.setContentType("application/pdf");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
+    @GetMapping("/donaciones/export/{id}")
+    @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
+    public void exportManyToPDF(@PathVariable Long id, HttpServletResponse response, Authentication authentication) throws DocumentException, IOException {
+        try {
+            String correo = authentication.getName();
+            Usuario donador = usuarioServiceImp.buscarPorCorreo(correo);
+            
+            response.setContentType("application/pdf");
+            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+            String currentDateTime = dateFormatter.format(new Date());
 
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=donaciones_" + currentDateTime + ".pdf";
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=recibo_donacion_" + currentDateTime + ".pdf";
+        
+            response.setHeader(headerKey, headerValue);
 
-        response.setHeader(headerKey, headerValue);
+            Donacion donacion = donacionServiceImp.obtenerDonacion(id);
+        
+            if (donacion.getDonador().getId().equals(donador.getId())) {
+                DonacionPdfExporter exporter = new DonacionPdfExporter(donacion);
+                exporter.export(response);
+            } else {
+                response.sendRedirect(URL_ERROR);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            response.sendRedirect(URL_ERROR);
+        }
+    }
 
-        List<Donacion> listDonaciones = donacionServiceImp.listarDonaciones();
+    @GetMapping("/donaciones/exportMany")
+    @PreAuthorize("hasAuthority('ROL_ADOPTADOR')")
+    public void exportToPDF(HttpServletResponse response, Authentication authentication) throws DocumentException, IOException {
+        try {
+            String correo = authentication.getName();
+            Usuario donador = usuarioServiceImp.buscarPorCorreo(correo);
 
-        DonacionPdfExporter exporter = new DonacionPdfExporter(listDonaciones);
-        exporter.export(response);
+            response.setContentType("application/pdf");
+            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+            String currentDateTime = dateFormatter.format(new Date());
+
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=donaciones_" + currentDateTime + ".pdf";
+
+            response.setHeader(headerKey, headerValue);
+
+            List<Donacion> listDonaciones = donacionServiceImp.listarDonacionesDelUsuario(donador);
+
+            DonacionesPdfExporter exporter = new DonacionesPdfExporter(listDonaciones);
+            exporter.export(response);
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            response.sendRedirect(URL_ERROR);
+        }
     }
 }

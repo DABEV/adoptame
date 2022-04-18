@@ -43,7 +43,7 @@
             </button>
         </div>
         <!-- Contenido -->
-        <div sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO', 'ROL_ADOPTADOR')">
+        <div sec:authorize="hasAnyAuthority('ROL_ADOPTADOR')">
             <hr class="my-5" />
             <div class="row">
                 <div class="col-md-6 gx-5 mb-4">
@@ -63,20 +63,18 @@
                         darle un lugar a cada animalito
                     </p>
                     <p><strong>¡Contribuye ahora!</strong></p>
-                    <form th:action="@{/donativo/guardarDonativo}" method="post" th:object="${donacion}">
+                    <form th:action="@{/donativo/guardarDonativo}" method="POST" th:object="${donacion}">
                         <div class="row mb-4">
                             <div class="col-12 col-sm-12 col-md-7 mb-3">
                                 <div class="form-outline">
                                     <input type="number" step="0.01" th:field="*{monto}" id="monto"
                                         placeholder="Ej. 5.99" class="form-control" />
-                                    <label class="form-label" for="form3Example1">Cantidad a donar</label>
+                                    <label class="form-label" for="form3Example1">Cantidad a donar: <span th:if="${#fields.hasErrors('monto')}" th:errors="*{monto}"
+                                        class="badge badge-danger"> </span> </label>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-12 col-md">
-                                <button type="submit" style="background-color: #253E5C;"
-                                    class="btn btn-primary btn-block mb-4 btn-rounded">
-                                    Donar
-                                </button>
+                                <input type="submit" style="background-color: #253E5C;" class="btn btn-primary mb-4 btn-rounded" value="Donar" />
                             </div>
                         </div>
                     </form>
