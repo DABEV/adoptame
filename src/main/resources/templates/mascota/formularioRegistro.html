@@ -34,24 +34,27 @@
                                         <input type="hidden" th:field="*{id}" />
                                         <input type="hidden" th:field="*{imagen}" />
                                         <div class="col-md-5 col-sm-12 mb-3">
-                                            <label for="nombre" style="color: #698FAE;">Nombre</label>
+                                            <label for="nombre" style="color: #698FAE;">Nombre: <span
+                                                    th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"
+                                                    class="badge badge-danger">
+                                                </span></label>
                                             <div class="input-group flex-nowrap">
                                                 <span class="input-group-text"
                                                     style="background-color: #253E5C; color: white;"
                                                     id="addon-wrapping">
                                                     <em class="fas fa-tag"></em>
                                                 </span>
-                                                <input type="text" th:field="*{nombre}" id="nombre" class="form-control"
-                                                    placeholder="Ej. Milo" aria-label="nombre"
+                                                <input type="text" maxlength="50" th:field="*{nombre}" id="nombre"
+                                                    class="form-control" placeholder="Ej. Milo" aria-label="nombre"
                                                     aria-describedby="addon-wrapping" />
-
-                                                <div th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"
-                                                    class="badge badge-danger">
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-12 col-md-3 col-sm-12 mb-3">
-                                            <label for="" style="color: #698FAE;">Sexo</label>
+                                            <label style="color: #698FAE;">Sexo:
+                                                <span th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"
+                                                    class="badge badge-danger">
+                                                </span>
+                                            </label>
                                             <div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" style="border-color: #253E5C;"
@@ -67,23 +70,21 @@
                                                     <label class="form-check-label" for="flexRadioDefault1"> Macho
                                                     </label>
                                                 </div>
-                                                <div th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"
-                                                    class="badge badge-danger">
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-sm-12 col-12 mb-3">
-                                            <label for="" style="color: #698FAE;">Edad</label>
+                                            <label style="color: #698FAE;">Edad:
+                                                <span th:if="${#fields.hasErrors('edad')}" th:errors="*{edad}"
+                                                    class="badge badge-danger">
+                                                </span>
+                                            </label>
                                             <div class="input-group flex-nowrap">
                                                 <span class="input-group-text"
                                                     style="background-color: #253E5C; color: white;">
                                                     <em class="fas fa-calendar-alt"></em>
                                                 </span>
-                                                <input type="text" th:field="*{edad}" class="form-control"
-                                                    placeholder="Ej. 6 meses" />
-                                                <div th:if="${#fields.hasErrors('edad')}" th:errors="*{edad}"
-                                                    class="badge badge-danger">
-                                                </div>
+                                                <input type="text" maxlength="30" th:field="*{edad}"
+                                                    class="form-control" placeholder="Ej. 6 meses" />
                                             </div>
                                         </div>
                                     </div>
@@ -102,7 +103,11 @@
                                             </div>
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-3 mb-3">
-                                            <label for="" style="color: #698FAE;">Tipo de mascota</label>
+                                            <label style="color: #698FAE;">Tipo de mascota:
+                                                <span th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"
+                                                    class="badge badge-danger">
+                                                </span>
+                                            </label>
                                             <div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" style="border-color: #253E5C;"
@@ -136,7 +141,11 @@
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="detalles" style="color: #698FAE;">Detalles</label>
+                                        <label for="detalles" style="color: #698FAE;">Detalles:
+                                            <span th:if="${#fields.hasErrors('detalles')}" th:errors="*{detalles}"
+                                                class="badge badge-danger">
+                                            </span>
+                                        </label>
                                         <div class="input-group flex-nowrap">
                                             <span class="input-group-text"
                                                 style="background-color: #253E5C; color: white;">
@@ -145,17 +154,14 @@
                                             <input type="text" th:field="*{detalles}" id="detalles" class="form-control"
                                                 placeholder="Ej. Juega todo el día" aria-label="detalles"
                                                 aria-describedby="addon-wrapping" />
-                                            <div th:if="${#fields.hasErrors('detalles')}" th:errors="*{detalles}"
-                                                class="badge badge-danger">
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="row justify-content-between d-flex align-items-end">
                                         <div class="col-12 col-sm-12 col-md-5">
                                             <label class="form-label" style="color:#698FAE;"
                                                 for="customFile">Imagen</label>
-                                            <input type="file" name="imagenMascota" class="form-control"
-                                                id="customFile" />
+                                            <input accept="image/jpeg,image/jpg,image/png" type="file"
+                                                name="imagenMascota" class="form-control" id="customFile" />
                                         </div>
                                         <div class="col-12 col-sm-12 col-md-3">
                                             <label for="" style="color: #698FAE;">Caracter</label>

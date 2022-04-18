@@ -12,13 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import mx.edu.utez.adoptame.validator.NameFormat;
-import mx.edu.utez.adoptame.validator.DescriptionFormat;
-import mx.edu.utez.adoptame.validator.ParagraphFormat;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -29,19 +22,12 @@ public class Mascota {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @NotNull
-    @NotBlank
-    @NameFormat(message = "Sólo se permiten letras")
     @Column(nullable = false, length = 50)
-    @Size(max = 50, message = "Máximo 50 caracteres")
     private String nombre;
     
     @Column(columnDefinition = "tinyint not null default 0")
     private Boolean sexo; 
 
-    @NotNull
-    @DescriptionFormat(message = "Sólo se permiten números y letras")
-    @Size(max = 30, message = "Máximo 30 caracteres")
     @Column(nullable = false, length = 30)
     private String edad; 
     
@@ -52,7 +38,6 @@ public class Mascota {
     private String imagen;
     
     @Column(nullable = false, length = 20)
-    @Size(max = 20, message = "Máximo 20 caracteres")
     private String aprobadoRegistro;
 
     @Column(columnDefinition = "tinyint not null default 1")
@@ -61,9 +46,7 @@ public class Mascota {
     @Column(columnDefinition = "tinyint not null default 1")
     private Boolean activo;
 
-    @NotNull
     @Column(columnDefinition = "longtext null")
-    @ParagraphFormat(message = "Caracteres no válidos")
 	private String detalles;
     
     @ManyToOne

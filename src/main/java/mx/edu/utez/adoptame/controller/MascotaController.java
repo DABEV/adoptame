@@ -144,14 +144,11 @@ public class MascotaController {
     @PostMapping("/guardarMascota")
     @PreAuthorize("hasAuthority('ROL_VOLUNTARIO')")
     public String guardarMacota(@Valid @ModelAttribute("mascota") MascotaDto mascotaDto, BindingResult result,
-            Model model,
-            RedirectAttributes attributes,
-            @RequestParam("imagenMascota") MultipartFile multipartFile, HttpSession session) {
+            Model model, RedirectAttributes attributes, @RequestParam("imagenMascota") MultipartFile multipartFile,
+            HttpSession session) {
         Mascota mascotaExistente = null;
         Mascota respuesta = null;
         try {
-            Mascota mascota = modelMapper.map(mascotaDto, Mascota.class);
-
             List<Color> colores = colorServiceImp.listarColores();
             List<Caracter> listaCaracter = caracterServiceImp.listarCaracteres();
             List<Tamano> listaTamano = tamanoServiceImp.listarTamanos();
@@ -160,14 +157,13 @@ public class MascotaController {
             model.addAttribute(listaTamanos, listaTamano);
             model.addAttribute(listaColores, colores);
 
-            boolean tipoMascota = mascota.getTipo();
-
             if (result.hasErrors()) {
                 return formRegistro;
             } else {
-                if (
+                Mascota mascota = modelMapper.map(mascotaDto, Mascota.class);
+                boolean tipoMascota = mascota.getTipo();
                 // mascota nueva
-                mascota.getId() == null) {
+                if (mascota.getId() == null) {
                     mascota.setAprobadoRegistro("pendiente");
                     mascota.setDisponibleAdopcion(false);
                     mascota.setActivo(true);
@@ -210,6 +206,8 @@ public class MascotaController {
         } catch (Exception e) {
             logger.error("Error al intentar guardar una mascota");
         }
+
+        attributes.addFlashAttribute(msgE, "Registro fallido");
         return redirectListar;
     }
 

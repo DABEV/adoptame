@@ -25,6 +25,7 @@ public class MascotaDto {
     @Size(max = 50, message = "Máximo 50 caracteres")
     private String nombre;
     
+    @NotNull
     private Boolean sexo; 
 
     @NotNull(message = "Campo requerido")
@@ -33,6 +34,7 @@ public class MascotaDto {
     @Size(max = 30, message = "Máximo 30 caracteres")
     private String edad; 
     
+    @NotNull
     private Boolean tipo; 
     
     private String imagen;
@@ -47,8 +49,13 @@ public class MascotaDto {
     @ParagraphFormat(message = "Caracteres no válidos")
 	private String detalles;
 
+    @NotNull
     private Tamano tamano;
+
+    @NotNull
     private Color color;
+
+    @NotNull
     private Caracter caracter;
     private Date fechaRegistro;
     private List<Favorito> favoritos;
