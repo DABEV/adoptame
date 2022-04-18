@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import mx.edu.utez.adoptame.model.Respuesta;
 
@@ -19,7 +19,7 @@ public class CodigoErrorController implements ErrorController {
     private static final String DEFAULT_TITLE_01 = "¡Ha ocurrido un error!";
     private static final String DEFAULT_MESSAGE_01 = "Favor de contactar a un administrador.";
 
-    @RequestMapping("/error")
+    @GetMapping("/error")
     public String handleError (HttpServletRequest request, Model model) {        
         model.addAttribute("respuesta", setRespuestaError(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)));
         return "error";
