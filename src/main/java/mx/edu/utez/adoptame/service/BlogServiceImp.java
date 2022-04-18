@@ -85,7 +85,6 @@ public class BlogServiceImp implements BlogService {
 
             return blogActualizar;
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
 
         }
@@ -111,7 +110,6 @@ public class BlogServiceImp implements BlogService {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
 
         }
@@ -132,7 +130,6 @@ public class BlogServiceImp implements BlogService {
                 return true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
 
         }
@@ -150,7 +147,6 @@ public class BlogServiceImp implements BlogService {
         try {
             lista = blogRepository.findByEsPrincipal(true);
         } catch (Exception e) {
-            e.printStackTrace();
             log.error(e.getMessage());
 
         }

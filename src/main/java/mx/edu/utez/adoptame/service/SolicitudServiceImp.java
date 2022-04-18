@@ -14,8 +14,13 @@ import mx.edu.utez.adoptame.dto.UsuarioDto;
 import mx.edu.utez.adoptame.model.Solicitud;
 import mx.edu.utez.adoptame.repository.SolicitudRepository;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 @Service
 public class SolicitudServiceImp implements SolicitudService {
+
+    Log log = LogFactory.getLog(getClass());
 
     @Autowired
     SolicitudRepository repository;
@@ -42,9 +47,9 @@ public class SolicitudServiceImp implements SolicitudService {
         Solicitud solicitudResultado = null;
         try {
             solicitudResultado = repository.save(solicitud);
-            
+
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return solicitudResultado;
     }
@@ -73,7 +78,7 @@ public class SolicitudServiceImp implements SolicitudService {
 
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return false;
     }
@@ -84,7 +89,7 @@ public class SolicitudServiceImp implements SolicitudService {
             repository.update("Rechazado", id);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return false;
     }
@@ -95,7 +100,7 @@ public class SolicitudServiceImp implements SolicitudService {
             repository.update("Aprobado", id);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return false;
     }
@@ -109,10 +114,10 @@ public class SolicitudServiceImp implements SolicitudService {
 
             list = repository.registroSolicitud(idUsuario, aprobado, fechaSolicitud, adoptadorId, mascotaId);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return list;
-    } 
+    }
 
     @Override
     public List<Solicitud> procedimientoActualizarSolicitud(Long idUsuario, Solicitud anterior, Solicitud solicitud) {
@@ -123,7 +128,7 @@ public class SolicitudServiceImp implements SolicitudService {
             list = repository.actualizarSolicitud(idUsuario, anterior, solicitud);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return list;
     }
@@ -136,7 +141,7 @@ public class SolicitudServiceImp implements SolicitudService {
         try {
             list = repository.eliminarSolicitud(idUsuario, aprobado, fechaSolicitud, adoptadorId, mascotaId);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return list;
     }

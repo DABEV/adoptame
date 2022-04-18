@@ -3,6 +3,9 @@ package mx.edu.utez.adoptame.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -13,9 +16,12 @@ import com.sendgrid.helpers.mail.objects.Email;
 
 @Service
 public class EmailServiceImp implements EmailService {
-    @Value("${sendgrid.api.key}")
+
+	private Logger logger = LoggerFactory.getLogger(EmailServiceImp.class);
+
+	@Value("${sendgrid.api.key}")
 	private String sendgridApiKey;
-	
+
 	@Value("${sendgrid.api.email}")
 	private String emailFrom;
 
@@ -34,17 +40,13 @@ public class EmailServiceImp implements EmailService {
 			request.setBody(mail.build());
 			Response response = sg.api(request);
 
-			System.out.println(response.getStatusCode());
-			System.out.println(response.getBody());
-			System.out.println(response.getHeaders());
-
 			return response.getStatusCode() == 202;
-		} catch (Exception exception) {
-			System.err.println(exception.getMessage());
+
+		} catch (Exception e) {
+
+			logger.error(e.getMessage());
 			return false;
 		}
 	}
 
 }
-    
-

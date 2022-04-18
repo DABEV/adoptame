@@ -20,18 +20,24 @@ import org.springframework.stereotype.Service;
 import mx.edu.utez.adoptame.config.PaypalPaymentIntent;
 import mx.edu.utez.adoptame.config.PaypalPaymentMethod;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 @Service
 public class PaypalServiceImp implements PaypalService {
 
-    private Payment payment = null; 
+    Log log = LogFactory.getLog(getClass());
+
+    private Payment payment = null;
 
     @Autowired
     private APIContext apiContext;
 
     @Override
-    public Payment creaPago(Double total, String currency, PaypalPaymentMethod method, PaypalPaymentIntent intent, String description, String cancelUrl, String successUrl) {
+    public Payment creaPago(Double total, String currency, PaypalPaymentMethod method, PaypalPaymentIntent intent,
+            String description, String cancelUrl, String successUrl) {
         try {
-        
+
             Amount amount = new Amount();
             amount.setCurrency(currency);
             total = BigDecimal.valueOf(total).setScale(2, RoundingMode.HALF_UP).doubleValue();
@@ -58,9 +64,9 @@ public class PaypalServiceImp implements PaypalService {
             payment.setRedirectUrls(redirectUrls);
 
             payment = payment.create(apiContext);
-        
+
         } catch (PayPalRESTException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             payment = null;
         }
 
@@ -69,20 +75,20 @@ public class PaypalServiceImp implements PaypalService {
 
     @Override
     public Payment ejecutaPago(String paymentId, String payerId) {
-        
+
         try {
             payment = new Payment();
             payment.setId(paymentId);
             PaymentExecution paymentExecute = new PaymentExecution();
             paymentExecute.setPayerId(payerId);
-        
+
             payment = payment.execute(apiContext, paymentExecute);
         } catch (PayPalRESTException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             payment = null;
         }
 
         return payment;
     }
-    
+
 }

@@ -53,7 +53,7 @@ public class MascotaServiceImp implements MascotaService {
     public Mascota guardarMascota(Mascota mascota) {
         Mascota mascotaResultante = null;
         try {
-         
+
             mascotaResultante = mascotaRepository.save(mascota);
 
         } catch (Exception e) {
@@ -160,7 +160,7 @@ public class MascotaServiceImp implements MascotaService {
         try {
             mascotas = mascotaRepository.registroMascota(idUsuario, mascota);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return mascotas;
     }
@@ -175,7 +175,7 @@ public class MascotaServiceImp implements MascotaService {
             mascotaRepository.actualizarMascota(idUsuario, mascota, anterior);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return mascotas;
     }
@@ -188,7 +188,7 @@ public class MascotaServiceImp implements MascotaService {
             mascotas = mascotaRepository.eliminarMascota(idUsuario, mascota);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return mascotas;
     }
