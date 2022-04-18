@@ -159,56 +159,56 @@ public class MascotaController {
             model.addAttribute(listaTamanos, listaTamano);
             model.addAttribute(listaColores, colores);
 
-            if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
-                attributes.addFlashAttribute(msgE, "Registro fallido solo se admiten imagenes");
-                return formRegistro;
-
-            }
-
             if (result.hasErrors()) {
                 return formRegistro;
+            }
+            
+            Mascota mascota = modelMapper.map(mascotaDto, Mascota.class);
+            boolean tipoMascota = mascota.getTipo();
+
+            if (!multipartFile.isEmpty()) {
+
+                if (!"image/jpeg".equals(contentType) && !"image/png".equals(contentType)) {
+                    attributes.addFlashAttribute(msgE, "Registro fallido solo se admiten imagenes");
+                    return formRegistro;
+
+                }
+                String ruta = "C:/mascotas/img-mascotas/";
+                String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
+                if (nombreImagen != null) {
+                    mascota.setImagen(nombreImagen);
+                }
+            }
+
+            // mascota nueva
+            if (mascota.getId() == null) {
+                mascota.setAprobadoRegistro("pendiente");
+                mascota.setDisponibleAdopcion(false);
+                mascota.setActivo(true);
+
+                respuesta = mascotaServiceImp.guardarMascota(mascota);
+                UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
+                Long idUsuario = usuarioDto.getId();
+                mascotaServiceImp.procedimientoRegistrarMascota(idUsuario, respuesta);
             } else {
-                Mascota mascota = modelMapper.map(mascotaDto, Mascota.class);
-                boolean tipoMascota = mascota.getTipo();
-                // mascota nueva
-                if (mascota.getId() == null) {
-                    mascota.setAprobadoRegistro("pendiente");
-                    mascota.setDisponibleAdopcion(false);
-                    mascota.setActivo(true);
+                // mascota existente
+                mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
+                mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
+                mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
+                mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
+                mascota.setActivo(mascotaExistente.getActivo());
 
-                    respuesta = mascotaServiceImp.guardarMascota(mascota);
-                    UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
-                    Long idUsuario = usuarioDto.getId();
-                    mascotaServiceImp.procedimientoRegistrarMascota(idUsuario, respuesta);
+                mascotaServiceImp.procedimientoActualizarMascota(mascota, mascotaExistente, session);
+            }
 
-                } else {
+            respuesta = mascotaServiceImp.guardarMascota(mascota);
 
-                    // mascota existente
-                    mascotaExistente = mascotaServiceImp.obtenerMascota(mascota.getId());
-                    mascota.setFechaRegistro(mascotaExistente.getFechaRegistro());
-                    mascota.setDisponibleAdopcion(mascotaExistente.getDisponibleAdopcion());
-                    mascota.setAprobadoRegistro(mascotaExistente.getAprobadoRegistro());
-                    mascota.setActivo(mascotaExistente.getActivo());
-
-                    mascotaServiceImp.procedimientoActualizarMascota(mascota, mascotaExistente, session);
-                    respuesta = mascotaServiceImp.guardarMascota(mascota);
-                }
-
-                if (!multipartFile.isEmpty()) {
-                    String ruta = "C:/mascotas/img-mascotas/";
-                    String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
-                    if (nombreImagen != null) {
-                        mascota.setImagen(nombreImagen);
-                    }
-                }
-
-                if (respuesta != null) {
-                    attributes.addFlashAttribute(msgS, "Registro exitoso");
-                    return redirectListar + "/" + tipoMascota;
-                } else {
-                    attributes.addFlashAttribute(msgE, "Registro fallido");
-                    return "redirect:/mascota/registrar";
-                }
+            if (respuesta != null) {
+                attributes.addFlashAttribute(msgS, "Registro exitoso");
+                return redirectListar + "/" + tipoMascota;
+            } else {
+                attributes.addFlashAttribute(msgE, "Registro fallido");
+                return "redirect:/mascota/registrar";
             }
 
         } catch (Exception e) {
