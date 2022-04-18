@@ -97,27 +97,32 @@ public class BlogController {
 
     @PostMapping("/actualizarBlog")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR')")
-    public String actualizarBlog(@ModelAttribute("blog") BlogDto blogDto, Model model,
+    public String actualizarBlog(@Valid @ModelAttribute("blog") BlogDto blogDto, BindingResult result, Model model,
             RedirectAttributes redirectAttributes,
             @RequestParam("imagenBlog") MultipartFile multipartFile, HttpSession session) {
 
         try {
-            Blog blog = modelMapper.map(blogDto, Blog.class);
-            if (!multipartFile.isEmpty()) {
-                String ruta = "C:/mascotas/img-mascotas/";
-                String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
-                if (nombreImagen != null) {
-                    blog.setImagen(nombreImagen);
-                }
-            }
-
-            Blog respuesta = blogServiceImp.actualizarBlog(blog, session);
-            if (respuesta != null) {
-                redirectAttributes.addFlashAttribute(msgSuccess, "Actualizacion exitosa");
-            } else {
+            if (result.hasErrors()) {
                 redirectAttributes.addFlashAttribute(msgError, "Actualizacion fallida verifique los datos");
-            }
+                return redirectBlogLista;
+            } else {
+                Blog blog = modelMapper.map(blogDto, Blog.class);
+                if (!multipartFile.isEmpty()) {
+                    String ruta = "C:/mascotas/img-mascotas/";
+                    String nombreImagen = ImagenUtileria.guardarImagen(multipartFile, ruta);
+                    if (nombreImagen != null) {
+                        blog.setImagen(nombreImagen);
+                    }
+                }
 
+                Blog respuesta = blogServiceImp.actualizarBlog(blog, session);
+                if (respuesta != null) {
+                    redirectAttributes.addFlashAttribute(msgSuccess, "Actualizacion exitosa");
+                } else {
+                    redirectAttributes.addFlashAttribute(msgError, "Actualizacion fallida verifique los datos");
+                }
+
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
 
