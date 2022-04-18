@@ -45,13 +45,16 @@ public class UsuarioController {
 
     @GetMapping("/actualizar")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO') or hasAuthority('ROL_ADOPTADOR')")
-    public String actualizar () {
-        return REDIRECT_MI_CUENTA;    
+    public String actualizar() {
+        return REDIRECT_MI_CUENTA;
     }
 
     @PostMapping("/actualizar")
     @PreAuthorize("hasAuthority('ROL_ADMINISTRADOR') or hasAuthority('ROL_VOLUNTARIO') or hasAuthority('ROL_ADOPTADOR')")
-    public String actualizar (Authentication authentication, RedirectAttributes redirectAttributes, @RequestParam("contrasena") String contrasena, @RequestParam("nuevaContrasena") String nuevaContrasena, @RequestParam("repetirContrasena") String repetirContrasena, @Valid @ModelAttribute("usuario") UsuarioDto usuarioDto, BindingResult result) {
+    public String actualizar(Authentication authentication, RedirectAttributes redirectAttributes,
+            @RequestParam("contrasena") String contrasena, @RequestParam("nuevaContrasena") String nuevaContrasena,
+            @RequestParam("repetirContrasena") String repetirContrasena,
+            @Valid @ModelAttribute("usuario") UsuarioDto usuarioDto, BindingResult result) {
         try {
             if (result.hasErrors())  {
                 redirectAttributes.addFlashAttribute("msg_warning", "Error en algunos campos, favor de verificarlos.");
@@ -64,7 +67,7 @@ public class UsuarioController {
             if (contrasena != null  && (!contrasena.isEmpty() || !contrasena.isBlank())) {
                 if (nuevaContrasena != null && nuevaContrasena.equals(repetirContrasena) && passwordEncoder.matches(contrasena, usuario.getContrasena())) {
                     // Si la nueva contraseña coincide con la repetición
-                    usuario.setContrasena(passwordEncoder.encode(nuevaContrasena));    
+                    usuario.setContrasena(passwordEncoder.encode(nuevaContrasena));
                 } else {
                     redirectAttributes.addFlashAttribute("msg_warning", "Las contraseñas no coinciden, favor de intentarlo de nuevo.");
                 }
@@ -98,10 +101,10 @@ public class UsuarioController {
             Usuario usuario = usuarioServiceImp.buscarPorCorreo(authentication.getName());
 
             UsuarioDto usuarioDto = modelMapper.map(usuario, UsuarioDto.class);
-            
+
             model.addAttribute("usuario", usuarioDto);
 
-            if (usuarioDto != null){
+            if (usuarioDto != null) {
                 model.addAttribute("usuario", usuarioDto);
                 return VIEW_MI_CUENTA;
             }

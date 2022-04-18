@@ -9,21 +9,22 @@
 <body>
     <div class="container-fluid">
         <!-- Navbar -->
-        <div class="row mb-3">
+        <div class="row">
             <navbar th:replace="fragments/navbar :: navbar"></navbar>
         </div>
-        <!-- Contenido -->
+
+        <!-- Carrousel -->
         <div id="carouselExampleTouch" class="carousel slide" data-mdb-touch="false">
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img src="https://mdbcdn.b-cdn.net/img/new/slides/041.webp" class="d-block w-100"
-                        alt="Wild Landscape" />
+                    <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=986&q=80"
+                        class="d-block w-100" style="max-height: 570px;" alt="No encontrada" />
                     <div class="mask" style="background-color: rgba(0, 0, 0, 0.3);">
                         <div class="d-flex justify-content-center align-items-center h-100">
                             <div class="text-white text-center">
                                 <h1 class="mb-3">Explora nuestra sección de noticias</h1>
-                                <a class="btn btn-outline-light btn-rounded btn-lg m-2" href="" role="button"
-                                    rel="nofollow" target="_blank">Ver noticias</a>
+                                <a class="btn btn-outline-light btn-rounded btn-lg m-2"
+                                    th:href="@{/blog/consultarTodas}" role="button" rel="nofollow">Ver noticias</a>
                             </div>
                         </div>
                     </div>
@@ -41,14 +42,15 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
+        <!-- Contenido -->
         <div sec:authorize="hasAnyAuthority('ROL_VOLUNTARIO', 'ROL_ADOPTADOR')">
             <hr class="my-5" />
             <div class="row">
                 <div class="col-md-6 gx-5 mb-4">
                     <div class="bg-image hover-overlay ripple shadow-2-strong rounded-5" data-mdb-ripple-color="light">
-                        <img src="https://images.unsplash.com/photo-1450778869180-41d0601e046e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=986&q=80"
+                        <img src="https://images.unsplash.com/photo-1597662942557-4087865bf476?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=873&q=80"
                             class="img-fluid" alt="mascotas" />
-                        <a href="#!">
+                        <a>
                             <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                         </a>
                     </div>
@@ -65,16 +67,14 @@
                         <div class="row mb-4">
                             <div class="col-12 col-sm-12 col-md-7 mb-3">
                                 <div class="form-outline">
-                                    <input type="number" step="0.01" th:field="*{monto}" id="monto" placeholder="Ej. 5.99" class="form-control" />
+                                    <input type="number" step="0.01" th:field="*{monto}" id="monto"
+                                        placeholder="Ej. 5.99" class="form-control" />
                                     <label class="form-label" for="form3Example1">Cantidad a donar</label>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-12 col-md">
-                                <button 
-                                    type="submit" 
-                                    style="background-color: #253E5C;"
-                                    class="btn btn-primary btn-block mb-4 btn-rounded"
-                                >
+                                <button type="submit" style="background-color: #253E5C;"
+                                    class="btn btn-primary btn-block mb-4 btn-rounded">
                                     Donar
                                 </button>
                             </div>
