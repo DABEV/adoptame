@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +38,7 @@ import mx.edu.utez.adoptame.service.UsuarioServiceImp;
 public class HomeController {
 
     private static final String REDIRECT_LOGIN = "redirect:/login";
+    private static final String REDIRECT_SINGUP = "redirect:/signup";
 
     private Logger logger = LoggerFactory.getLogger(HomeController.class);
 
@@ -87,38 +90,47 @@ public class HomeController {
     }
 
     @PostMapping("/signup")
-    public String guardarUsuario(@RequestParam("tipoUsuario") String tipoUsuario,
-            @ModelAttribute("usuario") UsuarioDto usuarioDto, RedirectAttributes redirectAttributes,
-            HttpSession session) {
+    public String guardarUsuario(@Valid @ModelAttribute("usuario") UsuarioDto usuarioDto, BindingResult result,
+            @RequestParam("tipoUsuario") String tipoUsuario,
+            RedirectAttributes redirectAttributes,
+            HttpSession session, @RequestParam("confirmarContrasena") String repeticion) {
 
         try {
-            // Encriptar la contraseña
-            String contrasenaEncriptada = passwordEncoder.encode(usuarioDto.getContrasena());
-
-            // Asignar la contraseña encriptada
-            usuarioDto.setContrasena(contrasenaEncriptada);
-
-            // Aplicar tratemiento al telefono para solo guardar los numeros
-            String telefono = usuarioDto.getTelefono().replaceAll("[\\s\\(\\)\\-]+", "");
-            usuarioDto.setTelefono(telefono);
-
-            // Habilitar la cuenta por defecto
-            usuarioDto.setHabilitado(true);
-
-            Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
-
-            // Asignar un rol de usuarioDto de acuerdo al tipo seleccionado en el formulario
-            usuario.addRol(rolServiceImp
-                    .buscarPorNombre(tipoUsuario.equals("voluntario") ? "ROL_VOLUNTARIO" : "ROL_ADOPTADOR"));
-
-            boolean respuesta = usuarioServiceImp.guardarUsuario(usuario) != null;
-
-            if (respuesta) {
-                redirectAttributes.addFlashAttribute("msg_success", "¡Registro exitoso! Por favor inicia sesión.");
-                return REDIRECT_LOGIN;
+            if (result.hasErrors()) {
+                redirectAttributes.addFlashAttribute("msg_warning", "Error en algunos campos, favor de verificarlos.");
+                return "signup";
             } else {
-                redirectAttributes.addFlashAttribute("msg_error", "¡Registro fallido! Por favor intenta de nuevo.");
-                return "redirect:/signup";
+                if (usuarioDto.getContrasena().equals(repeticion)) {
+                    // Encriptar la contraseña
+                    String contrasenaEncriptada = passwordEncoder.encode(usuarioDto.getContrasena());
+                    // Asignar la contraseña encriptada
+                    usuarioDto.setContrasena(contrasenaEncriptada);
+                    // Aplicar tratemiento al telefono para solo guardar los numeros
+                    String telefono = usuarioDto.getTelefono().replaceAll("[\\s\\(\\)\\-]+", "");
+                    usuarioDto.setTelefono(telefono);
+                    // Habilitar la cuenta por defecto
+                    usuarioDto.setHabilitado(true);
+                    Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
+                    // Asignar un rol de usuarioDto de acuerdo al tipo seleccionado en el formulario
+                    usuario.addRol(rolServiceImp
+                            .buscarPorNombre(tipoUsuario.equals("voluntario") ? "ROL_VOLUNTARIO" : "ROL_ADOPTADOR"));
+
+                    boolean respuesta = usuarioServiceImp.guardarUsuario(usuario) != null;
+
+                    if (respuesta) {
+                        redirectAttributes.addFlashAttribute("msg_success",
+                                "¡Registro exitoso! Por favor inicia sesión.");
+                        return REDIRECT_LOGIN;
+                    } else {
+                        redirectAttributes.addFlashAttribute("msg_error",
+                                "¡Registro fallido! Por favor intenta de nuevo.");
+                        return REDIRECT_SINGUP;
+                    }
+                } else {
+                    redirectAttributes.addFlashAttribute("msg_warning",
+                            "Las contraseñas no coinciden, favor de verificar");
+                    return REDIRECT_SINGUP;
+                }
             }
         } catch (Exception e) {
             logger.error("Error al intentar crear una nueva cuenta");
@@ -133,13 +145,14 @@ public class HomeController {
         try {
             UsuarioDto usuarioDto = (UsuarioDto) session.getAttribute("usuario");
             Long idUsuario = usuarioDto.getId();
-           usuarioServiceImp.procedimientoCerrarSesion(idUsuario, new Date());
+            usuarioServiceImp.procedimientoCerrarSesion(idUsuario, new Date());
             SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
             logoutHandler.logout(request, null, null);
 
             redirectAttributes.addFlashAttribute("msg_success", "¡Sesión cerrada! Hasta luego");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("msg_error", "Ocurrió un error al cerrar la sesión, intenta de nuevo.");
+            redirectAttributes.addFlashAttribute("msg_error",
+                    "Ocurrió un error al cerrar la sesión, intenta de nuevo.");
             logger.error("Error al intentar cerrar sesión");
         }
 

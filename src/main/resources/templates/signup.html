@@ -1,131 +1,161 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Registrarse</title>
-        <i-head th:replace="fragments/imports :: head" />
-        <link th:href="@{/css/login.css}" rel="stylesheet" />
-        <style>
-          #intro {
-              background-image: url([[@{/images/fondoLogo.webp}]]);
-              height: 110vh;
-          }
-      </style>
-    </head>
-    <body>
-      <!-- Background image -->
-      <div id="intro" class="bg-image shadow-2-strong">
-        <div class="mask d-flex align-items-center h-100">
-          <div class="container">
-            <div class="row justify-content-center">
-              <div class="col-xl-7 col-md-8">
-                <!-- Formulario -->
-                <form th:action="@{/signup}"  method="POST" th:object="${usuario}" enctype="multipart/form-data" class="bg-white radius shadow-5-strong p-5">
-                  <div class="row mb-4">
-                    <div class="col text-center">
-                      <h2>Registrarse</h2>
-                    </div>
-                  </div>
-                  <!-- Roles -->
-                  <div class="row">
-                    <div class="col-12 mb-2 d-flex justify-content-center">
-                      <h5>Seleccione un rol: </h5>
-                    </div>
-                    <div class="col-12 mb-4 d-flex justify-content-center">
-                      <div class="form-check form-check-inline">
-                        <input type="radio" class="form-check-input" id="voluntario" name="tipoUsuario" value="voluntario" checked>
-                        <label class="form-check-label" for="voluntario">
-                          <em class="fa-solid fa-hand fa-xl"></em>
-                          Voluntario
-                        </label>
-                      </div>
-                      <div class="form-check form-check-inline">
-                        <input type="radio" class="form-check-input" id="adoptador" name="tipoUsuario" value="adoptador">
-                        <label class="form-check-label" for="adoptador">
-                          <em class="fa-solid fa-paw fa-xl"></em>
-                          Adoptador
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Nombre y apellido -->
-                  <div class="row">
-                    <div class="col">
-                      <!-- Nombre -->
-                      <div class="input-group mb-3">
-                        <span class="input-group-text bg-span" id="basic-addon-nombre"><em class="fas fa-tag"></em></span>
-                        <input type="text" th:field="*{nombre}" class="form-control" placeholder="Nombre" aria-label="nombre" aria-describedby="basic-addon-nombre" />
-                      </div>
-                    </div>
-                    <div class="col">
-                      <!-- Apellido -->
-                      <div class="input-group mb-3 ">
-                        <span class="input-group-text bg-span" id="basic-addon-apellido"><em class="fas fa-tags"></em></span>
-                        <input  type="text" th:field="*{apellidos}" class="form-control" placeholder="Apellido" aria-label="apellido" aria-describedby="basic-addon-apellido" />
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Dirección -->
-                  <div class="input-group mb-3">
-                    <span class="input-group-text bg-span" id="basic-addon-direccion"><em class="fas fa-map-pin"></em></span>
-                    <input  type="text"  th:field="*{direccion}" class="form-control" placeholder="Dirección" aria-label="direccion" aria-describedby="basic-addon-direccion" />
-                  </div>
-                  <!-- Correo y teléfono -->
-                  <div class="row">
-                    <div class="col">
-                      <!-- Correo electrónico  -->
-                      <div class="input-group mb-3">
-                        <span class="input-group-text bg-span" id="basic-addon-correo"><em class="fas fa-envelope"></em></span>
-                        <input type="email" th:field="*{correo}" class="form-control" placeholder="Correo Electrónico" aria-label="correo" aria-describedby="basic-addon-correo" />
-                      </div>
-                    </div>
-                    <div class="col">
-                      <!-- telefono  -->
-                      <div class="input-group mb-3">
-                        <span class="input-group-text bg-span" id="basic-addon-telefono"><em class="fas fa-phone"></em></span>
-                        <input type="tel" th:field="*{telefono}" class="form-control" placeholder="Teléfono" aria-label="telefono" aria-describedby="basic-addon-telefono" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col">
-                      <!-- Contraseña  -->
-                      <div class="input-group mb-3">
-                        <span class="input-group-text bg-span" id="basic-addon-contrasena"><em class="fas fa-eye"></em></span>
-                        <input type="password" th:field="*{contrasena}" class="form-control" placeholder="Contraseña" aria-label="contrasena" aria-describedby="basic-addon-contrasena" />
-                      </div>
-                    </div>
-                    <div class="col">
-                      <!-- Confirmar Contraseña  -->
-                      <div class="input-group mb-3">
-                        <span class="input-group-text bg-span" id="basic-addon-confirmarContrasena"><em class="fas fa-eye-slash"></em></span>
-                        <input type="password" name="confirmarContrasena" class="form-control" placeholder="Confirmar Contraseña" aria-label="confirmarContrasena" aria-describedby="basic-addon-confirmarContrasena" />
-                      </div>
-                    </div>
-                  </div>
 
-                  <!-- Submit button -->
-                  <div class="row mb-3 mt-4">
-                    <div class="col d-flex justify-content-center">
-                      <button type="submit" class="btn boton radius btn-primary btn-block">
-                        <em class="fas fa-sign-in-alt"></em> Registrarse
-                      </button>
-                    </div>
-                  </div>
+<head>
+  <title>Registrarse</title>
+  <i-head th:replace="fragments/imports :: head" />
+  <link th:href="@{/css/login.css}" rel="stylesheet" />
+  <style>
+    #intro {
+      background-image: url([[@{/images/fondoLogo.webp}]]);
+      height: 110vh;
+    }
+  </style>
+</head>
 
-                  <div class="row text-center mt-4">
-                    <div class="col">
-                        <p class="col-12 mb-1">¿Ya tienes una cuenta?</p>
-                        <!-- Simple link -->
-                        <a th:href="@{/login}"><u>Iniciar sesión</u></a>
-                    </div>
+<body>
+  <!-- Background image -->
+  <div id="intro" class="bg-image shadow-2-strong">
+    <div class="mask d-flex align-items-center h-100">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-xl-7 col-md-8">
+            <!-- Formulario -->
+            <form th:action="@{/signup}" method="POST" th:object="${usuario}" enctype="multipart/form-data"
+              class="bg-white radius shadow-5-strong p-4">
+              <div class="row mb-1">
+                <div class="col text-center">
+                  <h2>Registrarse</h2>
                 </div>
-                </form>
               </div>
-            </div>
+              <!-- Roles -->
+              <div class="row">
+                <div class="col-12 mb-2 d-flex justify-content-center">
+                  <h5>Seleccione un rol: </h5>
+                </div>
+                <div class="col-12 mb-2 d-flex justify-content-center">
+                  <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="voluntario" name="tipoUsuario" value="voluntario"
+                      checked>
+                    <label class="form-check-label" for="voluntario">
+                      <em class="fa-solid fa-hand fa-xl"></em>
+                      Voluntario
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input type="radio" class="form-check-input" id="adoptador" name="tipoUsuario" value="adoptador">
+                    <label class="form-check-label" for="adoptador">
+                      <em class="fa-solid fa-paw fa-xl"></em>
+                      Adoptador
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- Nombre y apellido -->
+              <div class="row">
+                <div class="col">
+                  <!-- Nombre -->
+                  <label>Nombre(s): <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"
+                      class="badge badge-danger"></span> </label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text bg-span" id="basic-addon-nombre"><em class="fas fa-tag"></em></span>
+                    <input type="text" maxlength="50" th:field="*{nombre}" class="form-control"
+                      placeholder="Ej. Roberto" aria-label="nombre" aria-describedby="basic-addon-nombre" />
+                  </div>
+                </div>
+                <div class="col">
+                  <!-- Apellido -->
+                  <label>Apellido(s): <span th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"
+                      class="badge badge-danger"> </span> </label>
+                  <div class="input-group mb-3 ">
+                    <span class="input-group-text bg-span" id="basic-addon-apellido"><em
+                        class="fas fa-tags"></em></span>
+                    <input maxlength="50" minlength="1" type="text" th:field="*{apellidos}" class="form-control"
+                      placeholder="Ej. Martínez" aria-label="apellido" aria-describedby="basic-addon-apellido" />
+                  </div>
+                </div>
+              </div>
+              <!-- Dirección -->
+              <label>Dirección: <span th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"
+                  class="badge badge-danger"></span></label>
+              <div class="input-group mb-3">
+                <span class="input-group-text bg-span" id="basic-addon-direccion"><em
+                    class="fas fa-map-pin"></em></span>
+                <input type="text" th:field="*{direccion}" class="form-control" placeholder="Ej. Flores 31"
+                  aria-label="direccion" aria-describedby="basic-addon-direccion" />
+              </div>
+              <!-- Correo y teléfono -->
+              <div class="row">
+                <div class="col">
+                  <!-- Correo electrónico  -->
+                  <label>Correo electrónico: </label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text bg-span" id="basic-addon-correo"><em
+                        class="fas fa-envelope"></em></span>
+                    <input type="email" th:field="*{correo}" class="form-control" placeholder="Ej. correo@adoptame.com"
+                      aria-label="correo" aria-describedby="basic-addon-correo" />
+                  </div>
+                </div>
+                <div class="col">
+                  <!-- telefono  -->
+                  <label>Teléfono: <span th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"
+                      class="badge badge-danger"></span></label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text bg-span" id="basic-addon-telefono"><em
+                        class="fas fa-phone"></em></span>
+                    <input type="tel" th:field="*{telefono}" class="form-control phone-mask" placeholder="Ej. (777) 777 7777"
+                      aria-label="telefono" aria-describedby="basic-addon-telefono" />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <!-- Contraseña  -->
+                  <label>Contraseña: </label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text bg-span" id="basic-addon-contrasena"><em
+                        class="fas fa-eye"></em></span>
+                    <input type="password" th:field="*{contrasena}" class="form-control" placeholder="Contraseña"
+                      aria-label="contrasena" aria-describedby="basic-addon-contrasena" />
+                  </div>
+                </div>
+                <div class="col">
+                  <!-- Confirmar Contraseña  -->
+                  <label>Repetir Contraseña: </label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text bg-span" id="basic-addon-confirmarContrasena"><em
+                        class="fas fa-eye-slash"></em></span>
+                    <input type="password" name="confirmarContrasena" class="form-control"
+                      placeholder="Confirmar Contraseña" aria-label="confirmarContrasena"
+                      aria-describedby="basic-addon-confirmarContrasena" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit button -->
+              <div class="row mb-3 mt-4">
+                <div class="col d-flex justify-content-center">
+                  <button type="submit" class="btn boton radius btn-primary btn-block">
+                    <em class="fas fa-sign-in-alt"></em> Registrarse
+                  </button>
+                </div>
+              </div>
+
+              <div class="row text-center mt-4">
+                <div class="col">
+                  <p class="col-12 mb-1">¿Ya tienes una cuenta?</p>
+                  <!-- Simple link -->
+                  <a th:href="@{/login}"><u>Iniciar sesión</u></a>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-      <!-- Background image -->
-      <scripts th:replace="fragments/imports :: scripts"></scripts>
-    </body>
+    </div>
+  </div>
+  <!-- Background image -->
+  <scripts th:replace="fragments/imports :: scripts"></scripts>
+</body>
+
 </html>

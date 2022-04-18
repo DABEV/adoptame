@@ -67,7 +67,7 @@
                                             <div class="row">
                                                 <!-- Dirección -->
                                                 <div class="col-md-12 col-sm-12 mb-3">
-                                                    <label>Dirección(s): <span th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" class="badge badge-danger"></span></label>
+                                                    <label>Dirección: <span th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}" class="badge badge-danger"></span></label>
                                                     <div class="input-group flex-nowrap">
                                                         <span class="input-group-text" id="addon-wrapping-direccion">
                                                             <em class="fas fa-building"></em>
@@ -102,6 +102,7 @@
                                                         <input type="tel" th:field="*{telefono}"
                                                             class="form-control phone-mask"
                                                             aria-label="telefono"
+                                                            placeholder="Ej. (777) 777 7777"
                                                             aria-describedby="addon-wrapping-telefono" />
                                                     </div>
                                                 </div>
