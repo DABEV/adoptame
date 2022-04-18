@@ -1,5 +1,7 @@
 package mx.edu.utez.adoptame.controller;
 
+import java.security.SecureRandom;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,22 +36,26 @@ public class RecoverPasswordController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	String numeros = "0123456789";
-	String mayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	String minusculas = "abcdefghijklmnopqrstuvwxyz";
+	private String numeros = "0123456789";
+	private String mayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private String minusculas = "abcdefghijklmnopqrstuvwxyz";
 
 	private Logger logger = LoggerFactory.getLogger(RecoverPasswordController.class);
+
+	private static SecureRandom ran = new SecureRandom();
 
 	public String generarContrasena(int length) {
 		return contrasenaAleatoria(numeros + mayusculas + minusculas, length);
 	}
 
-	public String contrasenaAleatoria(String key, int length) {
-		String contrasena = "";
-		for (int i = 0; i < length; i++) {
-			contrasena += (key.charAt((int) (Math.random() * key.length())));
+	public String contrasenaAleatoria(String keyString, int length) {
+
+		StringBuilder sb = new StringBuilder(length);
+		for (int i = 0; i < length; i++){
+			sb.append(keyString.charAt(ran.nextInt(keyString.length())));
 		}
-		return contrasena;
+			
+		return sb.toString();
 	}
 
 	@GetMapping("/reset/password")
